@@ -2,18 +2,29 @@ import { Request, Response, Router } from 'express';
 import asyncHandler from 'express-async-handler';
 // import { logger } from '../../../resources/manager-log.resource';
 // import { MantenimientoUsuarioService } from '../../../service/seguridad/mantenimiento-usuario/MantenimientoUsuario.service';
+import { ProcesosService } from '../../services/administrador/procesos/Procesos.service'
 
-
-class MantenimientoUsuarioController {
+class ProcesosController {
     public router: Router;
+    public procesosService: ProcesosService
     // public mantenimientoUsuarioService: MantenimientoUsuarioService;
     constructor() {
         // this.mantenimientoUsuarioService = new MantenimientoUsuarioService();
+        this.procesosService = new ProcesosService();
         this.router = Router();
         this.routes();
     }
 
-    
+    public obtenerProcesos = async(req: Request, res: Response) => {
+        try {
+          const params = []
+          const result = await this.procesosService.obtenerProcesos(params);
+          console.log("Ingreso")
+            res.status(200).json(result)
+        }catch(error) {
+            res.status(500).json(error)
+        }
+    }
 
     public obtenerUsuarios = async (req: Request, res: Response) =>  {
       try {
@@ -33,6 +44,7 @@ class MantenimientoUsuarioController {
     }
 
     routes() {
+      this.router.get('/obtener-procesos', asyncHandler(this.obtenerProcesos))
         // this.router.get('/obtener-usuario-especifico', asyncHandler(this.obtenerUsuarioEspecifico))
         // this.router.get('/obtener-usuarios', asyncHandler(this.obtenerUsuarios));
         // this.router.get('/obtener-roles', asyncHandler(this.obtenerRoles));
@@ -47,4 +59,4 @@ class MantenimientoUsuarioController {
     }
 }
 
-export { MantenimientoUsuarioController };
+export { ProcesosController };

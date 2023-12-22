@@ -2,7 +2,9 @@
 import express from 'express';
 
 // Routes
-import appRouting from './controller/seguridad/seguridad.routing';
+import administradorRouting from './controller/administrador/administrador.routing'
+import seguridadRouting from './controller/seguridad/seguridad.routing';
+
 class ApiRoutes {
   public app = express();
 
@@ -11,8 +13,8 @@ class ApiRoutes {
   }
 
   public routes() {
-    
-    this.app.use('/app', appRouting);
+    this.app.use('/administrador', administradorRouting)
+    // this.app.use('/seguridad', seguridadRouting);
   }
 }
 
