@@ -44,16 +44,16 @@ export class MantenimientoOpcionesRepository {
     }
     
     public registrarOpciones = async(connection: any, params: any) => {
-        try {
-            const query = await obtenerQuery('INSERT', 'ds_tab_seg_opciones', params, null);
-            console.log("🚀 ~ file:  registrarOpciones=async ~ query", query)
-            const result = await connection.execute(query, params);
-            await connection.commit();
-            return result;
-        }catch(err){
-            logger.error(err);
-            throw err
-        }
+        // try {
+        //     // const query = await obtenerQuery('INSERT', 'ds_tab_seg_opciones', params, null);
+        //     console.log("🚀 ~ file:  registrarOpciones=async ~ query", query)
+        //     const result = await connection.execute(query, params);
+        //     await connection.commit();
+        //     return result;
+        // }catch(err){
+        //     logger.error(err);
+        //     throw err
+        // }
     }
 
     public actualizarOpciones = async(connection: any, params: any) => {

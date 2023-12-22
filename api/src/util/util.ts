@@ -1,4 +1,4 @@
-import { logger } from "../../resources/manager-log.resource";
+import { logger } from "../resources/manager-log.resource";
 
 export default class SeguridadUtil {
     public fetchRowsFromRS = async (resultSet: any, numRows: any) => {

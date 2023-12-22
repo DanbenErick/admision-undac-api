@@ -2,7 +2,7 @@
 import express from 'express';
 
 // Routes
-import seguridadRouting from './controller/seguridad/seguridad.routing';
+import appRouting from './controller/seguridad/seguridad.routing';
 class ApiRoutes {
   public app = express();
 
@@ -12,7 +12,7 @@ class ApiRoutes {
 
   public routes() {
     
-    this.app.use('/seguridad', seguridadRouting);
+    this.app.use('/app', appRouting);
   }
 }
 
