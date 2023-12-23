@@ -16,7 +16,7 @@ class ServerConfig {
   }
 
   public config(): void {
-    this.port = this.normalizePort(process.env.PORT);
+    this.port = this.normalizePort(process.env.PORT || '3001');
     this.server = http.createServer(this.appConfig.app);
     this.createServer();
   }
