@@ -1,0 +1,64 @@
+import React, { useState, useEffect } from 'react';
+
+// import { connect } from 'react-redux';
+
+
+import { LaptopOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
+import { Button, Menu } from 'antd';
+import * as Icon from '@ant-design/icons';
+import BtnActionComponent from '../BtnActionButtonComponent';
+import { getRutas } from '../../api/apiAside';
+
+import { Link } from 'react-router-dom';
+
+console.log("Variable de entorno", process.env.REACT_APP_API_URL)
+export default function AsideComponent() {
+    const [collapsed, setCollapsed] = useState(false)
+    const [routes, setRoutes] = useState([{ label: 'Icon', icon:<LaptopOutlined /> }])
+    
+    
+    useEffect(() => {
+        const fetchRoutes = getRutas()
+        const itemsRoutes = fetchRoutes.map((item, index) => {
+            const { nombre: label, ruta, icon } = item
+            const IconComponent = Icon[icon]; // Icon.alert
+            return {key: index, label: <Link to={ruta}>{label}</Link>, ruta, icon: React.createElement(IconComponent)}
+        })
+        setRoutes(itemsRoutes)
+        console.log("ruta", itemsRoutes)
+
+        
+    }, [])
+    const toggleCollapsed = () => {
+        setCollapsed(!collapsed)
+    }
+    
+    return (
+        <div>
+            
+            <Button
+                className='btnMenuToggle'
+                type="primary"
+                onClick={toggleCollapsed}
+                style={{
+                    marginBottom: 16,
+                }}
+            >
+                {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+            </Button>
+            {/* <Router> */}
+                <Menu
+                    className='aside'
+                    theme='dark'
+                    mode="inline"
+                    inlineCollapsed={collapsed}
+                    defaultSelectedKeys={["0"]}
+                    items={routes}                    
+                >
+                </Menu>
+            {/* </Router> */}
+            <BtnActionComponent />
+            
+        </div>
+    )
+}

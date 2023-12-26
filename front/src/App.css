@@ -1,38 +1,70 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+* {
+  font-family: Poppins;
+}
 .App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+}
+
+.ant-card {
+  margin-top: 20px;
+}
+.titlePageDashboard {
+  font-weight: bold;
+}
+.contentDashboard {
+  padding: 24px;
+  margin: 0;
+  min-height: 'calc(100vh - 150px)';
+}
+
+.fullSizeInput {
+  width: 100%;
+  
+}
+.ant-float-btn-body {
+  background: #001529 !important;
   color: white;
 }
-
-.App-link {
-  color: #61dafb;
+.content {
+  background: black;
+  padding: 40px;
+}
+.bradcrumpPadding {
+  margin-bottom: 20px;
+}
+.aside {
+  width: 180px;
+  min-height: 100vh;
+  position: fixed;
+  top: 0;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.containerGridDashboardPage {
+  display: grid;
+  grid-template-columns: 180px calc(100% - 180px);
+}
+
+.content {
+  grid-column: 2 / span 1;
+}
+.btnMenuToggle {
+  position: fixed;
+  right: 0;
+  top: 0;
+}
+.filaBotones button {
+  margin-right: 10px;
+}
+input {
+  max-width: 100% !important;
+}
+@media (max-width: 768px) {
+  .containerGridDashboardPage {
+    display: grid;
+    grid-template-columns: 80px calc(100% - 80px);
   }
-  to {
-    transform: rotate(360deg);
+  .aside {
+    width: 80px;
   }
 }

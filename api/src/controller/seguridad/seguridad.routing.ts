@@ -15,15 +15,15 @@ class SeguridadRouting {
 //   public mantenimientoOpciones: MantenimientoOpcionesController;
 
 
-//   public constructor() {
+  public constructor() {
 //     this.mantenimientoRoles = new MantenimientoRolesController();
 //     this.mantenimientoTipoGraficos = new MantenimientoTipoGraficosController();
 //     this.mantenimientoUsuarios = new MantenimientoUsuarioController();
 //     this.mantenimientoOpcionesRol = new MantenimientoOpcionesRolController();
 //     this.mantenimientoOpciones = new MantenimientoOpcionesController();
-//     this.router = Router();
+    this.router = Router();
 //     this.routes();
-//   }
+  }
 
 //   public routes() {
 //     this.router.use('/', this.mantenimientoRoles.router);

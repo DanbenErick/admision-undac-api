@@ -17,7 +17,7 @@ class DatabaseMysql {
         });
         return await this.connection.connect();
         // console.log('Connected to the database');
-      } catch (error) {
+      } catch (error: any) {
         console.log("OCurrio un error", error)
         throw new Error(`Error connecting to the database: ${error.message}`);
       }
@@ -45,7 +45,7 @@ class DatabaseMysql {
     try {
       await this.connection.end();
       console.log('Connection closed');
-    } catch (error) {
+    } catch (error: any) {
       throw new Error(`Error closing connection: ${error.message}`);
     }
   }

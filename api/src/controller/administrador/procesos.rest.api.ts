@@ -17,7 +17,7 @@ class ProcesosController {
 
     public obtenerProcesos = async(req: Request, res: Response) => {
         try {
-          const params = []
+          const params: any[] = []
           const result = await this.procesosService.obtenerProcesos(params);
           console.log("Ingreso")
             res.status(200).json(result)
