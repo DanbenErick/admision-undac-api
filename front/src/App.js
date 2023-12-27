@@ -10,6 +10,7 @@ import RegisterPage from './pages/Register/RegisterPage';
 import ProcesosPage from './pages/Procesos/ProcesosPage';
 import VacantesPage from './pages/Vacantes/VacantesPage';
 import CarreraPage from './pages/Carreras/CarrerasPage';
+import InscripcionEstudiantePage from './pages/InscripcionEstudiante/InscripcionEstudiantePage';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Routes>
           <Route path="/login" Component={LoginPage} />
           <Route path="/register" Component={RegisterPage} />
+          <Route path="/inscripcion" Component={InscripcionEstudiantePage} />
           <Route path="/dashboard/*" Component={DashboardPage}>
             <Route path="procesos" element={<ProcesosPage className="content" />} />  
             <Route path="vacantes" element={<VacantesPage />} />  
