@@ -13,7 +13,7 @@ class DatabaseMysql {
             host: CredentialsMysqlDev.host,
             user: CredentialsMysqlDev.user,
             password: CredentialsMysqlDev.password,
-            database: CredentialsMysqlDev.database
+            database: CredentialsMysqlDev.database,
         });
         return await this.connection.connect();
         // console.log('Connected to the database');

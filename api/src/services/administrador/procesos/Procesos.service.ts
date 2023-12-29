@@ -1,14 +1,13 @@
-// import connectOracle from '../../../config/connection.oracledb';
+
 import connectMysql from '../../../config/connection.mysqldb'
+import { ProcesosInterface } from '../../../interfaces/administrador/procesos.interface'
 import { ProcesosRepository } from '../../../repository/administrador/procesos/procesos.repository'
 // import { EstadosHttp } from '../../../constantes/mensajes/mensajes.constant';
-// import { MantenimientoOpcionesRolRepository } from "../../../repository/seguridad/mantenimiento-opciones-rol/MantenimientoOpcionesRol.repository";
-// import { logger } from '../../../resources/manager-log.resource';
 
 export class ProcesosService {
     // public asignarOpcionesRolRepository: MantenimientoOpcionesRolRepository;
     public procesosRepo: ProcesosRepository
-    constructor() {
+    public constructor() {
         this.procesosRepo = new ProcesosRepository()
         // this.asignarOpcionesRolRepository = new MantenimientoOpcionesRolRepository();
     }
@@ -16,6 +15,7 @@ export class ProcesosService {
         const dbConnect: any = await connectMysql.connectMysql()
         try {
             const result = await this.procesosRepo.obtenerProcesos(dbConnect, params)
+            
             return result
         }catch(error) {
             await dbConnect.rollback()
@@ -23,19 +23,44 @@ export class ProcesosService {
             await dbConnect.close()
         }
     }
-    public obtenerRolesByParam = async (param: any) => {
-        // let connection: any = await connectOracle.conectarOracle()
-        // try {
-        //     param.descripcion = param.descripcion;
-        //     console.log("PARAMTROS RECIBIDOS => ", param)
-        //     // const result = await this.asignarOpcionesRolRepository.obtenerRolesByParam(connection, param)
-        //     // return result;
-        // } catch (error) {
-        //     // logger.error("obtenerRolesByParam Serv => ", error)
-        //     await connection.rollback();
-        //     throw error;
-        // } finally {
-        //     await connection.close();
-        // }
+    
+    public crearProceso = async(params: ProcesosInterface) => {
+        const dbConnect: any = await connectMysql.connectMysql()
+        try {
+            const consultaProcesoAbierto: any[] = await this.procesosRepo.verificarSiHayProcesoAbierto(dbConnect, "")
+            console.log("RESPUESTA ", consultaProcesoAbierto.length, "[][][][]")
+            if(consultaProcesoAbierto.length > 0) {
+                return {ok: true, procesoAbiertoExistente: true, message: 'Ya hay un proceso abierto ahora'}
+            }
+            console.log(consultaProcesoAbierto)
+            const result = await this.procesosRepo.crearProceso(dbConnect ,params)
+            if(result[0].affectedRows > 0) {
+                return { ok: true, procesoAbiertoExistente: false, message: 'Proceso llevado exitosamente' }
+            }else {
+                return { ok: false, procesoAbiertoExistente: false, message: 'Proceso no llevado correctamente' }
+            }
+        }catch(error) {
+            await dbConnect.rollback()
+        }finally {
+            await dbConnect.close()
+        }
     }
+    public cerrarProceso = async(params: ProcesosInterface) => {
+        const dbConnect: any = await connectMysql.connectMysql()
+        try {
+            params.ESTADO = 0
+            const resp = await this.procesosRepo.cerrarProceso(dbConnect, params)
+            console.log("ROWS:", resp[0].affectedRows)
+            if(resp[0].affectedRows > 0) {
+                return { ok: true, message: 'Proceso llevado exitosamente' }
+            }else {
+                return { ok: false, message: 'Proceso no llevado correctamente' }
+            }
+        }catch(error) {
+            await dbConnect.rollback()
+        }finally {
+            await dbConnect.close()
+        }
+    }
+    
 }

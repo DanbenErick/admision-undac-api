@@ -5,9 +5,10 @@ import { Select } from "antd"
 import { InputNumber } from "antd";
 import { Form } from "antd";
 import { Popconfirm } from "antd";
-import '../../assets/styles/VacantesPage.css'
 import { message } from "antd";
 import { SaveFilled, SearchOutlined } from "@ant-design/icons";
+import { obtenerCarrerasForm, obtenerProcesosForm } from '../../api/apiInpputs'
+import '../../assets/styles/VacantesPage.css'
 
 
 const onChange = (value) => {
@@ -31,11 +32,36 @@ const cancel = (e) => {
 
 const VacantesPage = () => {
     const [loading, setLoading] = useState(true)
+    const [inputProcesos, setInputProcesos] = useState([])
+    const [inputCarrera, setInputCarrera] = useState([])
     useEffect(() => {
-        setTimeout(() => {
-            setLoading(false)
-        }, 1000)
-    })
+        const getProcesosInputs = async () => {
+            try {
+                const resp = await obtenerProcesosForm()
+                
+                console.log(resp.data)
+                setInputProcesos(resp.data)
+
+            } catch (error) {
+                console.log('Error ', error)
+            }
+        }
+        const getCarrerasInputs = async () => {
+            try {
+                const resp = await obtenerCarrerasForm()
+                console.log(resp.data)
+                setInputCarrera(resp.data)
+            } catch (error) {
+                console.error('Error', error)
+            }
+        }
+        getProcesosInputs()
+        getCarrerasInputs()
+        // setTimeout(() => {
+        //     setLoading(false)
+        // }, 1000)
+        setLoading(false)
+    }, [])
 
     return (
         <div>
@@ -51,12 +77,9 @@ const VacantesPage = () => {
                         <div className="vacantesPageContainerFormCrearVacante">
                             <Form.Item label="Proceso">
                                 <Select
-                                    options={[
-                                        {
-                                            value: 'lucy',
-                                            label: 'Lucy',
-                                        },
-                                    ]}
+                                    showSearch
+                                    placeholder="Selecciona el proceso"
+                                    options={inputProcesos}
                                 />
                             </Form.Item>
                             <Form.Item label="Carrera">
@@ -67,20 +90,7 @@ const VacantesPage = () => {
                                     onChange={onChange}
                                     onSearch={onSearch}
                                     filterOption={filterOption}
-                                    options={[
-                                        {
-                                            value: 'jack',
-                                            label: 'Jack',
-                                        },
-                                        {
-                                            value: 'lucy',
-                                            label: 'Lucy',
-                                        },
-                                        {
-                                            value: 'tom',
-                                            label: 'Tom',
-                                        },
-                                    ]}
+                                    options={inputCarrera}
                                 />
                             </Form.Item>
                             <Form.Item label="Cantidad de vacantes">

@@ -32,7 +32,7 @@ class ProcesosController {
         console.log('usuario:', usuario)
         let result;
         if(usuario != null) {
-        //   result = await this.mantenimientoUsuarioService.obtenerUsuarios(usuario);
+          // result = await this.mantenimientoUsuarioService.obtenerUsuarios(usuario);
         }else {
         //   result = await this.mantenimientoUsuarioService.obtenerUsuarios();
         }
@@ -43,8 +43,35 @@ class ProcesosController {
       }
     }
 
+    public crearProceso = async (req: Request, res: Response) => {
+      try {
+        const params = req.body
+        console.log(params)
+        const result:any = await this.procesosService.crearProceso(params)
+        if(result.ok) {
+          res.status(200).json(result)
+          
+        }else {
+          res.status(500).json(result)
+        }
+      }catch(error) {
+        res.status(500).json(error)
+      }
+    }
+    public cerrarProceso = async(req: Request, res: Response) => {
+      try {
+        const params = req.body
+        const result: any = await this.procesosService.cerrarProceso(params)
+        res.status(200).json(result)
+      }catch(error) {
+        res.status(500).json(error)
+      }
+    }
+
     routes() {
       this.router.get('/obtener-procesos', asyncHandler(this.obtenerProcesos))
+      this.router.post('/crear-proceso', asyncHandler(this.crearProceso))
+      this.router.post('/cerrar-proceso', asyncHandler(this.cerrarProceso))
         // this.router.get('/obtener-usuario-especifico', asyncHandler(this.obtenerUsuarioEspecifico))
         // this.router.get('/obtener-usuarios', asyncHandler(this.obtenerUsuarios));
         // this.router.get('/obtener-roles', asyncHandler(this.obtenerRoles));

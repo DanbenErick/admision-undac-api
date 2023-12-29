@@ -8,28 +8,28 @@ import ConfirmacionIns from "./InscripcionEstudiantePages/ConfirmacionIns";
 import "../../assets/styles/InscripcionEstudiantePage.css"
 const steps = [
   {
-    title: "Datos Personales",
+    title: <b>Datos Personales</b>,
     content: <DatosPersonalIncripcion />,
   },
   {
-    title: "Datos de contacto",
+    title: <b>Datos de contacto</b>,
     content: <DatosContactoIns />,
   },
   {
-    title: "Resumen",
+    title: <b>Resumen</b>,
     content: <ResumenIns />,
   },
   {
-    title: "Validacion",
+    title: <b>Validacion</b>,
     content: <ValidacionIns />,
   },
   {
-    title: "Confirmacion",
+    title: <b>Confirmacion</b>,
     content: <ConfirmacionIns />,
   },
 ];
 const App = () => {
-  const { token } = theme.useToken();
+  
   const [current, setCurrent] = useState(0);
   const next = () => {
     setCurrent(current + 1);
@@ -42,52 +42,53 @@ const App = () => {
     title: item.title,
   }));
   const contentStyle = {
-    // lineHeight: "260px",
-    // textAlign: "center",
-    // color: token.colorTextTertiary,
-    // backgroundColor: token.colorFillAlter,
-    // borderRadius: token.borderRadiusLG,
-    // border: `1px dashed ${token.colorBorder}`,
-    marginTop: 16,
+    marginTop: 10,
+    paddingTop: 10,
+    
   };
   return (
     <div className="InscripcionEstudiantePage">
-    <div class="background"></div>
-    <div className="containerInscripcionEstudiantePageCenter">
-      <div className="containerInscripcionEstudiantePage">
-        <Steps current={current} items={items} />
-        <div style={contentStyle}>{steps[current].content}</div>
-        <div
-          style={{
-            marginTop: 24,
-          }}
-        >
-          {current < steps.length - 1 && (
-            <Button type="primary" onClick={() => next()}>
-              Siguiente
-            </Button>
-          )}
-          {current === steps.length - 1 && (
-            <Button
-              type="primary"
-              onClick={() => message.success("Processing complete!")}
-            >
-              Terminar
-            </Button>
-          )}
-          {current > 0 && (
-            <Button
-              style={{
-                margin: "0 8px",
-              }}
-              onClick={() => prev()}
-            >
-              Regresar
-            </Button>
-          )}
+      <div class="background"></div>
+      <div className="containerInscripcionEstudiantePageCenter">
+        <div className="containerInscripcionEstudiantePage">
+          <Steps current={current} items={items} progressDot  direction="horizontal" />
+          <div style={contentStyle}>{steps[current].content}</div>
+          <div
+            style={{
+              marginTop: 24,
+              display: 'flex',
+              justifyContent: 'end'
+            }}
+          >
+            
+            
+            
+            {current > 0 && (
+              <Button
+                style={{
+                  margin: "0 8px",
+                }}
+                onClick={() => prev()}
+              >
+                Regresar
+              </Button>
+            )}
+            {current < steps.length - 1 && (
+              <Button type="primary" onClick={() => next()}>
+                Siguiente
+              </Button>
+            )}
+            {current === steps.length - 1 && (
+              <Button
+                type="primary"
+                onClick={() => message.success("Processing complete!")}
+              >
+                Terminar
+              </Button>
+            )}
+          </div>
         </div>
       </div>
-    </div>
     </div>
   );
 };

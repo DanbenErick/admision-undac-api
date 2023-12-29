@@ -1,74 +1,51 @@
-import { ProcesosInterface } from '../../../interfaces/administrador/procesos.interface';
-import { logger } from '../../../resources/manager-log.resource';
-import { generarConsulta } from '../../../util/util'
-
-export class ProcesosRepository {
-    public obtenerProcesos = async(connection: any, params: ProcesosInterface) => {
-        try {
-            const query = `SELECT * FROM procesos ORDER BY ID DESC`;
-            const [rows, fields]: any = await connection.promise().query(query)
-            return rows
-        }catch(error) {
-            logger.error("ProcesosRepo.obtenerProcesos =>", (error))
-            throw error
-        }
-    }
-    public crearProceso = async(connection: any, params: ProcesosInterface) => {
-        try {
-            const query =  await generarConsulta('procesos', params, null)
-            const data = Object.values(params)
-            const result = await connection.promise().execute(query, data)
-            console.log(query)
-            return result            
-        }catch(error) {
-            logger.error('ProcesosRepo.crearProceso => ', error)
-        }
-    }
-    public verificarSiHayProcesoAbierto = async(connection: any, params: any) => {
-        try {
-            const query = `SELECT ID, NOMBRE FROM procesos WHERE ESTADO = 1`
-            const [rows, fields] = await connection.promise().query(query)
-            return rows
-        }catch(error){
-            logger.error('ProcesosRepo.verificarSiHayProcesoAbierto => ', error)
-        }
-    }
-    public cerrarProceso = async(connection: any, params: ProcesosInterface) => {
-        try {
-            const query = await generarConsulta('procesos', params, `ID = ${params.ID}`)
-            const data = Object.values(params)
-            console.log("generado", query, data)
-            const result = await connection.promise().execute(query, data)
-            return result
-        }catch(error) {
-            logger.error(`ProcesosRepo.cerrarProceso =>`, error)
-        }
+"use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ProcesosRepository = void 0;
+const manager_log_resource_1 = require("../../../resources/manager-log.resource");
+class ProcesosRepository {
+    constructor() {
+        this.obtenerProcesos = (connection, params) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                const query = `SELECT * FROM procesos`;
+                const [rows, fields] = yield connection.promise().query(query);
+                return rows;
+            }
+            catch (error) {
+                // logger.error("sequenceOpciones =>", (error))
+                manager_log_resource_1.logger.error("ProcesosRepo.obtenerProcesos =>", (error));
+                throw error;
+            }
+        });
     }
 }
-
+exports.ProcesosRepository = ProcesosRepository;
 // export class MantenimientoOpcionesRepository {
-
 //     public obtenerOpcionByParam = async(connection: any, params: any) => {
 //         let query: string;
 //         const bind: any = {};
-
 //         try {
 //             const bind: any = {}
 //             query = `
 //                            SELECT * 
 //                              FROM ds_tab_seg_opciones 
 //                             WHERE 1=1 `;
-
 //             if (params.idOpcn){
 //                 query += ` AND id_opcn = :id_opcn `;
 //                 bind.id_opcn = params.idOpcn;
 //             }
-
 //             if (params.descripcion){
 //                 query += ` AND UPPER(de_opcn) LIKE UPPER(:de_opcn) `;
 //                 bind.de_opcn = `%${params.descripcion}%`;
 //             }
-
 //             console.log("QUERY =>", query, bind)
 //             const result: any = await connection.execute(query, bind)
 //             return result.rows as any 
@@ -77,7 +54,6 @@ export class ProcesosRepository {
 //             throw error;
 //         }
 //     }
-
 //     public sequenceOpciones =async (connection: any) => {
 //         try {
 //             const query = `SELECT ds_seq_seg_opciones.NEXTVAL AS ID_OPCN FROM DUAL`;      
@@ -88,7 +64,6 @@ export class ProcesosRepository {
 //             throw error
 //         }
 //     }
-    
 //     public registrarOpciones = async(connection: any, params: any) => {
 //         // try {
 //         //     // const query = await obtenerQuery('INSERT', 'ds_tab_seg_opciones', params, null);
@@ -101,13 +76,11 @@ export class ProcesosRepository {
 //         //     throw err
 //         // }
 //     }
-
 //     public actualizarOpciones = async(connection: any, params: any) => {
 //         try {
 //             const camposWhere = [{ ID: 'ID_OPCN' }]
 //             const query = await obtenerQuery('UPDATE', 'ds_tab_seg_opciones', params, camposWhere)
 //             console.log("🚀 ~ file:  actualizarOpciones=async ~ query", query, params)
-            
 //             const result = await connection.execute(query, params)
 //             return result
 //         }catch(err){
@@ -115,7 +88,6 @@ export class ProcesosRepository {
 //             throw err
 //         }
 //     }
-
 //     public obtenerListadoOpciones = async (connection: any) => {
 //         try{
 //             const query = `SELECT * FROM ds_tab_seg_opciones ORDER BY id_opcn ASC`
@@ -126,7 +98,6 @@ export class ProcesosRepository {
 //             throw err;
 //         }
 //     };    
-
 //     public obtenerOpcionesPadre = async (connection: any) => {
 //         try {
 //             const query = "SELECT * FROM ds_tab_seg_opciones"
@@ -137,7 +108,6 @@ export class ProcesosRepository {
 //             throw error
 //         }
 //     }
-
 //     public eliminarOpcion = async(connection: any, params:any) => {
 //         try {
 //             const bind:any ={};
@@ -145,7 +115,6 @@ export class ProcesosRepository {
 //             const query = `DELETE FROM ds ds_tab_seg_opciones
 //                         WHERE ID_OPCN = :ID_OPCN`;
 //             bind.ID_OPCN= id_opcn;
-
 //             console.log("CONSULTA =>" ,query, bind)
 //             const result = await connection.execute(query, bind)
 //             await connection.commit();
