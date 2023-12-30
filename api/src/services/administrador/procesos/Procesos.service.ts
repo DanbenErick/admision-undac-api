@@ -62,5 +62,4 @@ export class ProcesosService {
             await dbConnect.close()
         }
     }
-    
 }

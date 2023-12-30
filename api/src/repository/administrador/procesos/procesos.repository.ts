@@ -22,6 +22,7 @@ export class ProcesosRepository {
             return result            
         }catch(error) {
             logger.error('ProcesosRepo.crearProceso => ', error)
+            throw error
         }
     }
     public verificarSiHayProcesoAbierto = async(connection: any, params: any) => {
@@ -42,6 +43,7 @@ export class ProcesosRepository {
             return result
         }catch(error) {
             logger.error(`ProcesosRepo.cerrarProceso =>`, error)
+            throw error
         }
     }
 }
