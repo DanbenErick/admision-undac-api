@@ -11,8 +11,6 @@ class InputControlsRouting {
     } 
     public routes() {
         this.router.use('', this.inputsControls.router)
-
-        
     }
 }
 

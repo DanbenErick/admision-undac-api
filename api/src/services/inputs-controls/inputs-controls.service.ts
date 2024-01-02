@@ -31,4 +31,15 @@ export class InputsControlsService {
             await dbConex.close()
         }
     }
+    public obtenerFacultades = async() => {
+        const dbConex: any = await connectMysql.connectMysql()
+        try {
+            const resp = await this.inputsControlsRepo.obtenerFacultades(dbConex)
+            return resp
+        }catch(error) {
+            await dbConex.rollback()
+        }finally {
+            await dbConex.close()
+        }
+    }
 }

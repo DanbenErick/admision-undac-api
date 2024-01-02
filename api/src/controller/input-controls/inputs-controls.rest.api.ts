@@ -26,9 +26,18 @@ class InputsControlsController {
             res.status(500).json(error)
         }
     }
+    public obtenerFacultades = async(req: Request, res: Response) => {
+        try {
+            const resp = await this.inputsControlsService.obtenerFacultades()
+            res.status(200).json(resp)
+        }catch(error) {
+            res.status(500).json(error)
+        }
+    }
     public routes() {
         this.router.get('/obtener-procesos', asyncHandler(this.obtenerProcesos))
         this.router.get('/obtener-carreras', asyncHandler(this.obtenerCarreras))
+        this.router.get('/obtener-facultades', asyncHandler(this.obtenerFacultades))
     }
 }
 

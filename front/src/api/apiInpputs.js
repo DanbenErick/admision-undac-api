@@ -17,5 +17,13 @@ const obtenerCarrerasForm = async () => {
         console.error('Error', error)
     }
 }
+const obtenerFacultadesForm = async() => {
+    try {
+        const resp = axios.get('http://localhost:3500/input-controls/obtener-facultades')
+        return resp
+    }catch(error) {
+        console.error('Error', error)
+    }
+}
 
-export { obtenerCarrerasForm, obtenerProcesosForm }
+export { obtenerCarrerasForm, obtenerProcesosForm, obtenerFacultadesForm }

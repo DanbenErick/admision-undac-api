@@ -57,12 +57,12 @@ class VacantesController {
         }
     }
     public routes() {
-        this.router.get('/obtener-vacantes', this.obtenerVacantes)
-        this.router.get('/obtener-vacantes-proceso', this.obtenerVacantesPorProceso)
-        this.router.get('/verificar-proceso-id', this.verificarDisponibilidadProceso)
-        this.router.get('/obtener-carreras-inputs', this.oobtenerCarrerasPorProcesoInput)
+        this.router.get('/obtener-vacantes', asyncHandler(this.obtenerVacantes))
+        this.router.get('/obtener-vacantes-proceso', asyncHandler(this.obtenerVacantesPorProceso))
+        this.router.get('/verificar-proceso-id', asyncHandler(this.verificarDisponibilidadProceso))
+        this.router.get('/obtener-carreras-inputs', asyncHandler(this.oobtenerCarrerasPorProcesoInput))
         
-        this.router.post('/crear-vacante', this.crearVacante)
+        this.router.post('/crear-vacante', asyncHandler(this.crearVacante))
     
     }
 }

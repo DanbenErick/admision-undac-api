@@ -60,6 +60,11 @@ export class VacantesService {
         const dbConnect: any = await connectMysql.connectMysql()
         try {
             const result = await this.vacantesRepo.crearVacante(dbConnect, params)
+            if(result[0].affectedRows > 0) {
+                return { ok: true, procesoAbiertoExistente: false, message: 'Se creo correctamente la vacante' }
+            }else {
+                return { ok: false, procesoAbiertoExistente: false, message: 'No se llego a regsitrar la vacante' }
+            }
             return result
         }catch(error) {
             await dbConnect.rollback()

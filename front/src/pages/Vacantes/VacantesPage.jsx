@@ -2,13 +2,11 @@ import React, { useEffect, useState } from "react"
 import SpinnerComponent from "../../components/Spinner"
 import { message, Popconfirm, Form, InputNumber, Select, Breadcrumb, Button, Card, Table } from "antd"
 import { SaveFilled, SearchOutlined } from "@ant-design/icons";
-import { obtenerCarrerasForm, obtenerProcesosForm } from '../../api/apiInpputs'
+import { obtenerProcesosForm } from '../../api/apiInpputs'
 import '../../assets/styles/VacantesPage.css'
 import { crearVacante, obtenerVacantesProcesoActivo, verificarDisponibilidadProceso, obtenerCarrerasPorProcesoInput, obtenerVacantesPorId } from "../../api/apiVacantes";
 
-const onChange = (value) => {
-    console.log(`selected ${value}`);
-};
+
 const onSearch = (value) => {
     console.log('search:', value);
 };
@@ -16,13 +14,9 @@ const onSearch = (value) => {
 const filterOption = (input, option) => {
     return (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
 }
-const confirm = (e) => {
-    console.log(e);
-    message.success('Click on Yes');
-};
+
 const cancel = (e) => {
-    console.log(e);
-    message.error('Click on No');
+    message.error('Proceso cancelado');
 };
 
 const VacantesPage = () => {
@@ -39,27 +33,29 @@ const VacantesPage = () => {
         CANTIDAD: ''
     }
     const refreshDataVacatesProcesoActivo = async() => {
+        setLoading(true)
         try {
             const resp = await obtenerVacantesProcesoActivo()
             setDataTable(resp.data)
         }catch(error) {
-            console.log('Error ', error)
+            console.error('Error ', error)
         }
+        setLoading(false)
     }
     const getProcesosInputs = async () => {
         try {
             const resp = await obtenerProcesosForm()
-            console.log(resp.data)
+            
             setInputProcesos(resp.data)
         } catch (error) {
-            console.log('Error ', error)
+            console.error('Error ', error)
         }
     }
     
     const refreshCarrerasInput = async () => {
         try {
             const resp = await obtenerCarrerasPorProcesoInput()
-            console.log(resp.data)
+            
             setInputCarrera(resp.data)
         } catch (error) {
             console.error('Error', error)
@@ -97,9 +93,9 @@ const VacantesPage = () => {
         },
     ]
     const verificarEstadoProceso = async(data) => {
-        console.log("valor", data)
+        
         const resp = await verificarDisponibilidadProceso(data)
-        // debugger
+        
         if(!resp.data.ok){
             messageModal('warning', resp.data.message)
             setBotonDisabled(true)
@@ -109,21 +105,25 @@ const VacantesPage = () => {
         setLoading(true)
         values.USUARIO_REGISTRO = 1
         values.AREA = 1
-        console.log(values)
+        
         const resp = await crearVacante(values)
-        console.log(resp)
+        
+        
         await refreshDataVacatesProcesoActivo()
         await refreshCarrerasInput()
         formVacante.resetFields()
+        if (resp.data.ok) messageModal('success', resp.data.message)
+        else  messageModal('error', resp.data.message)
         setLoading(false)
         // const resp = await crear
     }
     const buscarVacantesPorProceso = async () => {
+        setLoading(true)
         const ID_PROCESO = formVacante.getFieldValue('ID_PROCESO')
-        console.log(ID_PROCESO)
         const resp = await obtenerVacantesPorId(ID_PROCESO)
         setDataTable(resp.data)
-        console.log(resp)
+        setLoading(false)
+        
     }
     const messageModal = (type, content) => {
         messageApi.open({type,content})
@@ -144,24 +144,25 @@ const VacantesPage = () => {
                             <Form.Item label="Proceso" name="ID_PROCESO">
                                 <Select
                                     showSearch
-                                    placeholder="Selecciona el proceso"
+                                    placeholder="Selecciona un proceso"
                                     options={inputProcesos}
                                     onChange={verificarEstadoProceso}
+                                    onSearch={onSearch}
+                                    filterOption={filterOption}
                                 />
                             </Form.Item>
                             <Form.Item label="Carrera" name="ID_CARRERA">
                                 <Select
                                     showSearch
-                                    placeholder="Select a person"
+                                    placeholder="Selecciona una carrera"
                                     optionFilterProp="children"
-                                    
                                     onSearch={onSearch}
                                     filterOption={filterOption}
                                     options={inputCarrera}
                                 />
                             </Form.Item>
                             <Form.Item label="Cantidad de vacantes" name="CANTIDAD">
-                                <InputNumber min={1} max={20} style={{width: '100%'}} />
+                                <InputNumber min={1} max={20} style={{width: '100%'}} placeholder="Cuantas vacantes habra?" />
                             </Form.Item>
 
                             <Form.Item className="filaBotones" >

@@ -1,27 +1,56 @@
-import React from 'react'
+import React, { useState } from 'react'
 import '../../assets/styles/Login.css'
 import { Link } from 'react-router-dom'
+import { Button, Form } from 'antd'
+import { Input } from 'antd'
+import SpinnerComponent from '../../components/Spinner'
+import { InputNumber } from 'antd'
+import { crearUsuarioAdminService } from '../../api/registerService'
 const RegisterPage = () => {
+    const [loading, setLoading] = useState(false)
+    const [formRegister] = Form.useForm()
+    const initialValues = {
+
+    }
+    const crearUsuario = async (values) => {
+        // setLoading(true)
+        console.log(values)
+        await crearUsuarioAdminService(values)
+        // setLoading(false)
+    }
     return (
+        <>
+        {loading ? <SpinnerComponent />: ''}
+        
         <div class="pageLogin">
             <div class="body">
                 <div class="background"></div>
                 <div class="login">
-                    <form class="form">
+
+                    <Form layout='vertical' form={formRegister} initialValues={initialValues} onFinish={crearUsuario} className='form'>
                         <div className="containerImg">
                             <img class="img" src="https://undac.edu.pe/wp-content/uploads/elementor/thumbs/cropped-undac-otxjxjp3hh6yj3evud6f4g667rmvghjh2tp91gonu8.png" alt="" />
                         </div>
                         <h1>Registrarse</h1>
-                        <input type="text" placeholder="Usuario" class="control" />
-                        <input type="text" placeholder="DNI" class="control" />
-                        <input type="password" placeholder="Contraseña" class="control" />
-                        <button value="Entrar" class="button">Continuar</button>
-                        
+                        <Form.Item name="NOMBRES" rules={[{required: true,},]} label="Nombres">
+                            <Input placeholder='Nombres' style={{ width: '100%', padding: '12px' }} maxLength="15" />
+                        </Form.Item>
+                        <Form.Item name="USUARIO" rules={[{required: true,},]} label="Usuario">
+                            <Input placeholder='Usuario' style={{ width: '100%', padding: '12px' }} maxLength="15" />
+                        </Form.Item>
+                        <Form.Item name="DNI" rules={[{required: true,},]} label="DNI">
+                            <InputNumber placeholder='Numero de DNI'  maxLength="8" style={{ width: '100%', padding: '6px'}} />
+                        </Form.Item>
+                        <Form.Item name="PASSWORD" rules={[{required: true,},]} label="Contraseña">
+                            <Input.Password placeholder='Contraseña' style={{ width: '100%', padding: '12px' }} maxLength="20" />
+                        </Form.Item>
+                        <Button type="primary" block size='large' htmlType='submit'>Registrarme</Button>
                         <p>¿Ya tienes cuenta? <Link to="/login">Ir</Link></p>
-                    </form>
+                    </Form>
                 </div>
             </div>
         </div>
+        </>
     )
 }
 

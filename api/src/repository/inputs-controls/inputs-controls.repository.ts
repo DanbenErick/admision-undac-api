@@ -24,4 +24,14 @@ export class InputsControlsRepository {
             throw error
         }
     }
+    public obtenerFacultades = async(connection: any) => {
+        try {
+            const query = `select DISTINCT(FACULTAD), FACULTAD as value, FACULTAD as label from carreras`
+            const [rows]: any = await connection.promise().query(query)
+            return rows
+        }catch(error) {
+            logger.error('InputsControlsRepository.obtenerFacultades => ', error)
+            throw error
+        }
+    }
 }
