@@ -18,9 +18,9 @@ import InscripcionDashboardEstudiante from './pages/DashboardEstudiantes/PagesDa
 import esES from 'antd/locale/es_ES'
 import { ConfigProvider } from 'antd';
 import './App.css';
-import {  AuthContext, AuthProvider } from './providers/AuthProvider';
-import { Outlet } from 'react-router-dom';
+import { AuthProvider } from './providers/AuthProvider';
 import { Navigate } from 'react-router-dom';
+import { EstudianteProvider } from './providers/EstudianteProvider';
 
 
 const App = () => {
@@ -30,7 +30,7 @@ const App = () => {
         <div className="App">
           <Router>
             <Routes>
-              
+
               <Route path="/login" element={
                 <ProtectedLoginRegister>
                   <LoginPage />
@@ -41,7 +41,11 @@ const App = () => {
                   <RegisterPage />
                 </ProtectedLoginRegister>
               } />
-              <Route path="/inscripcion" element={InscripcionEstudiantePage} />
+              <Route path="/inscripcion" element={
+                <EstudianteProvider>
+                  <InscripcionEstudiantePage />
+                </EstudianteProvider>
+              } />
               <Route path="/dashboard-estudiantes/*" element={<PrivateRoute><DashboardEstudiantes /></PrivateRoute>}>
                 <Route path="home" element={<HomeDashEstudinte />} />
                 <Route path="inscripcion" element={<InscripcionDashboardEstudiante />} />
@@ -59,7 +63,7 @@ const App = () => {
     </AuthProvider>
   );
 }
-const ProtectedLoginRegister = ({children}) => {
+const ProtectedLoginRegister = ({ children }) => {
   const user = localStorage.getItem('token')
   console.log(user)
   return (
@@ -69,9 +73,9 @@ const ProtectedLoginRegister = ({children}) => {
 }
 const PrivateRoute = ({ children }) => {
   const user = localStorage.getItem('token')
-  
+
   return (
-    user != null ? <>{children}</> : <Navigate to="/login" /> 
+    user != null ? <>{children}</> : <Navigate to="/login" />
   )
 }
 

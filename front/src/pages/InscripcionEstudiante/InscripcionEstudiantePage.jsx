@@ -1,11 +1,12 @@
-import React, { useState } from "react";
-import { Button, message, Steps, theme } from "antd";
+import React, { useContext, useState } from "react";
+import { Button, message, Steps } from "antd";
 import DatosPersonalIncripcion from "./InscripcionEstudiantePages/DatosPersonalesIns";
 import DatosContactoIns from "./InscripcionEstudiantePages/DatosContactoIns";
 import ResumenIns from "./InscripcionEstudiantePages/ResumenIns";
 import ValidacionIns from "./InscripcionEstudiantePages/ValidacionIns";
 import ConfirmacionIns from "./InscripcionEstudiantePages/ConfirmacionIns";
 import "../../assets/styles/InscripcionEstudiantePage.css"
+import { EstudianteContext } from "../../providers/EstudianteProvider";
 const steps = [
   {
     title: <b>Datos Personales</b>,
@@ -28,9 +29,10 @@ const steps = [
     content: <ConfirmacionIns />,
   },
 ];
-const App = () => {
+const InscripcionEstudiantePage = () => {
   
   const [current, setCurrent] = useState(0);
+  const { estudiante, setEstudiante } = useContext(EstudianteContext)
   const next = () => {
     setCurrent(current + 1);
   };
@@ -46,6 +48,10 @@ const App = () => {
     paddingTop: 10,
     
   };
+  const registrarEstudiante = async() => {
+    console.log(estudiante)
+    message.success("Processing complete!")
+  } 
   return (
     <div className="InscripcionEstudiantePage">
       <div class="background"></div>
@@ -60,9 +66,6 @@ const App = () => {
               justifyContent: 'end'
             }}
           >
-            
-            
-            
             {current > 0 && (
               <Button
                 style={{
@@ -81,7 +84,7 @@ const App = () => {
             {current === steps.length - 1 && (
               <Button
                 type="primary"
-                onClick={() => message.success("Processing complete!")}
+                onClick={() => registrarEstudiante()}
               >
                 Terminar
               </Button>
@@ -90,6 +93,7 @@ const App = () => {
         </div>
       </div>
     </div>
+    
   );
 };
-export default App;
+export default InscripcionEstudiantePage;
