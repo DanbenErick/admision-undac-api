@@ -24,7 +24,7 @@ const getRutas = () => {
         },
         {
             nombre: 'Voucher',
-            ruta: '/dashboard/voucher',
+            ruta: '/dashboard/vouchers',
             icon: 'SnippetsFilled'
         },
     ]

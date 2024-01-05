@@ -21,6 +21,7 @@ import './App.css';
 import { AuthProvider } from './providers/AuthProvider';
 import { Navigate } from 'react-router-dom';
 import { EstudianteProvider } from './providers/EstudianteProvider';
+import VoucherPage from './pages/Voucher/VoucherPage';
 
 
 const App = () => {
@@ -54,6 +55,7 @@ const App = () => {
                 <Route path="procesos" element={<ProcesosPage className="content" />} />
                 <Route path="vacantes" element={<VacantesPage />} />
                 <Route path="carreras" element={<CarreraPage />} />
+                <Route path="vouchers" element={<VoucherPage />} />
               </Route>
               <Route path="*" element={NotFound} />
             </Routes>
