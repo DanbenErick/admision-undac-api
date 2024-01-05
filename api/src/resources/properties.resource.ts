@@ -2,7 +2,7 @@ export const CredentialsMysqlDev = {
     host: 'localhost',
     user: 'danben',
     password: '',
-    database: 'base_arreglar'
+    database: 'admision_undac'
 }
 
 

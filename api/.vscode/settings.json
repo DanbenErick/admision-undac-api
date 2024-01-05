@@ -18,5 +18,21 @@
         "titleBar.inactiveBackground": "#21573299",
         "titleBar.inactiveForeground": "#e7e7e799"
     },
-    "peacock.color": "#215732"
+    "peacock.color": "#215732",
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default",
+                "enableSsl": "Disabled"
+            },
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 3306,
+            "driver": "MySQL",
+            "name": "local",
+            "database": "admision_undac",
+            "username": "root",
+            "askForPassword": true
+        }
+    ]
 }

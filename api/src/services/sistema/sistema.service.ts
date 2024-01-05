@@ -41,6 +41,7 @@ class SistemaService {
         const dbConex: any = await connectMysql.connectMysql()
         try {
             const result: any[] = await this.sistemaRepo.loginUsuarioAdmin(dbConex, params)
+            console.log(result)
             if(result.length == 0) return { ok: false, message: 'No se encontro usuario' }
             const validarPassword = await bcrypt.compare(params.PASSWORD, result[0].PASSWORD)
             if(!validarPassword) return { ok: false, message: 'Usuario o contraseña incorrecta' }
