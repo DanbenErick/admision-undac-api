@@ -22,6 +22,9 @@ import { AuthProvider } from './providers/AuthProvider';
 import { Navigate } from 'react-router-dom';
 import { EstudianteProvider } from './providers/EstudianteProvider';
 import VoucherPage from './pages/Voucher/VoucherPage';
+import EstudiantesPage from './pages/Estudiantes/EstudiantesPage';
+import InscritoPage from './pages/Inscritos/InscritosPage';
+import ResultadosAdmPage from './pages/ResultadosAdm/ResultadosAdm';
 
 
 const App = () => {
@@ -37,6 +40,11 @@ const App = () => {
                   <LoginPage />
                 </ProtectedLoginRegister>
               } />
+              <Route path="/" element={
+                <ProtectedLoginRegister>
+                  <LoginPage />
+                </ProtectedLoginRegister>
+              } />
               <Route path="/register" element={
                 <ProtectedLoginRegister>
                   <RegisterPage />
@@ -47,6 +55,7 @@ const App = () => {
                   <InscripcionEstudiantePage />
                 </EstudianteProvider>
               } />
+              
               <Route path="/dashboard-estudiantes/*" element={<PrivateRoute><DashboardEstudiantes /></PrivateRoute>}>
                 <Route path="home" element={<HomeDashEstudinte />} />
                 <Route path="inscripcion" element={<InscripcionDashboardEstudiante />} />
@@ -56,6 +65,9 @@ const App = () => {
                 <Route path="vacantes" element={<VacantesPage />} />
                 <Route path="carreras" element={<CarreraPage />} />
                 <Route path="vouchers" element={<VoucherPage />} />
+                <Route path="estudiantes" element={<EstudiantesPage />} />
+                <Route path="inscritos" element={<InscritoPage />} />
+                <Route path="resultados" element={<ResultadosAdmPage />} />
               </Route>
               <Route path="*" element={NotFound} />
             </Routes>

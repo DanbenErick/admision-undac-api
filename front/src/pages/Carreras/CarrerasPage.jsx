@@ -21,8 +21,7 @@ const CarreraPage = () => {
     const [selectFacultad, setSelectFacultad] = useState([])
     const [panelEditarCarrera, setPanelEditarCarrera] = useState(false)
     const showPanelEditCarrera = async (params) => {
-        const data = await  dataTable.find(carrera => carrera.ID, params.ID)
-        console.log(data)
+        const data = dataTable.find(carrera => carrera.ID === params.ID)
         formModificarCarreras.setFieldsValue(data)
         setPanelEditarCarrera(true)
     }

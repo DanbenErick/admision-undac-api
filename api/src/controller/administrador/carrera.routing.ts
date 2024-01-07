@@ -1,7 +1,5 @@
 import { Request, Response, Router } from 'express'
 import asyncHandler from 'express-async-handler'
-import { VacantesService } from '../../services/administrador/vacantes/Vacantes.service'
-import { VacantesInterface } from '../../interfaces/administrador/vacantes.interface'
 import { CarrerasService } from '../../services/administrador/carreras/Carreras.service'
 import { CarreraInterface } from '../../interfaces/administrador/carreras.interface'
 

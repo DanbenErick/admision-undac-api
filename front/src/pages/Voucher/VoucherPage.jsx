@@ -83,9 +83,15 @@ const VoucherPage = () => {
     if(params.length === 8) {
       const {DNI} = formVoucher.getFieldValue()
       const resp = await buscarEstudianteVoucherService({DNI})
-      console.log(resp.data)
-      console.log(resp.data[0].NOMBRE_COMPLETO)
-      formVoucher.setFieldValue('NOMBRE_COMPLETO', resp.data[0].NOMBRE_COMPLETO)
+      
+      if(resp.data.length !== 0) {
+        formVoucher.setFieldValue('NOMBRE_COMPLETO', resp.data[0].NOMBRE_COMPLETO)
+        message.success('Se encontro estudiante')
+        return
+      }
+      message.error('No se encontro estudiante')
+      
+      
         
     }
   }

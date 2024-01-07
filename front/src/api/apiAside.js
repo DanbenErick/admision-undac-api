@@ -18,13 +18,28 @@ const getRutas = () => {
             icon: 'SnippetsFilled'
         },
         {
+            nombre: 'Voucher',
+            ruta: '/dashboard/vouchers',
+            icon: 'SnippetsFilled'
+        },
+        {
             nombre: 'Estudiantes',
             ruta: '/dashboard/estudiantes',
             icon: 'SnippetsFilled'
         },
         {
-            nombre: 'Voucher',
-            ruta: '/dashboard/vouchers',
+            nombre: 'Inscritos',
+            ruta: '/dashboard/inscritos',
+            icon: 'SnippetsFilled'
+        },
+        {
+            nombre: 'Resultados',
+            ruta: '/dashboard/resultados',
+            icon: 'SnippetsFilled'
+        },
+        {
+            nombre: 'Aulas',
+            ruta: '/dashboard/aulas',
             icon: 'SnippetsFilled'
         },
     ]
