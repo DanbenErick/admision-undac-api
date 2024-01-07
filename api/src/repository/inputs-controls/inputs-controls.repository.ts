@@ -24,6 +24,17 @@ export class InputsControlsRepository {
             throw error
         }
     }
+    public obtenerCarrerasPorCodigoCarrera = async(connection: any, params: any) => {
+        try {
+            const query = `SELECT CODIGO_ESCUELA as value, ESCUELA_COMPLETA as label FROM carreras`
+            const [rows]: any = await connection.promise().query(query)
+            return rows
+        }
+        catch(error) {
+            logger.error(`InputsControlsRepository.obtenerCarreras => ${error}`)
+            throw error
+        }
+    }
     public obtenerFacultades = async(connection: any) => {
         try {
             const query = `select DISTINCT(FACULTAD), FACULTAD as value, FACULTAD as label from carreras`

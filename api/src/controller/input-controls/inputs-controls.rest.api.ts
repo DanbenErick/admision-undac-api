@@ -26,6 +26,14 @@ class InputsControlsController {
             res.status(500).json(error)
         }
     }
+    public obtenerCarrerasCodigo = async(req: Request, res:Response) => {
+        try {
+            const result = await this.inputsControlsService.obtenerCarrerasPorCodigo("")
+            res.status(200).json(result)
+        }catch(error) {
+            res.status(500).json(error)
+        }
+    }
     public obtenerFacultades = async(req: Request, res: Response) => {
         try {
             const resp = await this.inputsControlsService.obtenerFacultades()
@@ -37,6 +45,7 @@ class InputsControlsController {
     public routes() {
         this.router.get('/obtener-procesos', asyncHandler(this.obtenerProcesos))
         this.router.get('/obtener-carreras', asyncHandler(this.obtenerCarreras))
+        this.router.get('/obtener-carreras-codigo', asyncHandler(this.obtenerCarrerasCodigo))
         this.router.get('/obtener-facultades', asyncHandler(this.obtenerFacultades))
     }
 }

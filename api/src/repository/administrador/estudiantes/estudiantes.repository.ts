@@ -31,7 +31,6 @@ export class EstudianteRepository {
         const query = await generarConsulta("registros",params,`ID = ${ID}`);
         const data = Object.values(params);
         const resp = await connection.promise().execute(query, data);
-        console.log(resp)
         return resp
       }catch(error) {
       logger.error('EstudianteRepository.modificarEstudiante =>', (error))

@@ -44,7 +44,7 @@ class InscritosController {
     public routes() {
         this.router.get('/obtener-inscritos', asyncHandler(this.obtenerInscritos))
         this.router.post('/buscar-inscrito', asyncHandler(this.buscarInscrito))
-        this.router.post('/modificar-inscrito', asyncHandler(this.modificarInscrito))
+        this.router.put('/modificar-inscrito', asyncHandler(this.modificarInscrito))
         
         
     

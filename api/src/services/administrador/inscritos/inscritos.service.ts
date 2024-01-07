@@ -35,6 +35,18 @@ export class InscritosService {
             await dbConex.close()
         }
     }
-    
-    
+
+    public modificarInscrito = async(params: InscritosInterface) => {
+        const dbConex: any = await connectMysql.connectMysql()
+        try {
+            const [result] = await this.inscritosRepo.modificarInscritos(dbConex, params)
+            console.log("Resultado ", result.affectedRows)
+            if(result.affectedRows > 0) return { ok: true, message: 'Se modifico correctamente' }
+            return { ok: false, message: 'No se pudo modificar' }
+        }catch(error) {
+            await dbConex.rollback()
+        }finally {
+            await dbConex.close()
+        }
+    }
 }

@@ -17,5 +17,13 @@ const buscarInscritoService = async(params) => {
     console.error('Ocurrio un error', error)
   }
 }
+const modificarInscritoService = async(params) => {
+  try {
+    const resp = await axios.put(`${API_HOST}${API_ADMINISTRADOR}/inscritos/modificar-inscrito`, params)
+    return resp
+  }catch(error) {
+    console.error('Ocurrio un error', error)
+  }
+}
 
-export { obtenerInscritosService, buscarInscritoService }
+export { obtenerInscritosService, buscarInscritoService, modificarInscritoService }

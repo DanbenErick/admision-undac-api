@@ -5,18 +5,27 @@ import { Card } from "antd";
 import { Form } from "antd";
 import { Input } from "antd";
 import { SaveFilled, SearchOutlined } from "@ant-design/icons";
-import { buscarInscritoService, obtenerInscritosService } from "../../api/inscritosService";
-import { obtenerCarrerasForm, obtenerProcesosForm } from "../../api/apiInpputs";
+import {
+  buscarInscritoService,
+  modificarInscritoService,
+  obtenerInscritosService,
+} from "../../api/inscritosService";
+import { obtenerCarrerasCodigoForm, obtenerCarrerasForm, obtenerProcesosForm } from "../../api/apiInpputs";
 import { Select } from "antd";
 import { message } from "antd";
 import moment from "moment";
+import { Popconfirm } from "antd";
+import { Drawer } from "antd";
 
 const InscritoPage = () => {
   const [loading, setLoading] = useState();
   const [dataTable, setDataTable] = useState();
   const [formInscritos] = Form.useForm();
   const [selectCarreras, setSelectCarreras] = useState();
+  const [selectCarrerasCodigo, setSelectCarrerasCodigo] = useState();
   const [selectProcesos, setSelectProcesos] = useState();
+  const [panelEditarInscritos, setPanelEditarInscritos] = useState(false);
+  const [formModificarInscritos] = Form.useForm();
   const columnsTable = [
     {
       title: "Proceso",
@@ -43,9 +52,9 @@ const InscritoPage = () => {
       dataIndex: "PREPARATORIA",
       key: "PREPARATORIA",
       render: (data, column) => {
-        console.log(data)
-        return data === 1 ? 'Si' : 'No'
-      }
+        console.log(data);
+        return data === 1 ? "Si" : "No";
+      },
     },
     {
       title: "Año term",
@@ -56,33 +65,74 @@ const InscritoPage = () => {
       title: "Fecha Reg",
       dataIndex: "FECHA_REGISTRO",
       key: "FECHA_REGISTRO",
-      render: (data) => moment(data).format('YYYY/MM/DD')
+      render: (data) => moment(data).format("YYYY/MM/DD"),
+    },
+    {
+      title: "Action",
+      key: "action",
+      render: (_, column) => {
+        return (
+          <Popconfirm
+            title="Carerra"
+            description="Quieres editar este carrera?"
+            onConfirm={() => showPanelEditInscritos({ ID: column.ID })}
+            onCancel={() => ""}
+            okText="Si"
+            cancelText="No"
+          >
+            <Button type="link" info>
+              Editar
+            </Button>
+          </Popconfirm>
+        );
+      },
     },
   ];
+  const hiddenPanelEditInscritos = () => setPanelEditarInscritos(false);
+  const showPanelEditInscritos = (params) => {
+    const data = dataTable.find((inscrito) => inscrito.ID === params.ID);
+    console.log(params);
+    console.log(data);
+    formModificarInscritos.setFieldsValue(data);
+    setPanelEditarInscritos(true)
+  };
   const getDataInputs = async () => {
     const resp_carreras = await obtenerCarrerasForm();
-    const resp_procesos = await obtenerProcesosForm()
+    const resp_procesos = await obtenerProcesosForm();
+    const resp_carreras_codigo = await obtenerCarrerasCodigoForm()
     setSelectCarreras(resp_carreras.data);
-    setSelectProcesos(resp_procesos.data)
+    setSelectCarrerasCodigo(resp_carreras_codigo.data);
+    setSelectProcesos(resp_procesos.data);
   };
   const refreshTable = async () => {
     const resp = await obtenerInscritosService();
     setDataTable(resp.data);
   };
-  const buscarInscrito = async() => {
-    const params = formInscritos.getFieldValue()
-    params.DNI = params.DNI || ''
-    params.COD_CARRERA = params.COD_CARRERA || ''
-    params.SEDE_EXAM = params.SEDE_EXAM || ''
-    const resp = await buscarInscritoService(params)
-    if(resp.status === 200) {
-      message.success('Datos encontrados')
-      setDataTable(resp.data)
-      return 
+  const modificarInscrito = async (params) => {
+    const resp = await modificarInscritoService(params)
+    console.log(params, resp)
+    if(resp.data.ok) {
+      message.success(resp.data.message)
+      refreshTable()
+      hiddenPanelEditInscritos()
+      return
     }
-    message.error('Ocurrio un error')
-    console.log(resp)
-  }
+    message.error(resp.data.message)
+  };
+  const buscarInscrito = async () => {
+    const params = formInscritos.getFieldValue();
+    params.DNI = params.DNI || "";
+    params.COD_CARRERA = params.COD_CARRERA || "";
+    params.SEDE_EXAM = params.SEDE_EXAM || "";
+    const resp = await buscarInscritoService(params);
+    if (resp.status === 200) {
+      message.success("Datos encontrados");
+      setDataTable(resp.data);
+      return;
+    }
+    message.error("Ocurrio un error");
+    console.log(resp);
+  };
   useEffect(() => {
     refreshTable();
     getDataInputs();
@@ -100,7 +150,7 @@ const InscritoPage = () => {
           <Form layout="vertical" form={formInscritos}>
             <div className="vacantesPageContainerFormCrearVacante">
               <Form.Item label="Proceso" name="PROCESO">
-              <Select
+                <Select
                   showSearch
                   placeholder="Selecciona una proceso"
                   options={selectProcesos}
@@ -134,38 +184,32 @@ const InscritoPage = () => {
           <Table dataSource={dataTable} columns={columnsTable} size="small" />
         </Card>
 
-        {/* <Drawer title="Modificar carrera" placement="right" onClose={hiddenPanelEditCarrera} open={panelEditarCarrera}>
-                    <Form layout='vertical' form={formModificarCarreras} onFinish={modificarCarrera}>
-                        <Form.Item label="Facultad" name="FACULTAD">
-                                <Select
-                                    showSearch
-                                    placeholder="Selecciona un proceso"
-                                    options={selectFacultad}
-                                    // onChange={"verificarEstadoProceso"}
-                                    rules={[{ required: true, message: 'El estado es requerido' }]}
-                                />
-                        </Form.Item>
-                        <Form.Item label="Carrera" name="ESCUELA">
-                            <Input rules={[{ required: true, message: 'El estado es requerido' }]}/>
-                        </Form.Item>
-                        
-                        <Form.Item label="Codigo" name="CODIGO_ESCUELA">
-                            <Input rules={[{ required: true, message: 'El estado es requerido' }]}/>
-                        </Form.Item>
-                        <Form.Item label="Area" name="AREA">
-                            <Input rules={[{ required: true, message: 'El estado es requerido' }]}/>
-                        </Form.Item>
-                        <Form.Item label="Sede" name="SEDE_FACULTAD">
-                            <Input rules={[{ required: true, message: 'El estado es requerido' }]}/>
-                        </Form.Item>
-                        <Form.Item >
-                            <Button type="primary" block htmlType='submit'>Guardar cambios</Button>
-                        </Form.Item>
-                        <Form.Item name="ID">
-                            <Input type='hidden'/>
-                        </Form.Item>
-                    </Form>
-                </Drawer> */}
+        <Drawer title="Modificar carrera" placement="right" onClose={hiddenPanelEditInscritos} open={panelEditarInscritos}>
+          <Form layout="vertical" form={formModificarInscritos} onFinish={modificarInscrito}>
+            <Form.Item label="Carrera" name="COD_CARRERA">
+              <Select
+                showSearch
+                placeholder="Selecciona una carrera"
+                options={selectCarrerasCodigo}
+              />
+            </Form.Item>
+            <Form.Item label="Sede" name="SEDE_EXAM">
+              <Input />
+            </Form.Item>
+            <Form.Item label="Preparatoria" name="PREPARATORIA">
+              <Input />
+            </Form.Item>
+            <Form.Item label="Termino secundaria" name="YEAR_CONCLU">
+              <Input placeholder="Ingresa el año" />
+            </Form.Item>
+            <Form.Item >
+              <Button htmlType="submit">Guardar</Button>
+            </Form.Item>
+            <Form.Item name="ID">
+              <Input type="hidden"/>
+            </Form.Item>
+          </Form>
+        </Drawer>
       </div>
     </div>
   );

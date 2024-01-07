@@ -34,7 +34,7 @@ export class InscritosRepository {
     try {
       const { ID } = params;
       delete params.ID;
-      const query = await generarConsulta("inscritos",params,`WHERE ID = ${ID}`);
+      const query = await generarConsulta("inscritos",params,` ID = ${ID}`);
       const data = Object.values(params);
       const resp = await connection.promise().execute(query, data);
       return resp;
