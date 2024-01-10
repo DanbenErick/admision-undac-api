@@ -1,13 +1,12 @@
-import React, { useContext, useState } from "react";
-import { Button, message, Steps } from "antd";
-import DatosPersonalIncripcion from "./InscripcionEstudiantePages/DatosPersonalesIns";
-import DatosContactoIns from "./InscripcionEstudiantePages/DatosContactoIns";
-import ResumenIns from "./InscripcionEstudiantePages/ResumenIns";
-import ValidacionIns from "./InscripcionEstudiantePages/ValidacionIns";
-import ConfirmacionIns from "./InscripcionEstudiantePages/ConfirmacionIns";
-import "../../assets/styles/InscripcionEstudiantePage.css";
-import { EstudianteContext } from "../../providers/EstudianteProvider";
-;
+import React, { useContext, useState } from 'react';
+import { Button, message, Steps } from 'antd';
+import DatosPersonalIncripcion from './InscripcionEstudiantePages/DatosPersonalesIns';
+import DatosContactoIns from './InscripcionEstudiantePages/DatosContactoIns';
+import ResumenIns from './InscripcionEstudiantePages/ResumenIns';
+import ValidacionIns from './InscripcionEstudiantePages/ValidacionIns';
+import ConfirmacionIns from './InscripcionEstudiantePages/ConfirmacionIns';
+import '../../assets/styles/InscripcionEstudiantePage.css';
+import { EstudianteContext } from '../../providers/EstudianteProvider';
 const InscripcionEstudiantePage = () => {
   const [current, setCurrent] = useState(0);
   const { estudiante } = useContext(EstudianteContext);
@@ -18,7 +17,9 @@ const InscripcionEstudiantePage = () => {
   const steps = [
     {
       title: <b></b>,
-      content: <DatosPersonalIncripcion current={current} setCurrent={setCurrent} />,
+      content: (
+        <DatosPersonalIncripcion current={current} setCurrent={setCurrent} />
+      ),
     },
     {
       title: <b></b>,
@@ -36,7 +37,7 @@ const InscripcionEstudiantePage = () => {
       title: <b></b>,
       content: <ConfirmacionIns current={current} setCurrent={setCurrent} />,
     },
-  ]
+  ];
   const items = steps.map((item) => ({
     key: item.title,
     title: item.title,
@@ -48,7 +49,9 @@ const InscripcionEstudiantePage = () => {
         <div className="containerInscripcionEstudiantePage">
           <Steps current={current} items={items} />
           <div style={contentStyle}>{steps[current].content}</div>
-          <div style={{   marginTop: 24,   display: "flex",   justifyContent: "end", }}></div>
+          <div
+            style={{ marginTop: 24, display: 'flex', justifyContent: 'end' }}
+          ></div>
         </div>
       </div>
     </div>

@@ -45,7 +45,7 @@ class SistemaService {
             if(result.length == 0) return { ok: false, message: 'No se encontro usuario' }
             const validarPassword = await bcrypt.compare(params.PASSWORD, result[0].PASSWORD)
             if(!validarPassword) return { ok: false, message: 'Usuario o contraseña incorrecta' }
-            const token = jwt.sign({ _id: result[0].ID }, 'UNDAC_ADMISION');
+            const token = jwt.sign({ id: result[0].ID, usuario: result[0].USUARIO, rol: 'ADMINISTRADOR', dni: result[0].DNI, }, 'UNDAC_ADMISION');
             // send response with token 
             return { 
                 ok: true, 
@@ -70,6 +70,28 @@ class SistemaService {
             const { TOKEN } = params
             tokenBlacklist.add(TOKEN)
             // TODO: Añadido a la lista negra el token
+        }catch(error) {
+            await dbConex.rollback()
+        }finally {
+            await dbConex.close()
+        }
+    }
+    public loginUsuarioEstudiante = async(params: any) => {
+        const dbConex: any = await connectMysql.connectMysql()
+        try {
+            const result = await this.sistemaRepo.loginUsuarioEstudiante(dbConex, params)
+            if(result.length == 0) return { ok: false, message: 'No se encontro usuario' }
+            console.log(params.PASSWORD, result[0].PASSWORD)
+            const validarPassword = await bcrypt.compare(params.PASSWORD, result[0].PASSWORD)
+            if(!validarPassword) return { ok: false, message: 'Usuario o contraseña incorrecta' }
+            const token = jwt.sign({ id: result[0].ID, rol: 'ESTUDIANTE', dni: result[0].DNI, usuario: result[0].USUARIO }, 'UNDAC_ADMISION');
+            return { 
+                ok: true, 
+                message: 'Se autentico correctamente',
+                name: result[0].NOMBRES || 'USUARIO',
+                rol: result[0].ROL,
+                token
+            }
         }catch(error) {
             await dbConex.rollback()
         }finally {

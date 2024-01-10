@@ -2,6 +2,8 @@ import { Request, Response, Router } from 'express';
 import SistemaService from '../../services/sistema/sistema.service'
 import asyncHandler from 'express-async-handler';
 import { UsuarioInteface } from '../../interfaces/administrador/usuario.interface';
+import jwt from 'jsonwebtoken'
+
 
 class UsuarioADminController {
     public router: Router;
@@ -42,12 +44,20 @@ class UsuarioADminController {
             res.status(500).json(error)
         }
     }
-
+    public loginUsuarioEstudiante = async(req: Request, res: Response) => {
+        try {
+            const params = req.body
+            const resp = await this.sistemaService.loginUsuarioEstudiante(params)
+            res.status(200).json(resp)
+        }catch(error) {
+            res.status(500).json(error)
+        }
+    }
     routes() {
         this.router.post('/crear-usuario', asyncHandler(this.crearUsuaroAdmin))
         this.router.post('/login-usuario', asyncHandler(this.loginUsuarioAdmin))
         this.router.post('/cerrar-sesion', asyncHandler(this.cerrarSesionAdmin))
-        
+        this.router.post('/login-estudiante', asyncHandler(this.loginUsuarioEstudiante))
     }
 }
 

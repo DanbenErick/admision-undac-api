@@ -1,4 +1,4 @@
 export const getRoutes = (routes) => ({
-    type: 'SET_ROUTES',
-    payload: routes,
-})
+  type: 'SET_ROUTES',
+  payload: routes,
+});

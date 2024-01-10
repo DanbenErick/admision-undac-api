@@ -1,3 +1,4 @@
+import { query } from 'express'
 import connectMysql from '../../config/connection.mysqldb'
 import { InputsControlsRepository } from '../../repository/inputs-controls/inputs-controls.repository'
 
@@ -54,4 +55,82 @@ export class InputsControlsService {
             await dbConex.close()
         }
     }
+    public obtenerDicapacidades = async() => {
+        const dbConex: any = await connectMysql.connectMysql()
+        try {
+            const resp = await this.inputsControlsRepo.obtenerDiscapadidades(dbConex)
+            return resp
+        }catch(error) {
+            await dbConex.rollback()
+        }finally {
+            await dbConex.close()
+        }
+    }
+    public obtenerRazasEtnicas = async() => {
+        const dbConex: any = await connectMysql.connectMysql()
+        try {
+            const resp = await this.inputsControlsRepo.obtenerRazasEtnicas(dbConex)
+            return resp
+        }catch(error) {
+            await dbConex.rollback()
+        }finally {
+            await dbConex.close()
+        }
+    }
+    public obtenerProcesoActivo = async() => {
+        const dbConex: any = await connectMysql.connectMysql()
+        try {
+            const resp = await this.inputsControlsRepo.obtenerProcesoActivo(dbConex)
+            return resp
+        }catch(error) {
+            await dbConex.rollback()
+        }finally {
+            await dbConex.close()
+        }
+    }
+    public obtenerUbicacionesAutocomplete = async() => {
+        const dbConex: any = await connectMysql.connectMysql()
+        try {
+            const resp = await this.inputsControlsRepo.obtenerUbicacionAutocomplete(dbConex)
+            return resp
+        }catch(error) {
+            await dbConex.rollback()
+        }finally {
+            await dbConex.close()
+        }
+    }
+    public obtenerDepartamentos = async() => {
+        const dbConex: any = await connectMysql.connectMysql()
+        try {
+            const resp = await this.inputsControlsRepo.obtenerDepartamentos(dbConex)
+            return resp
+        }catch(error) {
+            await dbConex.rollback()
+        }finally {
+            await dbConex.close()
+        }
+    }
+    public obtenerProvincias = async(params: any) => {
+        const dbConex: any = await connectMysql.connectMysql()
+        try {
+            const resp = await this.inputsControlsRepo.obtenerProvincias(dbConex, params)
+            return resp
+        }catch(error) {
+            await dbConex.rollback()
+        }finally {
+            await dbConex.close()
+        }
+    }
+    public obtenerDistritos = async(params: any) => {
+        const dbConex: any = await connectMysql.connectMysql()
+        try {
+            const resp = await this.inputsControlsRepo.obtenerDistritos(dbConex, params)
+            return resp
+        }catch(error) {
+            await dbConex.rollback()
+        }finally {
+            await dbConex.close()
+        }
+    }
+    
 }

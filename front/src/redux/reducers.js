@@ -1,16 +1,16 @@
 const initialState = {
-    routes: []
-}
+  routes: [],
+};
 const rootReducer = (state = initialState, action) => {
-    switch (action.type) {
-        case 'SET_ROUTES':
-            return {
-                ...state,
-                routes: action.payload
-            }
-        default:
-            return state
-    }
-}
+  switch (action.type) {
+    case 'SET_ROUTES':
+      return {
+        ...state,
+        routes: action.payload,
+      };
+    default:
+      return state;
+  }
+};
 
-export default rootReducer
+export default rootReducer;

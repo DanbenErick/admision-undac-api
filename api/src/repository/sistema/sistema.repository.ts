@@ -38,5 +38,16 @@ class SistemaRepository {
             throw error
         }
     }
+    public loginUsuarioEstudiante = async(connection: any, params:any) => {
+        try {
+            const query = `SELECT * FROM registros WHERE DNI = '${params.USUARIO}'`
+            console.log(query)
+            const [rows] = await connection.promise().execute(query)
+            return rows
+        }catch(error) {
+            logger.error('SistemaRepository.loginUsuarioEstudiante => ', error)
+            throw error
+        }
+    }
 }
 export default SistemaRepository

@@ -1,35 +1,40 @@
-import axios from 'axios'
+import axios from './axiosConfig';
 
-const API_HOST = process.env.REACT_APP_API_URL
-const API_ADMINISTRADOR = process.env.REACT_APP_API_ADMINISTRADOR
+const API_HOST = process.env.REACT_APP_API_URL;
+const API_ADMINISTRADOR = process.env.REACT_APP_API_ADMINISTRADOR;
 
-const getRuta = (params) => `${API_HOST}${API_ADMINISTRADOR}/estudiantes/${params}`
-const obtenerEstudiantesService = async() => {
+const getRuta = (params) =>
+  `${API_HOST}${API_ADMINISTRADOR}/estudiantes/${params}`;
+const obtenerEstudiantesService = async () => {
   try {
-    const resp = await axios.get(getRuta('obtener-estudiantes'))
-    return resp
-  }catch(error) {
-    console.error('Ocurrio un error ', error)
+    const resp = await axios.get(getRuta('obtener-estudiantes'));
+    return resp;
+  } catch (error) {
+    console.error('Ocurrio un error ', error);
   }
-}
+};
 
-const buscarEstudianteService = async(params) => {
+const buscarEstudianteService = async (params) => {
   try {
-    const resp = await axios.post(getRuta('buscar-estudiante'), params)
-    return resp
-  }catch(error) {
-    console.error('Ocurrio un error', error)
+    const resp = await axios.post(getRuta('buscar-estudiante'), params);
+    return resp;
+  } catch (error) {
+    console.error('Ocurrio un error', error);
   }
-}
+};
 
-const modificarEstudianteService = async(params) => {
+const modificarEstudianteService = async (params) => {
   try {
-    const resp = await axios.put(getRuta('modificar-estudiante'), params)
-    console.log(resp)
-    return resp
-  }catch(error) {
-    console.error('Ocurrio un error', error)
+    const resp = await axios.put(getRuta('modificar-estudiante'), params);
+    console.log(resp);
+    return resp;
+  } catch (error) {
+    console.error('Ocurrio un error', error);
   }
-}
+};
 
-export { obtenerEstudiantesService, buscarEstudianteService, modificarEstudianteService }
+export {
+  obtenerEstudiantesService,
+  buscarEstudianteService,
+  modificarEstudianteService,
+};

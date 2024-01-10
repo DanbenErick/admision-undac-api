@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from "react";
-import SpinnerComponent from "../../components/Spinner";
-import { Breadcrumb, Button, Table } from "antd";
-import { Card } from "antd";
-import { Form } from "antd";
-import { Input } from "antd";
-import { SaveFilled, SearchOutlined } from "@ant-design/icons";
+import React, { useEffect, useState } from 'react';
+import SpinnerComponent from '../../components/Spinner';
+import { Breadcrumb, Button, Table } from 'antd';
+import { Card } from 'antd';
+import { Form } from 'antd';
+import { Input } from 'antd';
+import { SaveFilled, SearchOutlined } from '@ant-design/icons';
 import {
   buscarEstudianteService,
   modificarEstudianteService,
   obtenerEstudiantesService,
-} from "../../api/estudiantesAdmService";
-import { Popconfirm } from "antd";
-import { Drawer } from "antd";
-import { Select } from "antd";
-import { message } from "antd";
-import moment from "moment";
+} from '../../api/estudiantesAdmService';
+import { Popconfirm } from 'antd';
+import { Drawer } from 'antd';
+import { Select } from 'antd';
+import { message } from 'antd';
+import moment from 'moment';
 
 const EstudiantesPage = () => {
   const [loading, setLoading] = useState();
@@ -24,34 +24,34 @@ const EstudiantesPage = () => {
   const [panelEditarEstudiante, setPanelEditarEstudiante] = useState(false);
   const columnsTable = [
     {
-      title: "DNI",
-      dataIndex: "DNI",
-      key: "DNI",
+      title: 'DNI',
+      dataIndex: 'DNI',
+      key: 'DNI',
     },
     {
-      title: "NOMBRE COMPLETO",
-      dataIndex: "NOMBRE_COMPLETO",
-      key: "NOMBRE_COMPLETO",
+      title: 'NOMBRE COMPLETO',
+      dataIndex: 'NOMBRE_COMPLETO',
+      key: 'NOMBRE_COMPLETO',
     },
     {
-      title: "Celular",
-      dataIndex: "CELULAR",
-      key: "CELULAR",
+      title: 'Celular',
+      dataIndex: 'CELULAR',
+      key: 'CELULAR',
     },
     {
-      title: "Correo",
-      dataIndex: "CORREO",
-      key: "CORREO",
+      title: 'Correo',
+      dataIndex: 'CORREO',
+      key: 'CORREO',
     },
     {
-      title: "Fecha",
-      dataIndex: "FECHA_REGISTRO",
-      key: "FECHA_REGISTRO",
-      render: (data) => moment(data).format("YYYY/MM/DD"),
+      title: 'Fecha',
+      dataIndex: 'FECHA_REGISTRO',
+      key: 'FECHA_REGISTRO',
+      render: (data) => moment(data).format('YYYY/MM/DD'),
     },
     {
-      title: "Action",
-      key: "action",
+      title: 'Action',
+      key: 'action',
       render: (_, column) => {
         // if (column.ESTADO === 1) {
         return (
@@ -61,7 +61,7 @@ const EstudiantesPage = () => {
             onConfirm={() => {
               showPanelEditEstudiante({ ID: column.ID });
             }}
-            onCancel={() => ""}
+            onCancel={() => ''}
             okText="Si"
             cancelText="No"
           >
@@ -82,9 +82,9 @@ const EstudiantesPage = () => {
     setPanelEditarEstudiante(true);
   };
   const initialValues = {
-    DNI: "",
-    CORREO: "",
-    CELULAR: "",
+    DNI: '',
+    CORREO: '',
+    CELULAR: '',
   };
   const hiddenPanelEditEstudiante = () => {
     setPanelEditarEstudiante(false);
@@ -105,10 +105,10 @@ const EstudiantesPage = () => {
   };
   const buscarEstudiante = async () => {
     const params = formEstudiantes.getFieldValue();
-    params.DNI = params.DNI || "";
-    params.CORREO = params.CORREO || "";
-    params.CELULAR = params.CELULAR || "";
-    if (params.DNI === "" && params.CORREO === "" && params.CELULAR === "") {
+    params.DNI = params.DNI || '';
+    params.CORREO = params.CORREO || '';
+    params.CELULAR = params.CELULAR || '';
+    if (params.DNI === '' && params.CORREO === '' && params.CELULAR === '') {
       refreshTable();
       return;
     }
@@ -122,7 +122,7 @@ const EstudiantesPage = () => {
 
   return (
     <div>
-      {loading ? <SpinnerComponent /> : ""}
+      {loading ? <SpinnerComponent /> : ''}
       <div className="contentDashboard">
         <h1 class="titlePageDashboard">Estudiantes</h1>
         <Breadcrumb className="bradcrumpPadding">

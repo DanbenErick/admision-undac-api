@@ -25,4 +25,36 @@ export class EstudianteGeneralRepository {
         logger.error('EstudianteGeneralRepository.registrarEstudiante => ', error)
       }
     }
+    /**
+     * 
+     
+     *  dat_complementarios
+        => 
+        DNI, SEXO, FECHA_NACIMIENTO, LUGAR_NACIMIENTO, DIRECCION, DISCAPACIDAD, TIPO_DISCAPACIDAD, ETNICA, CELULAR, TELEFONO, RUTA_FOTO, NOMBRE_COLEGIO, TIPO_COLEGIO
+
+        inscritos
+        =>
+        DNI COD_CARRERA, AREA_CARRERA, PROCESO, MODALIDAD, SEDE_EXAM, PREPARATORIA, YEAR_CONCLU, FECHA_REGISTRO
+     */
+    public registrarDatosComplementariosEstudiante = async(connection: any, params: any) => {
+      try {
+        const query = await generarConsulta('dat_complementarios', params, null)
+        const data = Object.values(params)
+        console.log(query, data)
+        const resp = await connection.promise().execute(query, data)
+        return resp
+      }catch(error) {
+        logger.error('EstudianteGeneralRepository.registrarDatosComplementariosEstudiante => ', error)
+      }
+    }
+    public registrarInscripcionEstudiante = async(connection: any, params: any) => {
+      try {
+        const query = await generarConsulta('inscritos', params, null)
+        const data = Object.values(params)
+        const resp = await connection.promise().execute(query, data)
+        return resp
+      }catch(error) {
+        logger.error('EstudianteGeneralRepository.registrarInscripcionEstudiante => ', error)
+      }
+    }
 }
