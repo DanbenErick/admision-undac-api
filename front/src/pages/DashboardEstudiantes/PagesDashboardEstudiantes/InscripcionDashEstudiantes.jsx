@@ -6,7 +6,6 @@ import {
   Input,
   Select,
   Upload,
-  message,
   DatePicker,
   Radio,
 } from "antd";
@@ -16,7 +15,6 @@ import {
 } from "../../../api/inscripcionDashEstudianteService";
 import {
   obtenerCarrerasCodigoForm,
-  obtenerCarrerasForm,
   obtenerDepartamentosForm,
   obtenerDiscapacidadesForm,
   obtenerDistritosForm,
@@ -74,7 +72,7 @@ const InscripcionDashboardEstudiante = () => {
     console.log("DATOS", params);
     const resp = await inscribirEstudianteService(params);
     console.log(resp);
-    // await subirFoto();
+    await subirFoto();
     // setFormDatosComplementariosDisabled(true);
   };
   const buscarDistrito = async (params) => {

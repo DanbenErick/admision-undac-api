@@ -20,7 +20,9 @@ const AulasPage = () => {
     setInputProcesos(resp.data);
   };
   useEffect(() => {
+    setLoading(true)
     getInputs();
+    setLoading(false)
   }, []);
   return (
     <div>

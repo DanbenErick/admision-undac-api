@@ -1,6 +1,6 @@
 // useAuth.js
 
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   loginUsuarioAdminService,

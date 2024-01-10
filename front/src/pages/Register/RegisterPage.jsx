@@ -11,10 +11,10 @@ const RegisterPage = () => {
   const [formRegister] = Form.useForm();
   const initialValues = {};
   const crearUsuario = async (values) => {
-    // setLoading(true)
+    setLoading(true)
     console.log(values);
     await crearUsuarioAdminService(values);
-    // setLoading(false)
+    setLoading(false)
   };
   return (
     <>

@@ -38,10 +38,10 @@ const AsideDashboardEstudiantes = () => {
           </NavLink>
         </li>
         <li>
-          <a href="#" activeClassName="active" onClick={cerrarSesion}>
+          <NavLink activeClassName="active" onClick={cerrarSesion}>
             <i className="icon ri-logout-box-fill"></i>
             Salir
-          </a>
+          </NavLink>
         </li>
       </ul>
     </aside>

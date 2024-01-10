@@ -3,7 +3,6 @@ import { Breadcrumb, Button, Table } from 'antd';
 import { Tag, Popconfirm, Card, Form, Input, Radio, DatePicker } from 'antd';
 import SpinnerCompoent from '../../components/Spinner';
 import {
-  obtenerProcesosFull,
   crearProceso,
   cerrarProceso,
 } from '../../api/apiProcesos';

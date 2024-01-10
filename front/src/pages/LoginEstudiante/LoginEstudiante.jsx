@@ -1,5 +1,5 @@
 import React from 'react';
-import useAuthAdmin from '../../hooks/useAuthAdmin';
+
 import { Input, Button, Form } from 'antd';
 import { Link } from 'react-router-dom';
 import '../../assets/styles/Login.css';
@@ -9,7 +9,6 @@ import { message } from 'antd';
 
 const LoginEstudiantePage = () => {
   const [formLogin] = Form.useForm();
-  const { login } = useAuthAdmin();
   const navigate = useNavigate()
   const initialValues = {};
   const loginUsuario = async (params) => {

@@ -9,41 +9,41 @@ const HomeDashEstudinte = () => {
           <h4>Contenido</h4>
           <ul>
             <li>
-              <a href="#" target="_blank">
+              <a href="https://gooogle.com" rel="noopener noreferrer" target="_blank">
                 Reglamento del proceso de admision
                 <i className="ri-arrow-right-line"></i>
               </a>
             </li>
             <li>
-              <a href="#" target="_blank">
+              <a href="https://gooogle.com" rel="noopener noreferrer" target="_blank">
                 Guia de Inscripcion - Pregrado
                 <i className="ri-arrow-right-line"></i>
               </a>
             </li>
             <li>
-              <a href="#" target="_blank">
+              <a href="https://gooogle.com" rel="noopener noreferrer" target="_blank">
                 Guia de Inscripcion - Segunda Especilidad
                 <i className="ri-arrow-right-line"></i>
               </a>
             </li>
             <li>
-              <a href="#" target="_blank">
+              <a href="https://gooogle.com" rel="noopener noreferrer" target="_blank">
                 Catalogo de Pregrado<i className="ri-arrow-right-line"></i>
               </a>
             </li>
             <li>
-              <a href="#" target="_blank">
+              <a href="https://gooogle.com" rel="noopener noreferrer" target="_blank">
                 Temario<i className="ri-arrow-right-line"></i>
               </a>
             </li>
             <li>
-              <a href="#" target="_blank">
+              <a href="https://gooogle.com" rel="noopener noreferrer" target="_blank">
                 Vacantes Segunda Especialidad
                 <i className="ri-arrow-right-line"></i>
               </a>
             </li>
             <li>
-              <a href="#" target="_blank">
+              <a href="https://gooogle.com" rel="noopener noreferrer" target="_blank">
                 Temario segunda especialidad
                 <i className="ri-arrow-right-line"></i>
               </a>

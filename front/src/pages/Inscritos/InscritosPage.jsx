@@ -138,8 +138,10 @@ const InscritoPage = () => {
     console.log(resp);
   };
   useEffect(() => {
+    setLoading(true)
     refreshTable();
     getDataInputs();
+    setLoading(false)
   }, []);
   return (
     <div>

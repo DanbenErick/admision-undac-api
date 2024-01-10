@@ -104,8 +104,10 @@ const VoucherPage = () => {
     }
   };
   useEffect(() => {
+    setLoading(true)
     obtenerInputs();
     refreshTable();
+    setLoading(false)
   }, []);
   return (
     <div>

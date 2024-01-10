@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import { Button, Menu } from 'antd';
+import * as Icon from '@ant-design/icons';
+import BtnActionComponent from '../BtnActionButtonComponent';
+import { getRutas } from '../../api/apiAside';
+import { Link } from 'react-router-dom';
 import {
   LaptopOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
 } from '@ant-design/icons';
-import { Button, Menu } from 'antd';
-import * as Icon from '@ant-design/icons';
-import BtnActionComponent from '../BtnActionButtonComponent';
-import { getRutas } from '../../api/apiAside';
 
-import { Link } from 'react-router-dom';
-
-console.log('Variable de entorno', process.env.REACT_APP_API_URL);
 export default function AsideComponent() {
   const [collapsed, setCollapsed] = useState(false);
   const [routes, setRoutes] = useState([

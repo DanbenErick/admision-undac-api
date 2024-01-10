@@ -12,7 +12,6 @@ import {
 } from '../../api/estudiantesAdmService';
 import { Popconfirm } from 'antd';
 import { Drawer } from 'antd';
-import { Select } from 'antd';
 import { message } from 'antd';
 import moment from 'moment';
 
@@ -117,7 +116,9 @@ const EstudiantesPage = () => {
     setDataTable(resp.data);
   };
   useEffect(() => {
+    setLoading(true)
     refreshTable();
+    setLoading(false)
   }, []);
 
   return (

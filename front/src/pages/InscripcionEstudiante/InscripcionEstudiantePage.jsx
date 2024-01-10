@@ -1,15 +1,15 @@
-import React, { useContext, useState } from 'react';
-import { Button, message, Steps } from 'antd';
+import React, { useState } from 'react';
+import { Steps } from 'antd';
 import DatosPersonalIncripcion from './InscripcionEstudiantePages/DatosPersonalesIns';
 import DatosContactoIns from './InscripcionEstudiantePages/DatosContactoIns';
 import ResumenIns from './InscripcionEstudiantePages/ResumenIns';
 import ValidacionIns from './InscripcionEstudiantePages/ValidacionIns';
 import ConfirmacionIns from './InscripcionEstudiantePages/ConfirmacionIns';
 import '../../assets/styles/InscripcionEstudiantePage.css';
-import { EstudianteContext } from '../../providers/EstudianteProvider';
+// import { EstudianteContext } from '../../providers/EstudianteProvider';
 const InscripcionEstudiantePage = () => {
   const [current, setCurrent] = useState(0);
-  const { estudiante } = useContext(EstudianteContext);
+  // const { estudiante } = useContext(EstudianteContext);
   const contentStyle = {
     marginTop: 10,
     paddingTop: 10,

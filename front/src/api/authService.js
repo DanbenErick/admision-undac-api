@@ -1,7 +1,6 @@
 import axios from 'axios';
 const API_HOST = process.env.REACT_APP_API_URL;
 const API_SISTEMA = process.env.REACT_APP_API_SISTEMA;
-const API_GENERAL = process.env.REACT_APP_API_GENERAL;
 const crearUsuarioAdminService = async (params) => {
   try {
     const resp = await axios.post(
