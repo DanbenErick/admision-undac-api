@@ -15,10 +15,8 @@ class VoucherRepository {
         }
     }
     public buscarEstudianteParaVoucher = async(connection: any, params: VoucherInterface) => {
-        console.log("dara", params.DNI)
         try {
             const query = `SELECT CONCAT(AP_PATERNO, ' ', AP_MATERNO, ' ', NOMBRES) AS NOMBRE_COMPLETO FROM registros WHERE DNI LIKE '%${params.DNI}%'`
-            console.log("query",query)
             const [rows]: any = await connection.promise().query(query)
             return rows
         }catch(error) {
@@ -29,7 +27,6 @@ class VoucherRepository {
     public buscarVoucher = async(connection: any, params: VoucherInterface) => {
       try {
         const query = `SELECT * FROM pagos WHERE ID_PROCESO LIKE '%${params.ID_PROCESO}%' AND CODIGO LIKE '%${params.CODIGO}%' AND DNI LIKE '%${params.DNI}%'`
-        console.log("query", query)
         const [rows]: any = await connection.promise().query(query)
         return rows
       }catch(error) {
@@ -41,7 +38,6 @@ class VoucherRepository {
         try {
             const query = await generarConsulta('pagos', params, null)
             const data = Object.values(params)
-            console.log(query, data)
             const resp = await connection.promise().execute(query, data)
             return resp
         }catch(error) {

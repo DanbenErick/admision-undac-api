@@ -25,6 +25,8 @@ import InscritoPage from './pages/Inscritos/InscritosPage';
 import ResultadosAdmPage from './pages/ResultadosAdm/ResultadosAdm';
 import AulasPage from './pages/Aulas/AulasPage';
 import LoginEstudiantePage from './pages/LoginEstudiante/LoginEstudiante';
+import TestpsicologicoPage from './pages/DashboardEstudiantes/PagesDashboardEstudiantes/TestpsicologicoPage';
+import PagosEstudiantePage from './pages/DashboardEstudiantes/PagesDashboardEstudiantes/PagosPage';
 
 const App = () => {
   return (
@@ -73,13 +75,11 @@ const App = () => {
                   <PrivateRoute>
                     <DashboardEstudiantes />
                   </PrivateRoute>
-                }
-              >
+                }>
                 <Route path="home" element={<HomeDashEstudinte />} />
-                <Route
-                  path="inscripcion"
-                  element={<InscripcionDashboardEstudiante />}
-                />
+                <Route path="inscripcion" element={<InscripcionDashboardEstudiante />}/>
+                <Route path="test-psicologico" element={<TestpsicologicoPage />}/>
+                <Route path="pagos" element={<PagosEstudiantePage />}/>
               </Route>
               <Route
                 path="/dashboard/*"
@@ -89,10 +89,7 @@ const App = () => {
                   </PrivateRoute>
                 }
               >
-                <Route
-                  path="procesos"
-                  element={<ProcesosPage className="content" />}
-                />
+                <Route path="procesos" element={<ProcesosPage className="content" />}/>
                 <Route path="vacantes" element={<VacantesPage />} />
                 <Route path="carreras" element={<CarreraPage />} />
                 <Route path="vouchers" element={<VoucherPage />} />

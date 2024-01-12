@@ -1,6 +1,24 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "remixicon/fonts/remixicon.css";
+import { verificarDatosComplementariosEstudiante, verificarEstudianteInscritoService, verificarTestpsicologicoEstudianteService } from "../../../api/inscripcionDashEstudianteService";
 const HomeDashEstudinte = () => {
+  const [statusDatosApoderado, setStatusDatosApoderado] = useState(false)
+  const [statusInscripcion, setStatusInscripcion] = useState(false)
+  const [statusTestpsicologico, setStatusTestpsicologico] = useState(false)
+  const verificarStates = async () => {
+    const resp_inscrito = await verificarEstudianteInscritoService({DNI: localStorage.getItem('dni')})
+    const resp_datos_co = await verificarDatosComplementariosEstudiante({DNI: localStorage.getItem('dni')})
+    const resp_test_pic = await verificarTestpsicologicoEstudianteService({DNI: localStorage.getItem('dni')})
+    console.log(resp_inscrito)
+    console.log(resp_datos_co)
+    console.log(resp_test_pic)
+    if(resp_inscrito.data.ok) setStatusDatosApoderado(true)
+    if(resp_datos_co.data.ok) setStatusInscripcion(true)
+    if(resp_test_pic.data.ok) setStatusTestpsicologico(true)
+  }
+  useEffect(() => {
+    verificarStates()
+  },[])
   return (
     <>
       <h1>Bienvenido { localStorage.getItem('nombre') }</h1>
@@ -57,6 +75,32 @@ const HomeDashEstudinte = () => {
             alt=""
           />
           {/* </div> */}
+        </div>
+        <div className="containerEnlaces">
+          <h4>Requisitos</h4>
+          <ul>
+            <li style={{borderLeft: 'solid 2px green'}}>
+              <i class="ri-check-line" style={{ fontWeight: 'bold', color: 'green' }}></i>Registro
+            </li>
+            <li style={{borderLeft: statusDatosApoderado ? 'solid 2px green': 'solid 2px red'}}>
+              <i class={statusDatosApoderado ? "ri-check-line": 'ri-close-line'} style={{ fontWeight: 'bold', color: statusDatosApoderado ? 'green': 'red' }}></i>Datos del Apoderado
+            </li>
+            <li style={{borderLeft: statusInscripcion ? 'solid 2px green': 'solid 2px red'}}>
+              <i class={statusInscripcion ? "ri-check-line": 'ri-close-line'} style={{ fontWeight: 'bold', color: statusInscripcion ? 'green': 'red' }}></i>Inscripcion
+            </li>
+            <li style={{borderLeft: statusInscripcion ? 'solid 2px green': 'solid 2px red'}}>
+              <i class={statusInscripcion ? "ri-check-line": 'ri-close-line'} style={{ fontWeight: 'bold', color: statusInscripcion ? 'green': 'red' }}></i>Foto
+            </li>
+            <li style={{borderLeft: false ? 'solid 2px green': 'solid 2px red'}}>
+              <i class={false ? "ri-check-line": 'ri-close-line'} style={{ fontWeight: 'bold', color: false ? 'green': 'red' }}></i>Voucher de pago
+            </li>
+            <li style={{borderLeft: statusInscripcion ? 'solid 2px green': 'solid 2px red'}}>
+              <i class={statusInscripcion ? "ri-check-line": 'ri-close-line'} style={{ fontWeight: 'bold', color: statusInscripcion ? 'green': 'red' }}></i>Documentacion (DNI, CERT. EST.)
+            </li>
+            <li style={{borderLeft: statusTestpsicologico ? 'solid 2px green': 'solid 2px red'}}>
+              <i class={statusTestpsicologico ? "ri-check-line": 'ri-close-line'} style={{ fontWeight: 'bold', color: statusTestpsicologico ? 'green': 'red' }}></i>Test psicologico
+            </li>
+          </ul>
         </div>
       </div>
     </>

@@ -103,6 +103,9 @@ const VoucherPage = () => {
       message.error('No se encontro estudian');
     }
   };
+  const comprobarVoucher = async() => {
+    alert("Comprobando voucher")
+  }
   useEffect(() => {
     setLoading(true)
     obtenerInputs();
@@ -113,7 +116,7 @@ const VoucherPage = () => {
     <div>
       {loading ? <SpinnerComponent /> : ''}
       <div className="contentDashboard">
-        <h1 class="titlePageDashboard">Voucher</h1>
+        <h1 className="titlePageDashboard">Voucher</h1>
         <Breadcrumb className="bradcrumpPadding">
           <Breadcrumb.Item>Dashboard</Breadcrumb.Item>
           <Breadcrumb.Item>Voucher</Breadcrumb.Item>
@@ -142,7 +145,7 @@ const VoucherPage = () => {
               >
                 <Input
                   placeholder="Ingresa el codigo del voucher"
-                  maxLength={10}
+                  maxLength={7}
                 />
               </Form.Item>
               <Form.Item
@@ -169,6 +172,20 @@ const VoucherPage = () => {
               >
                 <Input disabled={true} />
               </Form.Item>
+              <Form.Item
+                label="Age"
+                name="age"
+                rules={[{ required: true }]}
+              >
+                <Input maxLength={4} />
+              </Form.Item>
+              <Form.Item
+                label="Caja"
+                name="caj"
+                rules={[{ required: true }]}
+              >
+                <Input maxLength={4} />
+              </Form.Item>
             </div>
             <Form.Item className="filaBotones">
               <Popconfirm
@@ -183,6 +200,9 @@ const VoucherPage = () => {
                   Guardar Cambios
                 </Button>
               </Popconfirm>
+              <Button  icon={<SearchOutlined />} onClick={comprobarVoucher}>
+                Comprobar
+              </Button>
               <Button icon={<SearchOutlined />} onClick={buscarVoucher}>
                 Buscar
               </Button>

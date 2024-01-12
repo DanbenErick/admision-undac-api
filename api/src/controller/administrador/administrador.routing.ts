@@ -5,6 +5,7 @@ import CarrerasController from './carrera.routing';
 import VoucherController from './voucher.rest.api';
 import EstudianteController from './estudiantes.rest.api';
 import InscritosController from './inscritos.routing';
+import AulasController from './aulas.rest.api';
 
 class AdministradorRouting {
 
@@ -15,7 +16,7 @@ class AdministradorRouting {
     public vouchers: VoucherController
     public estudiantes: EstudianteController
     public inscritos: InscritosController
-
+    public aulas: AulasController
 
   public constructor() {
     this.procesos = new ProcesosController()
@@ -24,6 +25,7 @@ class AdministradorRouting {
     this.vouchers = new VoucherController()
     this.estudiantes = new EstudianteController()
     this.inscritos = new InscritosController()
+    this.aulas = new AulasController()
 
     this.router = Router();
     this.routes();
@@ -36,6 +38,7 @@ class AdministradorRouting {
     this.router.use('/vouchers', this.vouchers.router)
     this.router.use('/estudiantes', this.estudiantes.router)
     this.router.use('/inscritos', this.inscritos.router)
+    this.router.use('/aulas', this.aulas.router)
   }
 }
 

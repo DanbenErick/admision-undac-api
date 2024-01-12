@@ -125,7 +125,7 @@ const EstudiantesPage = () => {
     <div>
       {loading ? <SpinnerComponent /> : ''}
       <div className="contentDashboard">
-        <h1 class="titlePageDashboard">Estudiantes</h1>
+        <h1 className="titlePageDashboard">Estudiantes</h1>
         <Breadcrumb className="bradcrumpPadding">
           <Breadcrumb.Item>Dashboard</Breadcrumb.Item>
           <Breadcrumb.Item>Estudiantes</Breadcrumb.Item>

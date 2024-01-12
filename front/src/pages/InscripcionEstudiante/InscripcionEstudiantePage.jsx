@@ -44,7 +44,7 @@ const InscripcionEstudiantePage = () => {
   }));
   return (
     <div className="InscripcionEstudiantePage">
-      <div class="background"></div>
+      <div className="background"></div>
       <div className="containerInscripcionEstudiantePageCenter">
         <div className="containerInscripcionEstudiantePage">
           <Steps current={current} items={items} />

@@ -8,7 +8,44 @@ export class EstudiantesGeneralService {
   public constructor() {
     this.estudianteRepo = new EstudianteGeneralRepository();
   }
-
+  public verificarInscripcionEstudiante = async(params: any) => {
+    const dbConex: any = await connectMysql.connectMysql()
+    try {
+      const result: [] = await this.estudianteRepo.verificarInscripcionEstudiante(dbConex, params)
+      if(result.length > 0) return { ok: true, message: 'Se encontro la inscripcion del estudiante' }
+      return { ok: false, message: 'No se encontro la inscripcion del estudiante' }
+    }catch(error) {
+      await dbConex.rollback()
+    }finally {
+      await dbConex.close()
+    }
+  }
+  public verificarDatosCompletamerioEstudiante = async(params: any) => {
+    const dbConex: any = await connectMysql.connectMysql()
+    try {
+      const result: [] = await this.estudianteRepo.verificarDatosCompletamerioEstudiante(dbConex, params)
+      if(result.length > 0) return { ok: true, message: 'Se encontro los datos complementarios' }
+      return { ok: false, message: 'No se encontro los datos complementarios' }
+      
+    }catch(error) {
+      await dbConex.rollback()
+    }finally {
+      await dbConex.close()
+    }
+  }
+  public verificarTestpsicologicoInscrito = async(params: any) => {
+    const dbConex: any = await connectMysql.connectMysql()
+    try {
+      const result: [] = await this.estudianteRepo.verificarTestpsicologicoInscrito(dbConex, params)
+      if(result.length > 0) return { ok: true, message: 'Se encontro su test psicologico' }
+      return { ok: false, message: 'No se encontro su test psicologico' }
+      
+    }catch(error) {
+      await dbConex.rollback()
+    }finally {
+      await dbConex.close()
+    }
+  }
   public consultarEstudianteExiste = async (params: EstudianteInterface) => {
     const dbConnect: any = await connectMysql.connectMysql();
     try {
@@ -66,7 +103,7 @@ export class EstudiantesGeneralService {
         NOMBRE_COMPLETO_APO: params.NOMBRE_COMPLETO_APO,
         CELULAR_APO: params.CELULAR_APO,
         DNI_APO: params.DNI_APO,
-        FECHA_REGISTRO: new Date()
+        FECHA_REGISTRO: new Date(),
       };
 
       const [result] =
@@ -98,9 +135,97 @@ export class EstudiantesGeneralService {
         YEAR_CONCLU: params.YEAR_CONCLU,
         FECHA_REGISTRO: new Date(),
       };
-      const [result]: any = await this.estudianteRepo.registrarInscripcionEstudiante(dbConex, data);
+      const [result]: any =
+        await this.estudianteRepo.registrarInscripcionEstudiante(dbConex, data);
 
-      if (result.affectedRows > 0) {return { ok: true, message: "Se modifico correctamente" };}
+      if (result.affectedRows > 0) {
+        return { ok: true, message: "Se modifico correctamente" };
+      }
+      return { ok: false, message: "Ocurrio un error al registrar" };
+    } catch (error) {
+      await dbConex.rollback();
+    } finally {
+      await dbConex.close();
+    }
+  };
+  public registrarTestPsicologicoEstudiante = async (params: any) => {
+    const dbConex: any = await connectMysql.connectMysql();
+    const {
+      DNI,
+      TEST_1_PREG_1,
+      TEST_1_PREG_2,
+      TEST_1_PREG_3,
+      TEST_1_PREG_4,
+      TEST_1_PREG_5,
+      TEST_1_PREG_6,
+      TEST_1_PREG_7,
+      TEST_1_PREG_8,
+      TEST_1_PREG_9,
+      TEST_1_PREG_10,
+      TEST_1_PREG_11,
+      TEST_1_PREG_12,
+      TEST_1_PREG_13,
+      TEST_1_PREG_14,
+      TEST_1_PREG_15,
+      TEST_2_PREG_1,
+      TEST_2_PREG_2,
+      TEST_2_PREG_3,
+      TEST_2_PREG_4,
+      TEST_2_PREG_5,
+      TEST_2_PREG_6,
+      TEST_2_PREG_7,
+      TEST_2_PREG_8,
+      TEST_2_PREG_9,
+      TEST_2_PREG_10,
+      TEST_2_PREG_11,
+      TEST_2_PREG_12,
+      TEST_2_PREG_13,
+      TEST_2_PREG_14,
+      TEST_2_PREG_15,
+    } = params;
+    try {
+      const data = {
+        DNI,
+        RESP_1: `${TEST_1_PREG_1}${TEST_1_PREG_1}${TEST_1_PREG_1}${TEST_1_PREG_1}${TEST_1_PREG_1}${TEST_1_PREG_1}${TEST_1_PREG_1}${TEST_1_PREG_1}${TEST_1_PREG_1}${TEST_1_PREG_1}${TEST_1_PREG_1}${TEST_1_PREG_1}${TEST_1_PREG_1}${TEST_1_PREG_1}${TEST_1_PREG_1}`,
+        RESP_2: `${TEST_2_PREG_1}${TEST_2_PREG_1}${TEST_2_PREG_1}${TEST_2_PREG_1}${TEST_2_PREG_1}${TEST_2_PREG_1}${TEST_2_PREG_1}${TEST_2_PREG_1}${TEST_2_PREG_1}${TEST_2_PREG_1}${TEST_2_PREG_1}${TEST_2_PREG_1}${TEST_2_PREG_1}${TEST_2_PREG_1}${TEST_2_PREG_1}`,
+        TOTAL_1:
+          Number(TEST_1_PREG_1) +
+          Number(TEST_1_PREG_2) +
+          Number(TEST_1_PREG_3) +
+          Number(TEST_1_PREG_4) +
+          Number(TEST_1_PREG_5) +
+          Number(TEST_1_PREG_6) +
+          Number(TEST_1_PREG_7) +
+          Number(TEST_1_PREG_8) +
+          Number(TEST_1_PREG_9) +
+          Number(TEST_1_PREG_10) +
+          Number(TEST_1_PREG_11) +
+          Number(TEST_1_PREG_12) +
+          Number(TEST_1_PREG_13) +
+          Number(TEST_1_PREG_14) +
+          Number(TEST_1_PREG_15),
+        TOTAL_2:
+          Number(TEST_2_PREG_1) +
+          Number(TEST_2_PREG_2) +
+          Number(TEST_2_PREG_3) +
+          Number(TEST_2_PREG_4) +
+          Number(TEST_2_PREG_5) +
+          Number(TEST_2_PREG_6) +
+          Number(TEST_2_PREG_7) +
+          Number(TEST_2_PREG_8) +
+          Number(TEST_2_PREG_9) +
+          Number(TEST_2_PREG_10) +
+          Number(TEST_2_PREG_11) +
+          Number(TEST_2_PREG_12) +
+          Number(TEST_2_PREG_13) +
+          Number(TEST_2_PREG_14) +
+          Number(TEST_2_PREG_15),
+        FECHA_REGISTRO: new Date(),
+      };
+      const [result]: any = await this.estudianteRepo.registrarTestPsicologicoEstudiante( dbConex, data );
+      if (result.affectedRows > 0) {
+        return { ok: true, message: "Se registro correctamente correctamente" };
+      }
       return { ok: false, message: "Ocurrio un error al registrar" };
     } catch (error) {
       await dbConex.rollback();

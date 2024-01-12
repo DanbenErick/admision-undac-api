@@ -15,7 +15,6 @@ class ProcesosController {
         try {
           const params: any[] = []
           const result = await this.procesosService.obtenerProcesos(params);
-          console.log("Ingreso")
             res.status(200).json(result)
         }catch(error) {
             res.status(500).json(error)
@@ -25,7 +24,6 @@ class ProcesosController {
     public obtenerUsuarios = async (req: Request, res: Response) =>  {
       try {
         const { usuario } = req.query;
-        console.log('usuario:', usuario)
         let result;
         if(usuario != null) {
           // result = await this.mantenimientoUsuarioService.obtenerUsuarios(usuario);
@@ -42,7 +40,6 @@ class ProcesosController {
     public crearProceso = async (req: Request, res: Response) => {
       try {
         const params = req.body
-        console.log(params)
         const result:any = await this.procesosService.crearProceso(params)
         if(result.ok) {
           res.status(200).json(result)

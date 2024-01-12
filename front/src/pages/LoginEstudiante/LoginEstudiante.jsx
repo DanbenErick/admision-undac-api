@@ -16,6 +16,7 @@ const LoginEstudiantePage = () => {
     if(resp.data.ok) {
       localStorage.setItem('token', resp.data.token)
       localStorage.setItem('nombre', resp.data.name)
+      localStorage.setItem('dni', resp.data.dni)
       localStorage.setItem('rol', resp.data.rol)
       message.success(resp.data.message)
       navigate('/dashboard-estudiantes')
@@ -26,10 +27,10 @@ const LoginEstudiantePage = () => {
     console.log(resp);
   };
   return (
-    <div class="pageLogin">
-      <div class="body">
-        <div class="background"></div>
-        <div class="login">
+    <div className="pageLogin">
+      <div className="body">
+        <div className="background"></div>
+        <div className="login">
           <Form
             layout="vertical"
             className="form"
@@ -39,7 +40,7 @@ const LoginEstudiantePage = () => {
           >
             <div className="containerImg">
               <img
-                class="img"
+                className="img"
                 src="https://undac.edu.pe/wp-content/uploads/elementor/thumbs/cropped-undac-otxjxjp3hh6yj3evud6f4g667rmvghjh2tp91gonu8.png"
                 alt=""
               />

@@ -44,9 +44,6 @@ dependencies:
   remixicon:
     specifier: ^4.0.1
     version: 4.0.1
-  tailwindcss:
-    specifier: ^3.4.1
-    version: 3.4.1
   web-vitals:
     specifier: ^2.1.4
     version: 2.1.4

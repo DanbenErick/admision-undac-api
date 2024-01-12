@@ -40,6 +40,14 @@ const buscarVoucherService = async (params) => {
   }
 };
 
+const comprobarComprobantePago = async(params) => {
+  try {
+
+  }catch(error) {
+    console.error('OC')
+  }
+}
+
 export {
   obtenerVouchersService,
   buscarEstudianteVoucherService,

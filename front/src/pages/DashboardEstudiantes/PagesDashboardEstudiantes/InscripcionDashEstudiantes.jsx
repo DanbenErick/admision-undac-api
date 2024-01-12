@@ -1,19 +1,24 @@
-import React, { useEffect, useState } from "react";
-import { SaveFilled, UploadOutlined } from "@ant-design/icons";
+import React, { useEffect, useRef, useState } from 'react';
+import { SaveFilled, UploadOutlined } from '@ant-design/icons';
 import {
   Button,
   Form,
   Input,
   Select,
-  Upload,
   DatePicker,
   Radio,
-} from "antd";
+  message,
+  Alert,
+} from 'antd';
 import {
-  subirFotoEstudiante,
+  subirFotoEstudianteService,
+  subirDocumentacionEstudianteService,
   inscribirEstudianteService,
-} from "../../../api/inscripcionDashEstudianteService";
+  verificarInscripcionEstudianteService,
+  verificarDatosComplementariosEstudiante,
+} from '../../../api/inscripcionDashEstudianteService';
 import {
+  buscarAulaPorTurnoForm,
   obtenerCarrerasCodigoForm,
   obtenerDepartamentosForm,
   obtenerDiscapacidadesForm,
@@ -21,30 +26,81 @@ import {
   obtenerProcesoActivoForm,
   obtenerProvinciasForm,
   obtenerRazasEtnicasForm,
-} from "../../../api/apiInpputs";
-import moment from "moment";
+} from '../../../api/apiInpputs';
+import moment from 'moment';
+import 'remixicon/fonts/remixicon.css';
+import SpinnerComponent from '../../../components/Spinner';
 
 const InscripcionDashboardEstudiante = () => {
   const [formDatosComplementariosEstudiante] = Form.useForm();
   const [selectProcesos, setSelectProcesos] = useState();
   const [selectCarreras, setSelectCarreras] = useState();
+  const [selectAulas, setSelectAulas] = useState();
   const [selectDiscapacidades, setSelectDiscapacidades] = useState();
   const [selectRazasEtnicas, setSelectRazasEtnicas] = useState();
+  const [loading, setLoading] = useState(false);
+  const [verificarRegistroEstudiante, setVerificarRegistroEstudiante] =
+    useState(0);
+  const [estudianteInscrito, setEstudianteInscrito] = useState(false);
 
   const [optionsDepartamento, setOptionsDepartamento] = useState();
   const [optionsProvincia, setOptionsProvincia] = useState();
   const [optionsDistrito, setOptionsDistrito] = useState();
   const [fileList, setFileList] = useState([]);
 
-  const subirFoto = async () => {
-    const formData = new FormData();
-    formData.append("foto", fileList[0]);
+  const fileInputDocRef = useRef(null);
+  const fileInputImgRef = useRef(null);
 
-    const resp_foto = await subirFotoEstudiante(formData);
-    console.log(resp_foto);
+  const verificarInscritoDatosComplEstudiante = async () => {
+    const params = { DNI: localStorage.getItem('dni') };
+    const resp_dat_compl = await verificarInscripcionEstudianteService(params);
+    const resp_insc = await verificarDatosComplementariosEstudiante(params);
+    if (resp_dat_compl.data.ok && resp_insc.data.ok) {
+      setVerificarRegistroEstudiante(true);
+      return true
+    }
+    return false
+  };
+
+  const subirFoto = async (params) => {
+    const formData = new FormData();
+    const selectedFile = fileInputImgRef.current.files[0];
+    const typeFile = selectedFile.type;
+    const fileExtension = typeFile.split('/')[1];
+    const newFileName = `${params}.${fileExtension}`;
+    formData.append('foto', selectedFile, newFileName);
+    if (!selectedFile) {
+      message.error('Selecciona una imagen');
+      return;
+    }
+    const resp_foto = await subirFotoEstudianteService(formData);
+    if (resp_foto.data.ok) {
+      message.success(resp_foto.data.message);
+      return true;
+    }
+    message.error(resp_foto.data.message);
+  };
+  const subirDocumentosEstudiante = async (params) => {
+    const formData = new FormData();
+    const selectedFile = fileInputDocRef.current.files[0];
+    const typeFile = selectedFile.type;
+    const fileExtension = typeFile.split('/')[1];
+    const newFileName = `${params}.${fileExtension}`;
+    formData.append('documento', selectedFile, newFileName);
+    if (!selectedFile) {
+      message.error('Selecciona un documento');
+      return;
+    }
+    const resp_doc = await subirDocumentacionEstudianteService(formData);
+    if (resp_doc.data.ok) {
+      message.success(resp_doc.data.message);
+      return true;
+    }
+    message.error(resp_doc.data.message);
   };
 
   const getInputs = async () => {
+    setLoading(true);
     const resp_proceso_activo = await obtenerProcesoActivoForm();
     const resp_carreras = await obtenerCarrerasCodigoForm();
     const resp_discapacidades = await obtenerDiscapacidadesForm();
@@ -59,21 +115,33 @@ const InscripcionDashboardEstudiante = () => {
     setSelectCarreras(resp_carreras.data);
     setSelectDiscapacidades(resp_discapacidades.data);
     setSelectRazasEtnicas(resp_razas_etnicas.data);
+    setLoading(false);
   };
   const guardarDatosComplementarios = async (params) => {
-    params.DNI = "72353567";
-    params.RUTA_FOTO = params.DNI + ".jpg";
-    params.LUGAR_NACIMIENTO = "010101";
-    params.CELULAR = "999999999";
+    params.DNI = localStorage.getItem('dni');
+    params.RUTA_FOTO = params.DNI + '.jpg';
+    params.LUGAR_NACIMIENTO = '010101';
+    params.CELULAR = '999999999';
     params.FECHA_NACIMIENTO = moment(params.FECHA_NACIMIENTO).format(
-      "YYYY-MM-DD"
+      'YYYY-MM-DD',
     );
-    params.YEAR_CONCLU = moment(params.YEAR_CONCLU).format("YYYY");
-    console.log("DATOS", params);
-    const resp = await inscribirEstudianteService(params);
-    console.log(resp);
-    await subirFoto();
-    // setFormDatosComplementariosDisabled(true);
+    params.YEAR_CONCLU = moment(params.YEAR_CONCLU).format('YYYY');
+
+    const resp_inscripcion_estudiante = await inscribirEstudianteService(params);
+    const resp_subir_foto = await subirFoto(params.DNI);
+    const resp_subir_documento = await subirDocumentosEstudiante(params.DNI);
+    console.log(resp_inscripcion_estudiante, "resp_inscripcion_estudiante")
+    console.log(resp_subir_foto, "resp_subir_foto")
+    console.log(resp_subir_documento, "resp_subir_documento")
+    if (
+      resp_inscripcion_estudiante.data.ok &&
+      resp_subir_foto &&
+      resp_subir_documento
+    ) {
+      message.success('Registrado correctamente');
+      setVerificarRegistroEstudiante(true )
+      return;
+    }
   };
   const buscarDistrito = async (params) => {
     const resp = await obtenerDistritosForm({ PROVINCIA: params });
@@ -86,24 +154,58 @@ const InscripcionDashboardEstudiante = () => {
   };
 
   useEffect(() => {
-    getInputs();
+    const exe = async() => {
+      const resp = await verificarInscritoDatosComplEstudiante();
+      if(!resp) getInputs();
+    }
+    exe()
   }, []);
-  const props = {
-    onRemove: (file) => {
-      const index = fileList.indexOf(file);
-      const newFileList = fileList.slice();
-      newFileList.splice(index, 1);
-      setFileList(newFileList);
-    },
-    beforeUpload: (file) => {
-      setFileList([...fileList, file]);
-      return false;
-    },
-    fileList,
+  const handleFileDocChange = (e) => {
+    const file = e.target.files[0];
+    if (file && file.type === 'application/pdf') {
+      // Aquí puedes manejar el archivo PDF
+      console.log('Archivo PDF seleccionado:', file);
+
+      // Puedes realizar más acciones, como enviar el archivo al servidor
+    } else {
+      // Mostrar un mensaje de error si el archivo no es un PDF
+      console.error('Por favor, selecciona un archivo PDF.');
+      // Limpiar el campo de entrada para permitir seleccionar el mismo archivo nuevamente
+      fileInputDocRef.current.value = '';
+    }
   };
-  return (
+  const handleFileImgChange = (e) => {
+    const file = e.target.files[0];
+    if (file.type === 'image/png' || file.type === 'image/jpeg') {
+      // Aquí puedes manejar el archivo PDF
+      console.log('Archivo PDF seleccionado:', file);
+
+      // Puedes realizar más acciones, como enviar el archivo al servidor
+    } else {
+      // Mostrar un mensaje de error si el archivo no es un PDF
+      console.error('Por favor, selecciona un archivo PDF.');
+      // Limpiar el campo de entrada para permitir seleccionar el mismo archivo nuevamente
+      fileInputImgRef.current.value = '';
+    }
+  };
+  const buscarAulaPorTurno = async(e) => {
+    //TODO: Hacer logica para buscar aula
+    const resp = await buscarAulaPorTurnoForm({TURNO: e})
+    setSelectAulas(resp.data)
+  }
+  return verificarRegistroEstudiante ? (
+    <Alert
+      message="Registro exitoso"
+      description="Usted ya realizo su test psicologico"
+      type="success"
+      showIcon
+    />
+  ) : (
     <>
-      <h1>Datos</h1>
+      {loading ? <SpinnerComponent /> : ''}
+      <h1>
+        <i className="ri-draft-fill"></i>Datos Complementarios
+      </h1>
       <Form
         layout="vertical"
         form={formDatosComplementariosEstudiante}
@@ -112,9 +214,10 @@ const InscripcionDashboardEstudiante = () => {
         <div className="gridInscripcionEstudianteDashboard">
           <div className="cardDashEstudiante">
             <div className="cardDashEstudianteHeader">
-              <p>Apoderado</p>
+              <p>
+                <i className="ri-group-2-fill"></i> Apoderado
+              </p>
             </div>
-
             <div className="cardDashEstudianteBody">
               <div className="gridFormFormularioApoderado">
                 <Form.Item
@@ -146,7 +249,9 @@ const InscripcionDashboardEstudiante = () => {
           </div>
           <div className="cardDashEstudiante">
             <div className="cardDashEstudianteHeader">
-              <p>Formulario de inscripcion</p>
+              <p>
+                <i className="ri-file-3-fill"></i> Formulario de inscripcion
+              </p>
             </div>
             <div className="cardDashEstudianteBody">
               <div className="gridFormFormularioInscripcion">
@@ -180,7 +285,7 @@ const InscripcionDashboardEstudiante = () => {
                   name="YEAR_CONCLU"
                   rules={[{ required: false }]}
                 >
-                  <DatePicker picker="year" />
+                  <DatePicker picker="year" style={{ width: '100%' }} />
                 </Form.Item>
                 <Form.Item
                   className="FormItem"
@@ -210,18 +315,48 @@ const InscripcionDashboardEstudiante = () => {
                   <Select
                     options={[
                       {
-                        value: "Pasco",
-                        label: "Pasco",
+                        value: 'Pasco',
+                        label: 'Pasco',
                       },
                       {
-                        value: "Tarma",
-                        label: "Tarma",
+                        value: 'Tarma',
+                        label: 'Tarma',
                       },
                       {
-                        value: "Oxampampa",
-                        label: "Oxampampa",
+                        value: 'Oxampampa',
+                        label: 'Oxampampa',
                       },
                     ]}
+                  />
+                </Form.Item>
+                <Form.Item
+                  className="FormItem"
+                  label="Turno"
+                  name="TURNO"
+                  rules={[{ required: false }]}
+                >
+                  <Select
+                    options={[
+                      {
+                        value: 'M',
+                        label: 'Mañana',
+                      },
+                      {
+                        value: 'T',
+                        label: 'Tarde',
+                      },
+                    ]}
+                    onChange={buscarAulaPorTurno}
+                  />
+                </Form.Item>
+                <Form.Item
+                  className="FormItem"
+                  label="Aula"
+                  name="ID_AULA"
+                  rules={[{ required: false }]}
+                >
+                  <Select
+                    options={selectAulas}
                   />
                 </Form.Item>
               </div>
@@ -229,7 +364,9 @@ const InscripcionDashboardEstudiante = () => {
           </div>
           <div className="cardDashEstudiante">
             <div className="cardDashEstudianteHeader">
-              <p>Datos Complementarios</p>
+              <p>
+                <i className="ri-file-3-fill"></i> Datos Complementarios
+              </p>
             </div>
             <div className="cardDashEstudianteBody">
               <div className="gridFormDatosComplementarios">
@@ -242,12 +379,12 @@ const InscripcionDashboardEstudiante = () => {
                   <Select
                     options={[
                       {
-                        value: "M",
-                        label: "Masculino",
+                        value: 'M',
+                        label: 'Masculino',
                       },
                       {
-                        value: "F",
-                        label: "Femenino",
+                        value: 'F',
+                        label: 'Femenino',
                       },
                     ]}
                   />
@@ -258,7 +395,7 @@ const InscripcionDashboardEstudiante = () => {
                   name="FECHA_NACIMIENTO"
                   rules={[{ required: false }]}
                 >
-                  <DatePicker />
+                  <DatePicker style={{ width: '100%' }} />
                 </Form.Item>
                 <Form.Item
                   className="FormItem"
@@ -309,11 +446,11 @@ const InscripcionDashboardEstudiante = () => {
                     placeholder="Si o No"
                     options={[
                       {
-                        label: "Si",
+                        label: 'Si',
                         value: 1,
                       },
                       {
-                        label: "No",
+                        label: 'No',
                         value: 0,
                       },
                     ]}
@@ -352,9 +489,23 @@ const InscripcionDashboardEstudiante = () => {
                   <Input />
                 </Form.Item>
                 <Form.Item className="FormItem" label="Foto" name="RUTA_FOTO">
-                  <Upload {...props} maxCount={1}>
-                    <Button icon={<UploadOutlined />}>Click to upload</Button>
-                  </Upload>
+                  <input
+                    type="file"
+                    accept=".png, .jpg, .jpeg"
+                    ref={fileInputImgRef}
+                    onChange={handleFileImgChange}
+                  />
+                </Form.Item>
+                <Form.Item
+                  className="FormItem"
+                  label="Archivos DNI y Cert. estudios"
+                >
+                  <input
+                    type="file"
+                    accept=".pdf"
+                    ref={fileInputDocRef}
+                    onChange={handleFileDocChange}
+                  />
                 </Form.Item>
               </div>
               <Button

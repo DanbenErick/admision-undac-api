@@ -13,10 +13,10 @@ const LoginPage = () => {
     console.log(resp);
   };
   return (
-    <div class="pageLogin">
-      <div class="body">
-        <div class="background"></div>
-        <div class="login">
+    <div className="pageLogin">
+      <div className="body">
+        <div className="background"></div>
+        <div className="login">
           <Form
             layout="vertical"
             className="form"
@@ -26,7 +26,7 @@ const LoginPage = () => {
           >
             <div className="containerImg">
               <img
-                class="img"
+                className="img"
                 src="https://undac.edu.pe/wp-content/uploads/elementor/thumbs/cropped-undac-otxjxjp3hh6yj3evud6f4g667rmvghjh2tp91gonu8.png"
                 alt=""
               />

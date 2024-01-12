@@ -49,50 +49,38 @@ export const generarConsulta = async (tabla: string, valores: any, condicion: an
 
 export const obtenerQuery = async (accion: string, tabla: string, campos: any, where: any[]) => {
     let resultado: string = '';
-    //
     let queryTabla: string = tabla;
     let queryCampos: string = '';
     let queryParametros: string = '';
     let queryWhere: string = ' WHERE 1=1 ';
-    //
     switch (accion) {
         case 'UPDATE':
-
             queryTabla = 'UPDATE ' + tabla + ' SET ';
             queryCampos = '';
             queryWhere = ' WHERE 1=1 ';
-
             for (let key of Object.keys(campos)) {
                 // console.log('key', key);
                 const existe = where.filter(f => f.ID.toUpperCase() == key.toUpperCase()).length;
                 if (existe == 0) queryCampos += key.toLowerCase() + '=' + ':' + key + ',';
             }
             queryCampos = queryCampos.substring(0, queryCampos.length - 1);
-
             for (let t of where) {
                 queryWhere += ' AND ' + t.ID + ' = ' + ':' + t.ID;
             };
-
             resultado = queryTabla + queryCampos + queryWhere;
             break;
         case 'INSERT':
             queryTabla = 'INSERT INTO ' + tabla + ' ';
             queryCampos = '';
-
             queryWhere = ' WHERE 1=1 ';
-
             for (let key of Object.keys(campos)) {
-                console.log('key', key)
                 queryCampos += key.toLowerCase() + ','
                 queryParametros += ':' + key + ',';
             }
-
             queryCampos = queryCampos.substring(0, queryCampos.length - 1);
             queryParametros = queryParametros.substring(0, queryParametros.length - 1);
-
             resultado = queryTabla + '(' + queryCampos + ') VALUES (' + queryParametros + ')';
             break;
-
     }
     return resultado;
 }

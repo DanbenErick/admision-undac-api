@@ -5,10 +5,10 @@ import { Outlet } from 'react-router-dom';
 const DashboardPage = () => {
   return (
     <div className="containerGridDashboardPage">
-      <div class="asideContainer">
+      <div className="asideContainer">
         <AsideComponent />
       </div>
-      <div class="mainContainer">
+      <div className="mainContainer">
         <Outlet />
       </div>
     </div>

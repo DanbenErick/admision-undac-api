@@ -1,10 +1,21 @@
 import axios from './axiosConfig';
 
+const API_HOST = process.env.REACT_APP_API_URL;
+const getRuta = (params) => `${API_HOST}/input-controls/${params}`;
+
+const buscarAulaPorTurnoForm = async (params) => {
+  try {
+    const ruta = getRuta('buscar-aula-por-turno');
+    const resp = await axios.post(ruta, params)
+    return resp
+  }catch(error) {
+    console.error('Ocurrio un error', error)
+  }
+} 
 const obtenerProcesosForm = async () => {
   try {
-    const response = await axios.get(
-      'http://localhost:3500/input-controls/obtener-procesos',
-    );
+    const ruta = getRuta('obtener-procesos')
+    const response = await axios.get(ruta);
     return response;
   } catch (error) {
     console.error(`Error: ${error}`);
@@ -12,9 +23,8 @@ const obtenerProcesosForm = async () => {
 };
 const obtenerCarrerasForm = async () => {
   try {
-    const response = await axios.get(
-      'http://localhost:3500/input-controls/obtener-carreras',
-    );
+    const ruta = getRuta('obtener-carreras')
+    const response = await axios.get(ruta);
     return response;
   } catch (error) {
     console.error('Error', error);
@@ -22,9 +32,8 @@ const obtenerCarrerasForm = async () => {
 };
 const obtenerCarrerasCodigoForm = async () => {
   try {
-    const response = await axios.get(
-      'http://localhost:3500/input-controls/obtener-carreras-codigo',
-    );
+    const ruta = getRuta('obtener-carreras-codigo')
+    const response = await axios.get(ruta);
     return response;
   } catch (error) {
     console.error('Error', error);
@@ -32,9 +41,8 @@ const obtenerCarrerasCodigoForm = async () => {
 };
 const obtenerFacultadesForm = async () => {
   try {
-    const resp = await axios.get(
-      'http://localhost:3500/input-controls/obtener-facultades',
-    );
+    const ruta = getRuta('obtener-facultades')
+    const resp = await axios.get(ruta);
     return resp;
   } catch (error) {
     console.error('Error', error);
@@ -42,9 +50,9 @@ const obtenerFacultadesForm = async () => {
 };
 const obtenerProcesoActivoForm = async () => {
   try {
-    const resp = await axios.get(
-      'http://localhost:3500/input-controls/obtener-proceso-activo',
-    );
+    const ruta = getRuta('obtener-proceso-activo')
+    console.log("ruta", ruta)
+    const resp = await axios.get(ruta);
     return resp;
   } catch (error) {
     console.error('Ocurrio un error', error);
@@ -52,9 +60,8 @@ const obtenerProcesoActivoForm = async () => {
 };
 const obtenerDiscapacidadesForm = async () => {
   try {
-    const resp = await axios.get(
-      'http://localhost:3500/input-controls/obtener-discapacidades',
-    );
+    const ruta = getRuta('obtener-discapacidades')
+    const resp = await axios.get(ruta);
     return resp;
   } catch (error) {
     console.error('Ocurrio un error', error);
@@ -62,10 +69,8 @@ const obtenerDiscapacidadesForm = async () => {
 };
 const obtenerRazasEtnicasForm = async () => {
   try {
-    const resp = await axios.get(
-      'http://localhost:3500/input-controls/obtener-razas-etnicas',
-      {headers: { Authorization: `Bearer ${localStorage.getItem('token-estudiante')}` },}
-    );
+    const ruta = getRuta('obtener-razas-etnicas')
+    const resp = await axios.get(ruta,{headers: { Authorization: `Bearer ${localStorage.getItem('token-estudiante')}` },});
     return resp;
   } catch (error) {
     console.error('Ocurrio un error', error);
@@ -73,9 +78,8 @@ const obtenerRazasEtnicasForm = async () => {
 };
 const obtenerUbicacionesForm = async () => {
   try {
-    const resp = await axios.get(
-      'http://localhost:3500/input-controls/obtener-ubicaciones',
-    );
+    const ruta = getRuta('obtener-ubicaciones')
+    const resp = await axios.get(ruta);
     return resp;
   } catch (error) {
     console.error('Ocurrio un error', error);
@@ -83,9 +87,8 @@ const obtenerUbicacionesForm = async () => {
 };
 const obtenerDepartamentosForm = async () => {
   try {
-    const resp = await axios.get(
-      'http://localhost:3500/input-controls/obtener-departamentos',
-    );
+    const ruta = getRuta('obtener-departamentos')
+    const resp = await axios.get(ruta);
     return resp;
   } catch (error) {
     console.error('Ocurrio un error', error);
@@ -93,12 +96,8 @@ const obtenerDepartamentosForm = async () => {
 };
 const obtenerProvinciasForm = async (params) => {
   try {
-    const resp = await axios.get(
-      'http://localhost:3500/input-controls/obtener-provincias',
-      { 
-        params: { ...params }
-      },
-    );
+    const ruta = getRuta('obtener-provincias')
+    const resp = await axios.get(ruta,{params: { ...params }});
     return resp;
   } catch (error) {
     console.error('Ocurrio un error', error);
@@ -106,10 +105,8 @@ const obtenerProvinciasForm = async (params) => {
 };
 const obtenerDistritosForm = async (params) => {
   try {
-    const resp = await axios.get(
-      'http://localhost:3500/input-controls/obtener-distritos',
-      { params: { ...params } },
-    );
+    const ruta = getRuta('obtener-distritos')
+    const resp = await axios.get(ruta, { params: { ...params }});
     return resp;
   } catch (error) {
     console.error('Ocurrio un error', error);
@@ -128,4 +125,5 @@ export {
   obtenerDepartamentosForm,
   obtenerProvinciasForm,
   obtenerDistritosForm,
+  buscarAulaPorTurnoForm
 };

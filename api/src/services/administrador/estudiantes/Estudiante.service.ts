@@ -41,7 +41,6 @@ export class EstudiantesService {
         const dbConex: any = await connectMysql.connectMysql()
         try {
             const [result] = await this.estudianteRepo.modificarEstudiante(dbConex, params)
-            console.log("Resultado ", result.affectedRows)
             if(result.affectedRows > 0) return { ok: true, message: 'Se modifico correctamente' }
             return { ok: false, message: 'No se pudo modificar' }
         }catch(error) {

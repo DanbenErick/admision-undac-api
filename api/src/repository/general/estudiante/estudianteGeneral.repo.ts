@@ -4,7 +4,39 @@ import { logger } from '../../../resources/manager-log.resource';
 import { generarConsulta } from '../../../util/util'
 
 export class EstudianteGeneralRepository {
-    
+    public verificarInscripcionEstudiante = async(connection: any, params: any) => {
+      try {
+        const query = `SELECT ID
+                          FROM inscritos
+                      WHERE DNI = '${params.DNI}'
+                      AND PROCESO = (SELECT ID FROM procesos WHERE ESTADO = 1 AND TIPO_PROCESO = 'C')`
+        const [rows]: any = await connection.promise().query(query)
+        return rows
+      }catch(error) {
+        logger.error('EstudianteGeneralRepository.verificarInscripcionEstudiante =>', error)
+      }
+    }
+    public verificarDatosCompletamerioEstudiante = async(connection: any, params: any ) => {
+      try {
+        const query = `SELECT ID
+                        FROM dat_complementarios
+                        WHERE DNI = '${params.DNI}'`
+        const [rows]: any = await connection.promise().query(query)
+        return rows
+      }catch(error) {
+        logger.error('EstudianteGeneralRepository.verificarDatosCompletamerioEstudiante =>', error)
+      }
+
+    }
+    public verificarTestpsicologicoInscrito = async(connection: any, params: any) => {
+      try {
+        const query = `SELECT ID FROM actitudes WHERE DNI = '${params.DNI}'`
+        const [rows]: any = await connection.promise().query(query)
+        return rows
+      }catch(error) {
+        logger.error('EstudianteGeneralRepository.verificarTestpsicologicoInscrito =>', error)
+      }
+    }
     public consultarEstudianteExiste = async(connection: any, params: EstudianteInterface) => {
       try {
         const query = `SELECT DNI FROM registros WHERE DNI = ${params.DNI}`
@@ -40,7 +72,6 @@ export class EstudianteGeneralRepository {
       try {
         const query = await generarConsulta('dat_complementarios', params, null)
         const data = Object.values(params)
-        console.log(query, data)
         const resp = await connection.promise().execute(query, data)
         return resp
       }catch(error) {
@@ -56,5 +87,57 @@ export class EstudianteGeneralRepository {
       }catch(error) {
         logger.error('EstudianteGeneralRepository.registrarInscripcionEstudiante => ', error)
       }
+    }
+    public registrarTestPsicologicoEstudiante = async(connection: any, params: any) => {
+      try {
+        const query = await generarConsulta('actitudes', params, null)
+        const data = Object.values(params)
+        const resp = await connection.promise().execute(query, data)
+        return resp
+      }catch(error) {
+        logger.error('EstudianteGeneralRepository.registrarTestPsicologicoEstudiante => ', error)
+      }
+    }
+    public consultarSiSeRegistroEstudiante = async(connection: any, params: any) => {
+      try {
+
+      }catch(error) {
+        logger.error('EstudianteGeneralRepository.consultarSiSeRegistroEstudiante => ', error)
+      }
+    }
+    public consultarSiSeInscribioEstudiante = async(connection: any, params: any) => {
+      try {
+
+      }catch(error) {
+        logger.error('EstudianteGeneralRepository.consultarSiSeRegistroEstudiante => ', error)
+      } 
+    }
+    public consultarSiSeSubioFotoEstudiante = async(connection: any, params: any) => {
+      try {
+
+      }catch(error) {
+        logger.error('EstudianteGeneralRepository.consultarSiSeRegistroEstudiante => ', error)
+      } 
+    }
+    public consultarSiSeConfirmoPagoEstudiante = async(connection: any, params: any) => {
+      try {
+
+      }catch(error) {
+        logger.error('EstudianteGeneralRepository.consultarSiSeRegistroEstudiante => ', error)
+      } 
+    }
+    public consultarSiSePresentoDocumentacionEstudiante = async(connection: any, params: any) => {
+      try {
+
+      }catch(error) {
+        logger.error('EstudianteGeneralRepository.consultarSiSeRegistroEstudiante => ', error)
+      } 
+    }
+    public consultarSiRegistroDatosComplementarios  = async(connection: any, params: any) => {
+      try {
+
+      }catch(error) {
+        logger.error('EstudianteGeneralRepository.consultarSiSeRegistroEstudiante => ', error)
+      } 
     }
 }

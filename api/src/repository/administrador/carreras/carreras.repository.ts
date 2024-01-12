@@ -30,9 +30,7 @@ export class CarrerasRepository {
             const {ID} = params
             delete params.ID
             const query = await generarConsulta('carreras', params, `ID = ${ID}`)
-            console.log(query)
             const data = Object.values(params)
-            console.log(data)
             const result = await connection.promise().execute(query, data)
             return result
         }catch(error) {
@@ -44,8 +42,7 @@ export class CarrerasRepository {
             const query =  await generarConsulta('carreras', params, null)
             const data = Object.values(params)
             const result = await connection.promise().execute(query, data)
-            console.log(query)
-            return result            
+            return result
         }catch(error) {
             logger.error('CarrerasRepository.crearCarrera => ', error)
             throw error

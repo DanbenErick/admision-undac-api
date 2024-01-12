@@ -28,11 +28,9 @@ export class ProcesosService {
         const dbConnect: any = await connectMysql.connectMysql()
         try {
             const consultaProcesoAbierto: any[] = await this.procesosRepo.verificarSiHayProcesoAbierto(dbConnect, "")
-            console.log("RESPUESTA ", consultaProcesoAbierto.length, "[][][][]")
             if(consultaProcesoAbierto.length > 0) {
                 return {ok: true, procesoAbiertoExistente: true, message: 'Ya hay un proceso abierto ahora'}
             }
-            console.log(consultaProcesoAbierto)
             const result = await this.procesosRepo.crearProceso(dbConnect ,params)
             if(result[0].affectedRows > 0) {
                 return { ok: true, procesoAbiertoExistente: false, message: 'Proceso llevado exitosamente' }
@@ -50,7 +48,6 @@ export class ProcesosService {
         try {
             params.ESTADO = 0
             const resp = await this.procesosRepo.cerrarProceso(dbConnect, params)
-            console.log("ROWS:", resp[0].affectedRows)
             if(resp[0].affectedRows > 0) {
                 return { ok: true, message: 'Proceso llevado exitosamente' }
             }else {

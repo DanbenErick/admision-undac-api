@@ -7,7 +7,6 @@ class SistemaRepository {
         try {
             
             const query = `select * from usuarios WHERE USUARIO = '${params.USUARIO}' OR DNI ='${params.USUARIO}'`
-            console.log(query, params, params.USUARIO)
             const [rows, fields] = await connection.promise().query(query)
             return rows
         }catch(error) {
@@ -19,7 +18,6 @@ class SistemaRepository {
         try {
             const data = Object.values(params)
             const query = await generarConsulta('usuarios', params, null)
-            console.log(query)
             const resp = await connection.promise().execute(query, data)
             return resp
         } catch (error) {
@@ -30,7 +28,6 @@ class SistemaRepository {
     public loginUsuarioAdmin = async (connection: any, params: UsuarioInteface) => {
         try {
             const query = `select * from usuarios WHERE USUARIO = '${params.USUARIO}' OR DNI = '${params.USUARIO}'`
-            console.log(query)
             const [rows, fields] = await connection.promise().query(query)
             return rows 
         } catch (error) {
@@ -41,7 +38,6 @@ class SistemaRepository {
     public loginUsuarioEstudiante = async(connection: any, params:any) => {
         try {
             const query = `SELECT * FROM registros WHERE DNI = '${params.USUARIO}'`
-            console.log(query)
             const [rows] = await connection.promise().execute(query)
             return rows
         }catch(error) {

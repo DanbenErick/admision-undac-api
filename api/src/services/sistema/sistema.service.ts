@@ -18,7 +18,6 @@ class SistemaService {
             const salt = await bcrypt.genSalt(10);
             const password_encript = await bcrypt.hash(password, salt);
             params.PASSWORD = password_encript
-            console.log(params)
             const existenteUsuario: [] = await this.sistemaRepo.encontrarDuplidoUsuario(dbConex, params)
             if(existenteUsuario.length > 0) {
                 return {ok: true, duplicateUser: true,  message: 'Hay otro usuario con dni con este usuario registrado'}
@@ -41,7 +40,6 @@ class SistemaService {
         const dbConex: any = await connectMysql.connectMysql()
         try {
             const result: any[] = await this.sistemaRepo.loginUsuarioAdmin(dbConex, params)
-            console.log(result)
             if(result.length == 0) return { ok: false, message: 'No se encontro usuario' }
             const validarPassword = await bcrypt.compare(params.PASSWORD, result[0].PASSWORD)
             if(!validarPassword) return { ok: false, message: 'Usuario o contraseña incorrecta' }
@@ -89,6 +87,7 @@ class SistemaService {
                 ok: true, 
                 message: 'Se autentico correctamente',
                 name: result[0].NOMBRES || 'USUARIO',
+                dni: result[0].DNI,
                 rol: result[0].ROL,
                 token
             }

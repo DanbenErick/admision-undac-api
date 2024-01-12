@@ -147,7 +147,7 @@ const VacantesPage = () => {
       {contextHolder}
       {loading ? <SpinnerComponent /> : ''}
       <div className="contentDashboard">
-        <h1 class="titlePageDashboard">Vacantes</h1>
+        <h1 className="titlePageDashboard">Vacantes</h1>
         <Breadcrumb className="bradcrumpPadding">
           <Breadcrumb.Item>Dashboard</Breadcrumb.Item>
           <Breadcrumb.Item>Vacantes</Breadcrumb.Item>

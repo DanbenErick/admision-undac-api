@@ -2,8 +2,8 @@ import React from 'react';
 import 'remixicon/fonts/remixicon.css';
 import '../../../assets/styles/DashboardEstudiantes.css';
 import { NavLink } from 'react-router-dom';
-import '../../../assets/styles/tailwind.css';
 import { useNavigate } from 'react-router-dom';
+
 const AsideDashboardEstudiantes = () => {
   const navigate = useNavigate()
   const cerrarSesion = () => {
@@ -14,16 +14,16 @@ const AsideDashboardEstudiantes = () => {
   }
   return (
     <aside className="asideEstudiantesDash">
-      <div className="avatarEstudiante">
-        <img
-          src="https://undac.edu.pe/wp-content/uploads/elementor/thumbs/cropped-undac-otxjxjp3hh6yj3evud6f4g667rmvghjh2tp91gonu8.png"
-          alt=""
-        />
-        <p className="nombreEstudianteAside">DANBEN ERICK</p>
+      <div className="avatarEstudiante" style={{ marginBottom: '40px' }}>
+        <div className="containerImgAvatar">
+        <img className='imgAvatarEstudiante' src={process.env.PUBLIC_URL + '/logo.jpg'} alt="Logo avatar" />
+        </div>
+        <b>{localStorage.getItem('nombre')}</b>
+        
       </div>
-      <ul className="bg-blue-500 text-white p-10">
+      <ul className="">
         <li>
-          <NavLink to="/dashboard-estudiantes/home" activeClassName="active">
+          <NavLink to="/dashboard-estudiantes/home" activeclassname="active" >
             <i className="icon ri-home-fill"></i>
             Inicio
           </NavLink>
@@ -31,17 +31,54 @@ const AsideDashboardEstudiantes = () => {
         <li>
           <NavLink
             to="/dashboard-estudiantes/inscripcion"
-            activeClassName="active"
-          >
+            activeclassname="active">
             <i className="icon ri-file-paper-fill"></i>
-            Inscripcion
+            Inscripcion CEPRE
           </NavLink>
         </li>
         <li>
-          <NavLink activeClassName="active" onClick={cerrarSesion}>
+          <NavLink
+            to="/dashboard-estudiantes/inscripcion-ordinario"
+            activeclassname="active">
+            <i className="icon ri-file-paper-fill"></i>
+            Inscripcion Ordinario
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
+            to="/dashboard-estudiantes/inscripcion-extraordinario"
+            activeclassname="active">
+            <i className="icon ri-file-paper-fill"></i>
+            Inscripcion Extraordinario
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
+            to="/dashboard-estudiantes/inscripcion-modalidad"
+            activeclassname="active">
+            <i className="icon ri-file-paper-fill"></i>
+            Inscripcion Modalidades
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
+            to="/dashboard-estudiantes/test-psicologico"
+            activeclassname="active">
+            <i className="icon ri-file-paper-fill"></i>
+            Test psicologico
+          </NavLink>
+          <NavLink
+            to="/dashboard-estudiantes/pagos"
+            activeclassname="active">
+            <i className="icon ri-file-paper-fill"></i>
+            Pagos
+          </NavLink>
+        </li>
+        <li>
+          <a  onClick={cerrarSesion}>
             <i className="icon ri-logout-box-fill"></i>
             Salir
-          </NavLink>
+          </a>
         </li>
       </ul>
     </aside>

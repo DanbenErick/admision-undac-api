@@ -48,7 +48,6 @@ class VacantesRepository {
         try {
             const query = await generarConsulta('vacantes', params, null)
             const data = Object.values(params)
-            console.log(query, data)
             const result = await connection.promise().execute(query, data)
             return result
         }catch(error) {

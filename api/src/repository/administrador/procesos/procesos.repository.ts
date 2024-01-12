@@ -18,8 +18,7 @@ export class ProcesosRepository {
             const query =  await generarConsulta('procesos', params, null)
             const data = Object.values(params)
             const result = await connection.promise().execute(query, data)
-            console.log(query)
-            return result            
+            return result
         }catch(error) {
             logger.error('ProcesosRepo.crearProceso => ', error)
             throw error
@@ -38,7 +37,6 @@ export class ProcesosRepository {
         try {
             const query = await generarConsulta('procesos', params, `ID = ${params.ID}`)
             const data = Object.values(params)
-            console.log("generado", query, data)
             const result = await connection.promise().execute(query, data)
             return result
         }catch(error) {

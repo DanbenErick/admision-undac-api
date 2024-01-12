@@ -18,7 +18,6 @@ class UsuarioADminController {
         try {
             const params: UsuarioInteface = req.body
             const result = await this.sistemaService.crearUsuarioAdmin(params)
-            console.log(params)
             res.status(200).json(result)
 
         } catch (error) {

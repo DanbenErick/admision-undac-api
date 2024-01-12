@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from './axiosConfig';
 const API_HOST = process.env.REACT_APP_API_URL;
 const API_GENERAL = process.env.REACT_APP_API_GENERAL;
 const getRuta = (params) => `${API_HOST}${API_GENERAL}/estudiantes/${params}`;
