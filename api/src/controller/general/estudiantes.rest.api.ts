@@ -79,8 +79,8 @@ class EstudianteController {
         try {
             if (!req.file) { 
                 res.status(400).json({ error: 'No se proporcionó ningún archivo.' });
-              }
-              res.status(200).json({ok: true, message: 'Foto subido correctamente'})
+            }
+            res.status(200).json({ok: true, message: 'Foto subido correctamente'})
             
         } catch (error) {
             res.status(500).json(error);
@@ -136,7 +136,6 @@ class EstudianteController {
     public routes() {
         this.router.post('/consultar-dni', asyncHandler(this.consultarEstudianteExiste))
         this.router.post('/registrar-estudiante', asyncHandler(this.registrarEstudiante))
-        
         this.router.post('/inscribir-estudiante', asyncHandler(this.inscribirEstudiante))
         this.router.post('/subir-foto-estudiante', upload.single('foto'), asyncHandler(this.subirFotoEstudiante))
         this.router.post('/subir-documentos-estudiante', upload.single('documento'), asyncHandler(this.subirDocumentacionEstudiante))

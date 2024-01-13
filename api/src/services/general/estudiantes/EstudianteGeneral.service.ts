@@ -69,10 +69,7 @@ export class EstudiantesGeneralService {
       const salt = await bcrypt.genSalt(10);
       const password_encript = await bcrypt.hash(password, salt);
       params.PASSWORD = password_encript;
-      const [result] = await this.estudianteRepo.registrarEstudiante(
-        dbConex,
-        params
-      );
+      const [result] = await this.estudianteRepo.registrarEstudiante(dbConex,params);
       if (result.affectedRows > 0)
         return { ok: true, message: "Se modifico correctamente" };
       return { ok: false, message: "Ocurrio un error al registrar" };

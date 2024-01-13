@@ -16,8 +16,7 @@ const ConfirmacionIns = (props) => {
       return;
     }
     setEstudiante({ ...estudiante, PASSWORD: params.PASSWORD });
-    console.log(estudiante);
-    const resp = await registrarEstudianteService(estudiante);
+    const resp = await registrarEstudianteService({ ...estudiante, PASSWORD: params.PASSWORD });
     console.log(resp);
     if (!resp.data.ok) {
       message.error(resp.data.message);
