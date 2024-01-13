@@ -189,7 +189,6 @@ const InscripcionDashboardEstudiante = () => {
     }
   };
   const buscarAulaPorTurno = async(e) => {
-    //TODO: Hacer logica para buscar aula
     const resp = await buscarAulaPorTurnoForm({TURNO: e})
     setSelectAulas(resp.data)
   }

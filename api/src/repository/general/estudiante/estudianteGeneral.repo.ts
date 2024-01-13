@@ -88,6 +88,33 @@ export class EstudianteGeneralRepository {
         logger.error('EstudianteGeneralRepository.registrarInscripcionEstudiante => ', error)
       }
     }
+    public cantidadDeVacantesAula = async(connection: any, params: any) => {
+      try {
+        const query = `SELECT CAPACIDAD FROM aulas WHERE ID = ${params.ID_AULA}`
+        const [rows]: any = await connection.promise().query(query)
+        return rows
+      }catch(error) {
+        logger.error('EstudianteGeneralRespository.cantidadDeVacantesAula => ', error)
+      }
+    }
+    public cantidadDeInscritosPorAula = async(connection: any, params: any) => {
+      try {
+        const query = `SELECT COUNT(*) AS CANTIDAD FROM inscritos WHERE ID_AULA = ${params.ID_AULA}`
+        const [rows]: any = await connection.promise().query(query)
+        return rows
+      }catch(error) {
+        logger.error('EstudianteGeneralRespository.cantidadDeInscritosPorAula => ', error)
+      }
+    }
+    public establecerPorOcupadaAula = async(connection: any, params: any) => {
+      try {
+        const query = `UPDATE aulas SET OCUPADO = 1 WHERE ID = ${params.ID_AULA}`
+        const [rows]: any = await connection.promise().query(query)
+        return rows
+      }catch(error) {
+        logger.error('EstudianteGeneralRespository.establecerPorOcupadaAula => ', error)
+      }
+    }
     public registrarTestPsicologicoEstudiante = async(connection: any, params: any) => {
       try {
         const query = await generarConsulta('actitudes', params, null)

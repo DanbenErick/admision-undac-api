@@ -114,7 +114,7 @@ export class InputsControlsRepository {
     }
     public buscarAulaPorTurno = async(connection: any, params: any) => {
         try {
-            const query = `SELECT ID AS VALUE, NOMBRE_AULA AS label FROM aulas WHERE ID_PROCESO = (SELECT ID FROM procesos WHERE ESTADO = 1 AND TIPO_PROCESO = 'C' ) AND OCUPADO = 0 AND TURNO = '${params.TURNO}'`
+            const query = `SELECT ID AS value, NOMBRE_AULA AS label FROM aulas WHERE ID_PROCESO = (SELECT ID FROM procesos WHERE ESTADO = 1 AND TIPO_PROCESO = 'C' ) AND OCUPADO = 0 AND TURNO = '${params.TURNO}'`
             console.log(query)
             const [rows] = await connection.promise().query(query)
             return rows

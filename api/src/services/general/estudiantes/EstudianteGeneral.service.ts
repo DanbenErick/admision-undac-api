@@ -133,15 +133,23 @@ export class EstudiantesGeneralService {
         PAGO_2: params.PAGO_2 || 0,
         PREPARATORIA: 0,
         YEAR_CONCLU: params.YEAR_CONCLU,
+        ID_AULA: params.ID_AULA,
         FECHA_REGISTRO: new Date(),
       };
-      const [result]: any =
-        await this.estudianteRepo.registrarInscripcionEstudiante(dbConex, data);
-
-      if (result.affectedRows > 0) {
-        return { ok: true, message: "Se modifico correctamente" };
+      const [resp_vacantes_aula] = await this.estudianteRepo.cantidadDeVacantesAula(dbConex, params)
+      const [resp_inscritos_por_aula] = await this.estudianteRepo.cantidadDeInscritosPorAula(dbConex, params)
+      let vacantes_aula = Number(resp_vacantes_aula.CAPACIDAD)
+      let inscritos_por_aula = Number(resp_inscritos_por_aula.CANTIDAD)
+      if(vacantes_aula > inscritos_por_aula) {
+        const [result]: any = await this.estudianteRepo.registrarInscripcionEstudiante(dbConex, data);
+        if(vacantes_aula > inscritos_por_aula++ ){
+          this.estudianteRepo.establecerPorOcupadaAula(dbConex, params);
+        }
+        if (result.affectedRows > 0) {
+          return { ok: true, message: "Se registro correctamente" };
+        }
+        return { ok: false, message: "Ocurrio un error al registrar" };
       }
-      return { ok: false, message: "Ocurrio un error al registrar" };
     } catch (error) {
       await dbConex.rollback();
     } finally {
