@@ -9,11 +9,8 @@ const HomeDashEstudinte = () => {
     const resp_inscrito = await verificarEstudianteInscritoService({DNI: localStorage.getItem('dni')})
     const resp_datos_co = await verificarDatosComplementariosEstudiante({DNI: localStorage.getItem('dni')})
     const resp_test_pic = await verificarTestpsicologicoEstudianteService({DNI: localStorage.getItem('dni')})
-    console.log(resp_inscrito)
-    console.log(resp_datos_co)
-    console.log(resp_test_pic)
-    if(resp_inscrito.data.ok) setStatusDatosApoderado(true)
-    if(resp_datos_co.data.ok) setStatusInscripcion(true)
+    if(resp_inscrito.data.ok) setStatusInscripcion(true)
+    if(resp_datos_co.data.ok) setStatusDatosApoderado(true)
     if(resp_test_pic.data.ok) setStatusTestpsicologico(true)
   }
   useEffect(() => {

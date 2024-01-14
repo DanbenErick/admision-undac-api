@@ -6,11 +6,9 @@ import { generarConsulta } from '../../../util/util'
 export class EstudianteGeneralRepository {
     public verificarInscripcionEstudiante = async(connection: any, params: any) => {
       try {
-        const query = `SELECT ID
-                          FROM inscritos
-                      WHERE DNI = '${params.DNI}'
-                      AND PROCESO = (SELECT ID FROM procesos WHERE ESTADO = 1 AND TIPO_PROCESO = 'C')`
+        const query = `SELECT ID FROM inscritos WHERE DNI = '${params.DNI}' AND PROCESO = (SELECT ID FROM procesos WHERE ESTADO = 1 AND TIPO_PROCESO = '${params.TIPO_PROCESO}')`
         const [rows]: any = await connection.promise().query(query)
+        console.log(query)
         return rows
       }catch(error) {
         logger.error('EstudianteGeneralRepository.verificarInscripcionEstudiante =>', error)
@@ -18,10 +16,9 @@ export class EstudianteGeneralRepository {
     }
     public verificarDatosCompletamerioEstudiante = async(connection: any, params: any ) => {
       try {
-        const query = `SELECT ID
-                        FROM dat_complementarios
-                        WHERE DNI = '${params.DNI}'`
+        const query = `SELECT ID FROM dat_complementarios WHERE DNI = '${params.DNI}'`
         const [rows]: any = await connection.promise().query(query)
+        console.log(query)
         return rows
       }catch(error) {
         logger.error('EstudianteGeneralRepository.verificarDatosCompletamerioEstudiante =>', error)
@@ -55,6 +52,7 @@ export class EstudianteGeneralRepository {
         return resp
       }catch(error) {
         logger.error('EstudianteGeneralRepository.registrarEstudiante => ', error)
+        throw error
       }
     }
     /**

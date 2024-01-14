@@ -17,9 +17,9 @@ const LoginEstudiantePage = () => {
       localStorage.setItem('token', resp.data.token)
       localStorage.setItem('nombre', resp.data.name)
       localStorage.setItem('dni', resp.data.dni)
-      localStorage.setItem('rol', resp.data.rol)
+      localStorage.setItem('rol', 'ESTUDIANTE')
       message.success(resp.data.message)
-      navigate('/dashboard-estudiantes')
+      navigate('/dashboard-estudiantes/home')
       return
     }
     message.error(resp.data.message)
@@ -74,7 +74,7 @@ const LoginEstudiantePage = () => {
               </Button>
 
               <p>
-                ¿No tienes cuenta? <Link to="/register">Registrarse</Link>
+                ¿No tienes cuenta? <Link to="/inscripcion">Registrarse</Link>
               </p>
             </Form.Item>
           </Form>

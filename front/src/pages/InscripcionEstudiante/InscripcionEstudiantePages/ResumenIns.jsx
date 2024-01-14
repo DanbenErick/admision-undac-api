@@ -22,22 +22,22 @@ const ResumenIns = (props) => {
           onFinish={guardarCambio}
         >
           <Form.Item label="DNI" name="DNI">
-            <Input disabled placeholder="Basic usage" />
+            <Input disabled />
           </Form.Item>
           <Form.Item label="Apellidos Paterno" name="AP_PATERNO">
-            <Input disabled placeholder="Basic usage" />
+            <Input disabled />
           </Form.Item>
           <Form.Item label="Apellidos Materno" name="AP_MATERNO">
-            <Input disabled placeholder="Basic usage" />
+            <Input disabled />
           </Form.Item>
           <Form.Item label="Nombres" name="NOMBRES">
-            <Input disabled placeholder="Basic usage" />
+            <Input disabled />
           </Form.Item>
           <Form.Item label="Celular" name="CELULAR">
-            <Input disabled placeholder="Basic usage" />
+            <Input disabled />
           </Form.Item>
           <Form.Item label="Correo Electronico" name="CORREO">
-            <Input disabled placeholder="Basic usage" />
+            <Input disabled />
           </Form.Item>
           <Button onClick={anteriorPage}>Anterior</Button>
           <Button type="primary" htmlType="submit">

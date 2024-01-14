@@ -48,11 +48,11 @@ const obtenerFacultadesForm = async () => {
     console.error('Error', error);
   }
 };
-const obtenerProcesoActivoForm = async () => {
+const obtenerProcesoActivoForm = async (params) => {
   try {
+    console.log(params)
     const ruta = getRuta('obtener-proceso-activo')
-    console.log("ruta", ruta)
-    const resp = await axios.get(ruta);
+    const resp = await axios.post(ruta, params);
     return resp;
   } catch (error) {
     console.error('Ocurrio un error', error);
@@ -94,6 +94,15 @@ const obtenerDepartamentosForm = async () => {
     console.error('Ocurrio un error', error);
   }
 };
+const obtenerProcesosAbiertosAside = async () => {
+  try {
+    const ruta = getRuta('obtener-procesos-abiertos')
+    const resp = await axios.get(ruta);
+    return resp;
+  } catch (error) {
+    console.error('Ocurrio un error', error);
+  }
+}
 const obtenerProvinciasForm = async (params) => {
   try {
     const ruta = getRuta('obtener-provincias')
@@ -125,5 +134,6 @@ export {
   obtenerDepartamentosForm,
   obtenerProvinciasForm,
   obtenerDistritosForm,
-  buscarAulaPorTurnoForm
+  buscarAulaPorTurnoForm,
+  obtenerProcesosAbiertosAside
 };

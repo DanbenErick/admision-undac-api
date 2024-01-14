@@ -1,10 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import 'remixicon/fonts/remixicon.css';
 import '../../../assets/styles/DashboardEstudiantes.css';
 import { NavLink } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { obtenerProcesosAbiertosAside } from '../../../api/apiInpputs';
 
 const AsideDashboardEstudiantes = () => {
+  const [selectProcesos, setSelectProcesos] = React.useState(false);
+  const [statusCepre, setStatusCepre] = React.useState(false);
+  const [statusOrdinario, setStatusOrdinario] = React.useState(false);
+  const [statusModalidades, setStatusModalidades] = React.useState(false);
+  const [statusExtraOrdinario, setStatusExtraOrdinario] = React.useState(false)
   const navigate = useNavigate()
   const cerrarSesion = () => {
     localStorage.removeItem('token')
@@ -12,6 +18,23 @@ const AsideDashboardEstudiantes = () => {
     localStorage.removeItem('nombre')
     navigate('/login-estudiante')
   }
+  const getData = async() => {
+    const response = await obtenerProcesosAbiertosAside()
+    const {data} = response;
+    console.log(response)
+    
+    data.forEach(element => {
+      if(element.TIPO_PROCESO === 'C') setStatusCepre(true) 
+      if(element.TIPO_PROCESO === 'O') setStatusOrdinario(true) 
+      if(element.TIPO_PROCESO === 'M') setStatusModalidades(true) 
+      if(element.TIPO_PROCESO === 'O') setStatusOrdinario(true) 
+    })
+    setSelectProcesos(data)
+  }
+  useEffect(() => {
+    getData()
+
+  },[])
   return (
     <aside className="asideEstudiantesDash">
       <div className="avatarEstudiante" style={{ marginBottom: '40px' }}>
@@ -28,38 +51,62 @@ const AsideDashboardEstudiantes = () => {
             Inicio
           </NavLink>
         </li>
-        <li>
-          <NavLink
-            to="/dashboard-estudiantes/inscripcion"
-            activeclassname="active">
-            <i className="icon ri-file-paper-fill"></i>
-            Inscripcion CEPRE
-          </NavLink>
-        </li>
-        <li>
-          <NavLink
-            to="/dashboard-estudiantes/inscripcion-ordinario"
-            activeclassname="active">
-            <i className="icon ri-file-paper-fill"></i>
-            Inscripcion Ordinario
-          </NavLink>
-        </li>
-        <li>
-          <NavLink
-            to="/dashboard-estudiantes/inscripcion-extraordinario"
-            activeclassname="active">
-            <i className="icon ri-file-paper-fill"></i>
-            Inscripcion Extraordinario
-          </NavLink>
-        </li>
-        <li>
-          <NavLink
-            to="/dashboard-estudiantes/inscripcion-modalidad"
-            activeclassname="active">
-            <i className="icon ri-file-paper-fill"></i>
-            Inscripcion Modalidades
-          </NavLink>
-        </li>
+        {
+          statusCepre === true
+          ?
+          <li>
+            <NavLink
+              to="/dashboard-estudiantes/inscripcion-cepre"
+              activeclassname="active">
+              <i className="icon ri-file-paper-fill"></i>
+              Inscripcion CEPRE
+            </NavLink>
+          </li>
+          :
+          ''
+        }
+        {
+          statusOrdinario === true
+          ?
+            <li>
+              <NavLink
+                to="/dashboard-estudiantes/inscripcion-ordinario"
+                activeclassname="active">
+                <i className="icon ri-file-paper-fill"></i>
+                Inscripcion Ordinario
+              </NavLink>
+            </li>
+          :
+          ''
+        }
+        {
+          statusExtraOrdinario === true
+          ?
+            <li>
+              <NavLink
+                to="/dashboard-estudiantes/inscripcion-extraordinario"
+                activeclassname="active">
+                <i className="icon ri-file-paper-fill"></i>
+                Inscripcion Extraordinario
+              </NavLink>
+            </li>
+          :
+          ''
+        }
+        {
+          statusModalidades === true
+          ?
+            <li>
+              <NavLink
+                to="/dashboard-estudiantes/inscripcion-modalidad"
+                activeclassname="active">
+                <i className="icon ri-file-paper-fill"></i>
+                Inscripcion Modalidades
+              </NavLink>
+            </li>
+          :
+          ''
+        }
         <li>
           <NavLink
             to="/dashboard-estudiantes/test-psicologico"

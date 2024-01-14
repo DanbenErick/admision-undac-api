@@ -70,7 +70,8 @@ class InputsControlsController {
   };
   public obtenerProcesoActivo = async (req: Request, res: Response) => {
     try {
-      const resp = await this.inputsControlsService.obtenerProcesoActivo();
+      const params = req.body
+      const resp = await this.inputsControlsService.obtenerProcesoActivo(params);
       res.status(200).json(resp);
     } catch (error) {
       res.status(500).json(error);
@@ -120,7 +121,16 @@ class InputsControlsController {
       res.status(500).json(error)
     }
   }
+  public obtenerProcesosAbiertos = async(req: Request, res: Response) => {
+    try {
+      const resp = await this.inputsControlsService.obtenerProcesosAbiertos()
+      res.status(200).json(resp)
+    }catch(error) {
+      res.status(500).json(error)
+    }
+  }
   public routes() {
+    this.router.get("/obtener-procesos-abiertos", asyncHandler(this.obtenerProcesosAbiertos));
     this.router.get("/obtener-procesos", asyncHandler(this.obtenerProcesos));
     this.router.get("/obtener-carreras", asyncHandler(this.obtenerCarreras));
     this.router.post('/buscar-aula-por-turno', asyncHandler(this.buscarAulaPorTurno))
@@ -140,7 +150,7 @@ class InputsControlsController {
       "/obtener-razas-etnicas",
       asyncHandler(this.obtenerRazasEtnicas)
     );
-    this.router.get(
+    this.router.post(
       "/obtener-proceso-activo",
       asyncHandler(this.obtenerProcesoActivo)
     );

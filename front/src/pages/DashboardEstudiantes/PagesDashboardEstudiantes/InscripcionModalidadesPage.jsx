@@ -31,7 +31,7 @@ import moment from 'moment';
 import 'remixicon/fonts/remixicon.css';
 import SpinnerComponent from '../../../components/Spinner';
 
-const InscripcionDashboardEstudiante = () => {
+const InscripcionModalidadesPage = () => {
   const [formDatosComplementariosEstudiante] = Form.useForm();
   const [selectProcesos, setSelectProcesos] = useState();
   const [selectCarreras, setSelectCarreras] = useState();
@@ -47,13 +47,13 @@ const InscripcionDashboardEstudiante = () => {
   const [optionsDepartamento, setOptionsDepartamento] = useState();
   const [optionsProvincia, setOptionsProvincia] = useState();
   const [optionsDistrito, setOptionsDistrito] = useState();
-  
+  const [fileList, setFileList] = useState([]);
 
   const fileInputDocRef = useRef(null);
   const fileInputImgRef = useRef(null);
 
   const verificarInscritoDatosComplEstudiante = async () => {
-    const params = { DNI: localStorage.getItem('dni'), TIPO_PROCESO: 'C' };
+    const params = { DNI: localStorage.getItem('dni'), TIPO_PROCESO: 'M' };
     
     const resp_dat_compl = await verificarDatosComplementariosEstudiante(params);
     console.log(resp_dat_compl.data.ok)
@@ -108,7 +108,7 @@ const InscripcionDashboardEstudiante = () => {
 
   const getInputs = async () => {
     setLoading(true);
-    const resp_proceso_activo = await obtenerProcesoActivoForm({ TIPO_PROCESO: 'C' });
+    const resp_proceso_activo = await obtenerProcesoActivoForm();
     const resp_carreras = await obtenerCarrerasCodigoForm();
     const resp_discapacidades = await obtenerDiscapacidadesForm();
     const resp_razas_etnicas = await obtenerRazasEtnicasForm();
@@ -542,4 +542,4 @@ const InscripcionDashboardEstudiante = () => {
   );
 };
 
-export default InscripcionDashboardEstudiante;
+export default InscripcionModalidadesPage;

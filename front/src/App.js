@@ -27,6 +27,9 @@ import AulasPage from './pages/Aulas/AulasPage';
 import LoginEstudiantePage from './pages/LoginEstudiante/LoginEstudiante';
 import TestpsicologicoPage from './pages/DashboardEstudiantes/PagesDashboardEstudiantes/TestpsicologicoPage';
 import PagosEstudiantePage from './pages/DashboardEstudiantes/PagesDashboardEstudiantes/PagosPage';
+import InscripcionEstraordinarioPage from './pages/DashboardEstudiantes/PagesDashboardEstudiantes/InscripcionExtraordinarioPage';
+import InscripcionModalidadesPage from './pages/DashboardEstudiantes/PagesDashboardEstudiantes/InscripcionModalidadesPage';
+import InscripcionOdinarioPage from './pages/DashboardEstudiantes/PagesDashboardEstudiantes/InscripcionOrdinarioPage';
 
 const App = () => {
   return (
@@ -35,7 +38,7 @@ const App = () => {
         <div className="App">
           <Router>
             <Routes>
-            <Route path="/login-estudiante" element={<LoginEstudiantePage />} />
+              <Route path="/login-estudiante" element={<ProtectedLoginRegister><LoginEstudiantePage /></ProtectedLoginRegister>} />
               <Route
                 path="/login"
                 element={
@@ -77,7 +80,10 @@ const App = () => {
                   </PrivateRoute>
                 }>
                 <Route path="home" element={<HomeDashEstudinte />} />
-                <Route path="inscripcion" element={<InscripcionDashboardEstudiante />}/>
+                <Route path="inscripcion-cepre" element={<InscripcionDashboardEstudiante />}/>
+                <Route path="inscripcion-ordinario" element={<InscripcionOdinarioPage />}/>
+                <Route path="inscripcion-modalidades" element={<InscripcionModalidadesPage />}/>
+                <Route path="inscripcion-extraordinario" element={<InscripcionEstraordinarioPage />}/>
                 <Route path="test-psicologico" element={<TestpsicologicoPage />}/>
                 <Route path="pagos" element={<PagosEstudiantePage />}/>
               </Route>
@@ -108,8 +114,17 @@ const App = () => {
 };
 const ProtectedLoginRegister = ({ children }) => {
   const user = localStorage.getItem('token');
-  console.log(user);
-  return user !== null ? <Navigate to="/dashboard/procesos" /> : children;
+  const rol = localStorage.getItem('rol')
+  if( user !== null) {
+    if(rol === 'ADMIN_DARAS'){
+      return <Navigate to="/dashboard-estudiantes" />
+    } 
+    if(rol === 'ESTUDIANTE'){
+      return <Navigate to="/dashboard-estudiantes" />
+    }
+  }
+  return children
+  
   // children
 };
 const PrivateRoute = ({ children }) => {

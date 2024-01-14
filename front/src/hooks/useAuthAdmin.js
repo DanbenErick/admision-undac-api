@@ -24,8 +24,8 @@ const useAuthAdmin = () => {
     }
     localStorage.setItem('token', response.data.token);
     localStorage.setItem('nombre', response.data.name);
-    localStorage.setItem('rol', response.data.rol);
-    localStorage.setItem('ndi', response.data.dni || '');
+    localStorage.setItem('rol', 'ADMIN_DARAS');
+    localStorage.setItem('dni', response.data.dni || '');
     message.success('Autenticado correctamente');
     context.setUser(response.data);
     // setUser(response.data);
@@ -42,7 +42,12 @@ const useAuthAdmin = () => {
     localStorage.removeItem('token');
     navigate('/login');
   };
-
+  const logoutEstudiante = async() => {
+    // await cerrarSesionUsuarioAdminService();
+    localStorage.removeItem('token');
+    navigate('/login-estudiante');
+  }
+ 
   return {
     // user,
     login,

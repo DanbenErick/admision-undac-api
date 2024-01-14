@@ -1,18 +1,34 @@
-import { Button, InputNumber } from 'antd';
+import { Button, InputNumber, notification } from 'antd';
 import { Select } from 'antd';
 import { Form, Input } from 'antd';
 import React, { useContext } from 'react';
 import { EstudianteContext } from '../../../providers/EstudianteProvider';
 import { consultarEstudianteExisteService } from '../../../api/inscripcionEstudianteService';
 import { message } from 'antd';
+import { SmileOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
 
 const DatosPersonalIncripcion = (props) => {
   const [formDatosPersonales] = Form.useForm();
+  const [api, contextHolder] = notification.useNotification();
+  const navigate = useNavigate()
+  const openNotification = () => {
+    api.open({
+      message: 'UNDAC ADMISION',
+      description: 'Usted ya esta registrado en el sistema, se le mandara al login.',
+      icon: ( <SmileOutlined style={{ color: '#108ee9', }}/>),
+      duration: 4,
+    });
+    setTimeout(() => {
+      navigate('/login-estudiante')
+    },2000)
+  };
   const { setEstudiante } = useContext(EstudianteContext);
   const guardarDatosPersonales = async (params) => {
     const resp = await consultarEstudianteExisteService({ DNI: params.DNI });
     if (resp.data.length > 0) {
-      message.info('Ya esta registrado');
+      openNotification()
+      // message.info('Ya esta registrado');
       return;
     }
     setEstudiante(params);
@@ -20,6 +36,7 @@ const DatosPersonalIncripcion = (props) => {
   };
   return (
     <>
+    {contextHolder}
       <Form
         layout="vertical"
         form={formDatosPersonales}

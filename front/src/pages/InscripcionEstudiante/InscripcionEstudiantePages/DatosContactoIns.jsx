@@ -17,11 +17,11 @@ const DatosContactoIns = (props) => {
         form={formDatosContacto}
         onFinish={guardarDatosContacto}
       >
-        <Form.Item label="Celular" name="CELULAR">
-          <Input placeholder="Basic usage" />
+        <Form.Item label="Celular" name="CELULAR" rules={[{ required: true }]}>
+          <Input placeholder="Ingres tu numero de celular" maxLength={9} />
         </Form.Item>
-        <Form.Item label="Correo Electronico" name="CORREO">
-          <Input placeholder="Basic usage" />
+        <Form.Item label="Correo Electronico" name="CORREO" rules={[{ required: true, type: 'email' }]}>
+          <Input placeholder="Ingresa tu correo electronico"  />
         </Form.Item>
         <Button onClick={anteriorPage}>Anterior</Button>
         <Button type="primary" htmlType="submit">

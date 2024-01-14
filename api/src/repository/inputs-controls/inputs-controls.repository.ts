@@ -65,9 +65,10 @@ export class InputsControlsRepository {
             throw error
         }
     }
-    public obtenerProcesoActivo = async(connection: any) => {
+    public obtenerProcesoActivo = async(connection: any, params: any) => {
         try {
-            const query  = `SELECT ID as value, NOMBRE as label FROM procesos WHERE ESTADO = 1`
+            const query  = `SELECT ID as value, NOMBRE as label FROM procesos WHERE ESTADO = 1 AND TIPO_PROCESO = '${params.TIPO_PROCESO}'`
+            console.log(query)
             const [rows] = await connection.promise().query(query)
             return rows
         }catch(error) {
@@ -120,6 +121,15 @@ export class InputsControlsRepository {
             return rows
         }catch(error) {
             logger.error('InputControlRepository.buscarAulaPorTurno => ', error)
+        }
+    }
+    public obtenerProcesosAbiertos = async(connection: any) => {
+        try {
+            const query = `SELECT ID, TIPO_PROCESO, ESTADO   FROM procesos WHERE ESTADO = 1`
+            const [rows] = await connection.promise().query(query)
+            return rows
+        }catch(error) {
+            logger.error('InputControlRepository.obtenerProcesosAbiertos => ', error)
         }
     }
 

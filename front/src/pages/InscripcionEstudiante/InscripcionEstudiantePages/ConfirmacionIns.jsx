@@ -34,11 +34,11 @@ const ConfirmacionIns = (props) => {
         form={formConfirmacion}
         onFinish={guardarConfirmacion}
       >
-        <Form.Item label="Contraseña" name="PASSWORD">
-          <Input.Password placeholder="Basic usage" />
+        <Form.Item label="Contraseña" name="PASSWORD" rules={[{ required: true }]}>
+          <Input.Password placeholder="Ingresa tu contraseña" />
         </Form.Item>
-        <Form.Item label="Repite Contraseña" name="PASSWORD_2">
-          <Input.Password placeholder="Basic usage" />
+        <Form.Item label="Repite Contraseña" name="PASSWORD_2" rules={[{ required: true }]}>
+          <Input.Password placeholder="Repite tu contraseña" />
         </Form.Item>
         <Button onClick={anteriorPage}>Anterior</Button>
         <Button type="primary" htmlType="submit">

@@ -16,12 +16,11 @@ const ValidacionIns = (props) => {
     <>
       <Form layout="vertical" form={formValidacion} onFinish={guardarCambios}>
         <Form.Item label="Correo Electronico" name="CORREO">
-          <Input placeholder="Basic usage" disabled />
+          <Input placeholder="Ingresa tu correo" disabled />
         </Form.Item>
-        <Form.Item label="Codigo" name="CODIGO">
-          <Input placeholder="Basic usage" />
+        <Form.Item label="Codigo" name="CODIGO" rules={[{ required: true }]}>
+          <Input placeholder="Ingresa 123" />
         </Form.Item>
-        <Form.Item>{/* <Button label="Verificar" /> */}</Form.Item>
         <Button onClick={anteriorPage}>Anterior</Button>
         <Button type="primary" htmlType="submit">
           Siguiente

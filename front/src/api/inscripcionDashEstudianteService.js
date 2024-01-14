@@ -65,7 +65,7 @@ const verificarTestpsicologicoEstudianteService = async(params) => {
 }
 const verificarInscripcionEstudianteService = async(params) => {
   try {
-    const ruta = getRuta('verificar-inscripcion-estudiante',)
+    const ruta = getRuta('verificar-inscripcion-estudiante',params)
     const resp = await axios.post(ruta, params)
     return resp
   }catch(error) {

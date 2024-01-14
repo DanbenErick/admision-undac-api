@@ -77,10 +77,10 @@ export class InputsControlsService {
             await dbConex.close()
         }
     }
-    public obtenerProcesoActivo = async() => {
+    public obtenerProcesoActivo = async(params: any) => {
         const dbConex: any = await connectMysql.connectMysql()
         try {
-            const resp = await this.inputsControlsRepo.obtenerProcesoActivo(dbConex)
+            const resp = await this.inputsControlsRepo.obtenerProcesoActivo(dbConex, params)
             return resp
         }catch(error) {
             await dbConex.rollback()
@@ -136,6 +136,18 @@ export class InputsControlsService {
         const dbConex: any = await connectMysql.connectMysql()
         try {
             const resp = await this.inputsControlsRepo.buscarAulaPorTurno(dbConex, params)
+            return resp
+        }catch(error) {
+            await dbConex.rollback()
+        }finally {
+            await dbConex.close()
+        }
+    }
+
+    public obtenerProcesosAbiertos = async() => {
+        const dbConex: any = await connectMysql.connectMysql()
+        try {
+            const resp = await this.inputsControlsRepo.obtenerProcesosAbiertos(dbConex)
             return resp
         }catch(error) {
             await dbConex.rollback()
