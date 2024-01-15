@@ -2,14 +2,18 @@
 import connectMysql from '../../../config/connection.mysqldb'
 import { AulasInterface } from '../../../interfaces/administrador/aulas.interface'
 import { AulasRepository } from '../../../repository/administrador/aulas/aulas.repository'
+import { construirPdfAula, generarPdfAula } from '../../../util/util'
+import handlebars from 'handlebars'
 
 
 
 export class AulasService {
     
     public aulasRepo: AulasRepository
+    
     public constructor() {
         this.aulasRepo = new AulasRepository()
+        
     }
 
     public obtenerAulas = async() => {
@@ -61,5 +65,24 @@ export class AulasService {
         await dbConex.close()
       }
     }
-    
+    public generarPdf = async(params: any) => {
+      const dbConex: any = await connectMysql.connectMysql()
+      try {
+        const resp = await this.aulasRepo.obtenerEstudiantesPorAula(dbConex, params)
+        return resp
+      }catch(error) {
+        await dbConex.rollback()
+      }finally {
+        await dbConex.close()
+      }
+      // construirPdfAula((data: any) => {
+
+      // }, () => {
+
+      // })
+
+
+      // const pdfBuffer = await generarPdfAula('http://google.com')
+      // return pdfBuffer
+    }
 }

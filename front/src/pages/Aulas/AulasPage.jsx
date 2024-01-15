@@ -4,11 +4,11 @@ import SpinnerComponent from '../../components/Spinner';
 import { Card } from 'antd';
 import { Form } from 'antd';
 import { Select } from 'antd';
-import { SaveFilled, SearchOutlined } from '@ant-design/icons';
+import { CloseCircleOutlined, EditFilled, FilePdfOutlined, FolderOpenOutlined, SaveFilled, SearchOutlined } from '@ant-design/icons';
 import { Popconfirm } from 'antd';
 import { Input } from 'antd';
 import { obtenerProcesosForm } from '../../api/apiInpputs';
-import { buscarAulaService, crearAulaService, modificarAulaService, obtenerAulasService } from '../../api/aulasService';
+import { buscarAulaService, crearAulaService, generarPDFEstudiantesAulaService, modificarAulaService, obtenerAulasService } from '../../api/aulasService';
 
 const AulasPage = () => {
   const [loading, setLoading] = useState();
@@ -33,7 +33,18 @@ const AulasPage = () => {
     formModificarAula.setFieldsValue(data);
     setPanelAula(true);
   };
-
+  const generarReporteEstudiantesPorAula = async (params) => {
+    try {
+      const resp = await generarPDFEstudiantesAulaService(params);
+      // if (resp.data.ok) {
+        message.success(resp.data.message);
+        // return;
+      // }
+      // message.error(resp.data.message);
+    }catch(error) {
+      console.log(error)
+    }
+  }
   const columnsTable = [
     {
       title: 'Proceso',
@@ -58,8 +69,17 @@ const AulasPage = () => {
     },
     {
       title: 'Capacidad',
-      dataIndex: 'CAPACIDAD',
-      key: 'CAPACIDAD',
+      dataIndex: 'INSCRITOS_CAPACIDAD',
+      key: 'INSCRITOS_CAPACIDAD',
+    },
+    {
+      title: 'Lleno',
+      dataIndex: 'OCUPADO',
+      key: 'OCUPADO',
+      render: (data) => {
+        console.log(data);
+        return data === '1' ? 'Si' : 'No'
+      }
     },
     {
       title: 'Action',
@@ -68,6 +88,7 @@ const AulasPage = () => {
       render: (_, column) => {
         // if (column.ESTADO === 1) {
         return (
+          <>
           <Popconfirm
             title="Carerra"
             description="Quieres editar este carrera?"
@@ -78,10 +99,45 @@ const AulasPage = () => {
             okText="Si"
             cancelText="No"
           >
-            <Button type="link" info>
-              Editar
-            </Button>
+            <Button type="link" info icon={<EditFilled />}></Button>
           </Popconfirm>
+          <Popconfirm
+            title="Aula"
+            description="Quieres cerrar esta aula?"
+            onConfirm={() => {
+              showPanelEditAula({ ID: column.ID });
+            }}
+            onCancel={() => ''}
+            okText="Si"
+            cancelText="No"
+          >
+            <Button type="link" info icon={<CloseCircleOutlined />}></Button>
+          </Popconfirm>
+          <Popconfirm
+            title="Aula"
+            description="Quieres abrir este  aula?"
+            onConfirm={() => {
+              showPanelEditAula();
+            }}
+            onCancel={() => ''}
+            okText="Si"
+            cancelText="No"
+          >
+            <Button type="link" info icon={<FolderOpenOutlined /> }></Button>
+          </Popconfirm>
+          <Popconfirm
+            title="Aula"
+            description="Quieres generar un pdf de este aula?"
+            onConfirm={() => {
+              generarReporteEstudiantesPorAula({ ID_AULA: column.ID, NOMBRE_PROCESO: column.NOMBRE_PROCESO, NOMBRE_AULA: column.NOMBRE_AULA, TURNO: column.TURNO });
+            }}
+            onCancel={() => ''}
+            okText="Si"
+            cancelText="No"
+          >
+            <Button type="link" info icon={<FilePdfOutlined /> }></Button>
+          </Popconfirm>
+          </>
         );
 
         // }

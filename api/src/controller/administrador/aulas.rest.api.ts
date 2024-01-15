@@ -2,6 +2,7 @@ import { Request, Response, Router } from 'express'
 import asyncHandler from 'express-async-handler'
 import { AulasService } from '../../services/administrador/aulas/aulas.service'
 import { AulasInterface } from '../../interfaces/administrador/aulas.interface'
+import { construirPdfAula } from '../../util/util'
 
 
 class AulasController {
@@ -48,8 +49,32 @@ class AulasController {
         res.status(500).json(error)
       }
     }
+    public generarPdf = async(req: Request, res: Response) => {
+        // const params = {ID_AULA: 14}
+        const params = req.body
+        const resp = await this.aulasService.generarPdf(params)
+        console.log(resp)
+        const stream = res.writeHead(200, {
+            "Content-Type": "application/pdf",
+            "content-Disposition": "attachment; filename=invoice.pdf"
+        })
+        construirPdfAula(
+            (data: any) => stream.write(data), 
+            () =>  stream.end(),
+            resp,
+            {AULA: '4 A', TURNO: 'MAÑANA', PROCESO: 'CEPRE III 2024'}
+        )
+
+        // const pdfBuffer = await this.aulasService.generarPdf()
+        // res.status(200).set({
+        //     "Access-Control-Allow-Origin": "*",
+        //     "Access-Control-Allow-Credentials": true,
+        //     "Content-Type": "application/pdf"
+        // }).end(pdfBuffer)
+    }
     public routes() {
         this.router.get('/obtener-aulas', asyncHandler(this.obtenerAulas))
+        this.router.post('/generar-pdf', asyncHandler(this.generarPdf))
         this.router.post('/buscar-aula', asyncHandler(this.buscarAula))
         this.router.post('/crear-aula', asyncHandler(this.crearAula))
         this.router.put('/modificar-aula', asyncHandler(this.modificarAula))

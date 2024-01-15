@@ -20,6 +20,29 @@ const crearAulaService = async(params) => {
     console.error('Ocurrio un error', error)
   }
 }
+const generarPDFEstudiantesAulaService = async(params) => {
+  try {
+    const ruta = getRuta('generar-pdf')
+    const resp = await axios.post(ruta, params, { responseType: 'blob' })
+
+    // Verificar si la respuesta indica un error
+    if (resp.data.error) {
+      throw new Error(resp.data.message);
+    }
+
+    // Crear una URL para el Blob y abrir una nueva pestaña
+    const blob = new Blob([resp.data], { type: 'application/pdf' });
+    const url = window.URL.createObjectURL(blob);
+    window.open(url, '_blank');
+
+    // Liberar recursos después de abrir el enlace
+    window.URL.revokeObjectURL(url);
+
+    return {ok: true, message: 'Se genero correctamente el reporte'}
+  }catch(error) {
+    console.error('Ocurrio un error', error)
+  }
+}
 const modificarAulaService = async(params) => {
   try {
     const ruta = getRuta('modificar-aula')
@@ -43,5 +66,6 @@ export {
   obtenerAulasService,
   crearAulaService,
   modificarAulaService,
-  buscarAulaService
+  buscarAulaService,
+  generarPDFEstudiantesAulaService
 }

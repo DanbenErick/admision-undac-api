@@ -6,7 +6,17 @@ import { generarConsulta } from '../../../util/util'
 export class AulasRepository {
     public obtenerAulas = async(connection: any) => {
         try {
-            const query = `SELECT *, aulas.ID, procesos.NOMBRE AS NOMBRE_PROCESO FROM aulas LEFT JOIN procesos ON aulas.ID_PROCESO = procesos.ID ORDER BY aulas.ID DESC`;
+            const query = `
+            SELECT 
+                aulas.*, 
+                procesos.NOMBRE AS NOMBRE_PROCESO,
+                CONCAT(COUNT(inscritos.ID_AULA), ' / ', aulas.CAPACIDAD) AS INSCRITOS_CAPACIDAD
+            FROM aulas 
+            LEFT JOIN procesos ON aulas.ID_PROCESO = procesos.ID 
+            LEFT JOIN inscritos ON aulas.ID = inscritos.ID_AULA
+            GROUP BY aulas.ID
+            ORDER BY aulas.ID DESC;
+            `;
             const [rows]: any = await connection.promise().query(query)
             return rows
         }catch(error) {
@@ -66,6 +76,26 @@ export class AulasRepository {
         return rows
       }catch(error) {
         logger.error('AulasRepository.verificarSiHayAulaDisponible => ', error)
+        throw error
+      }
+    }
+    public obtenerEstudiantesPorAula = async(connection: any, params:any) => {
+      try {
+        const query = `
+                SELECT
+                  reg.DNI,
+                  CONCAT(reg.AP_PATERNO, reg.AP_MATERNO, reg.NOMBRES) AS NOMBRE_COMPLETO,
+                  reg.CELULAR,
+                  dat_c.CELULAR_APO AS CELULAR_APODERADO
+                FROM inscritos ins
+                LEFT JOIN registros reg ON reg.DNI = ins.DNI
+                LEFT JOIN dat_complementarios dat_c ON dat_c.DNI = ins.DNI
+                LEFT JOIN aulas au ON au.ID = ins.ID_AULA
+                WHERE au.ID = ${params.ID_AULA}`
+        const [rows] = await connection.promise().query(query)
+        return rows
+      }catch(error) {
+        logger.error('AulasRepository.obtenerEstudiantesPorAula => ', error)
         throw error
       }
     }
