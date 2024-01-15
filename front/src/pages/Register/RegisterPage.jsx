@@ -12,7 +12,6 @@ const RegisterPage = () => {
   const initialValues = {};
   const crearUsuario = async (values) => {
     setLoading(true)
-    console.log(values);
     await crearUsuarioAdminService(values);
     setLoading(false)
   };

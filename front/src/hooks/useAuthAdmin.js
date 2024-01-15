@@ -17,7 +17,6 @@ const useAuthAdmin = () => {
   const context = useContext(AuthContext);
   const login = async (params) => {
     const response = await loginUsuarioAdminService(params);
-    console.log(response.data);
     if (!response.data.ok) {
       message.info('No se encontro usuario o contraseña errada');
       return null;

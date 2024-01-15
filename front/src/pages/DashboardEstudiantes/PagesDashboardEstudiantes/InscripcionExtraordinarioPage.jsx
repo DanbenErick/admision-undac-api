@@ -56,11 +56,11 @@ const InscripcionEstraordinarioPage = () => {
     const params = { DNI: localStorage.getItem('dni'), TIPO_PROCESO: 'P' };
     
     const resp_dat_compl = await verificarDatosComplementariosEstudiante(params);
-    console.log(resp_dat_compl.data.ok)
+    
     setStateDatComplEstudiante(resp_dat_compl.data.ok)
-    console.log()
+    
     const resp_insc = await verificarInscripcionEstudianteService(params);
-    console.log(resp_insc.data.ok)
+    
     setStateInscripcionEstudiante(resp_insc.data.ok)
     if (resp_dat_compl.data.ok && resp_insc.data.ok) {
       setVerificarRegistroEstudiante(true);
@@ -137,9 +137,7 @@ const InscripcionEstraordinarioPage = () => {
     const resp_inscripcion_estudiante = await inscribirEstudianteService(params);
     const resp_subir_foto = await subirFoto(params.DNI);
     const resp_subir_documento = await subirDocumentosEstudiante(params.DNI);
-    console.log(resp_inscripcion_estudiante, "resp_inscripcion_estudiante")
-    console.log(resp_subir_foto, "resp_subir_foto")
-    console.log(resp_subir_documento, "resp_subir_documento")
+    
     if (
       resp_inscripcion_estudiante.data.ok &&
       resp_subir_foto &&
@@ -171,7 +169,7 @@ const InscripcionEstraordinarioPage = () => {
     const file = e.target.files[0];
     if (file && file.type === 'application/pdf') {
       // Aquí puedes manejar el archivo PDF
-      console.log('Archivo PDF seleccionado:', file);
+      
 
       // Puedes realizar más acciones, como enviar el archivo al servidor
     } else {
@@ -185,7 +183,7 @@ const InscripcionEstraordinarioPage = () => {
     const file = e.target.files[0];
     if (file.type === 'image/png' || file.type === 'image/jpeg') {
       // Aquí puedes manejar el archivo PDF
-      console.log('Archivo PDF seleccionado:', file);
+      
 
       // Puedes realizar más acciones, como enviar el archivo al servidor
     } else {

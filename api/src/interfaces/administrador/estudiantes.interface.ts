@@ -8,5 +8,6 @@ export interface EstudianteInterface {
   CELULAR?: string,
   CORREO?: string,
   PASSWORD?: string,
-  FECHA_REGISTRO?: Date
+  FECHA_REGISTRO?: Date,
+  IP_DIRECCION?: string,
 }

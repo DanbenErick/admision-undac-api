@@ -57,11 +57,38 @@ export class AulasService {
         params.ID_PROCESO = params.ID_PROCESO || ''
         params.NOMBRE_AULA = params.NOMBRE_AULA || ''
         params.CAPACIDAD = params.CAPACIDAD || ''
+        params.TURNO = params.TURNO || ''
         const resp = await this.aulasRepo.buscarAulas(dbConex, params)
         return resp
       }catch(error) {
         await dbConex.rollback()
       }finally {
+        await dbConex.close()
+      }
+    }
+    public cerrarAula = async(params: AulasInterface) => {
+      const dbConex: any = await connectMysql.connectMysql()
+      try {
+        const [resp] = await this.aulasRepo.cerrarAula(dbConex,params)
+        if(resp.affectedRows > 0) return { ok: true, message: 'Aula cerrada correctamente' }
+        return { ok: false, message: 'No se llego a guardar' }
+      }catch(error) {
+        await dbConex.rollback()
+      }
+      finally {
+        await dbConex.close()
+      }
+    }
+    public abrirAula = async(params: AulasInterface) => {
+      const dbConex: any = await connectMysql.connectMysql()
+      try {
+        const [resp] = await this.aulasRepo.abrirAula(dbConex, params)
+        if(resp.affectedRows > 0) return { ok: true, message: 'Aula abierta correctamente' }
+        return { ok: false, message: 'No se llego a guardar' }
+      }catch(error) {
+        await dbConex.rollback()
+      }
+      finally {
         await dbConex.close()
       }
     }

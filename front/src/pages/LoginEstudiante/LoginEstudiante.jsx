@@ -23,8 +23,6 @@ const LoginEstudiantePage = () => {
       return
     }
     message.error(resp.data.message)
-
-    console.log(resp);
   };
   return (
     <div className="pageLogin">

@@ -74,8 +74,6 @@ const EstudiantesPage = () => {
   ];
   const showPanelEditEstudiante = async (params) => {
     const data = dataTable.find((carrera) => carrera.ID === params.ID);
-    console.log(params);
-    console.log(data);
     formModificarEstudiante.setFieldsValue(data);
     // formModificarCarreras.setFieldsValue(data)
     setPanelEditarEstudiante(true);

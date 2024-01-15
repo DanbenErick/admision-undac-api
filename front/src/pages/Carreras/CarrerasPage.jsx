@@ -101,9 +101,7 @@ const CarreraPage = () => {
   const guardarCarrera = async (params) => {
     setLoading(true);
     params.ESCUELA_COMPLETA = `${params.ESCUELA} (${params.SEDE_FACULTAD})`;
-    console.log(params);
     const resp = await crearCarreraService(params);
-    console.log(resp);
     setLoading(false);
     if (resp.data.ok) {
       message.success(resp.data.message);
@@ -116,7 +114,6 @@ const CarreraPage = () => {
   const modificarCarrera = async (params) => {
     setLoading(true);
     params.ESCUELA_COMPLETA = `${params.ESCUELA} (${params.SEDE_FACULTAD})`;
-    console.log(params);
     const resp = await modificarCarreraService(params);
     setLoading(false);
     if (resp.data.ok) {

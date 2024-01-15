@@ -1,4 +1,4 @@
-import { Request, Response, Router } from 'express'
+import { NextFunction, Request, Response, Router } from 'express'
 import asyncHandler from 'express-async-handler'
 import { VoucherService } from '../../services/administrador/voucher/Voucher.service'
 import { VoucherInterface } from '../../interfaces/administrador/voucher.interface'
@@ -43,15 +43,23 @@ class VoucherController {
     public crearVoucher = async(req: Request, res: Response) => {
         try {
             const params: VoucherInterface = req.body
+            const datosMiddleware = (req as any).locals;
+            params.USUARIO_REGISTRO = datosMiddleware.id
             const resp = await this.voucherService.crearVoucher(params)
+            console.log(resp)
             res.status(200).json(resp)
-        }catch(error) {
+        }catch(error: any) {
+            if(!error.ok) {
+                res.status(401).json(error)
+                return 
+            }
+            // console.log("DATOS DE ERRORES => ", error)
             res.status(500).json(error)
+            
         }
     }
     public routes() {
         this.router.get('/obtener-vouchers', asyncHandler(this.obtenerVouchers))
-
         this.router.post('/buscar-voucher', asyncHandler(this.buscarVoucher))
         this.router.post('/buscar-estudiante-parar-voucher', asyncHandler(this.buscarEstudianteParaVoucher))
         this.router.post('/crear-voucher', asyncHandler(this.crearVoucher))

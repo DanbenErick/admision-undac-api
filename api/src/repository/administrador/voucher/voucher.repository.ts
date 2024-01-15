@@ -6,7 +6,14 @@ import { generarConsulta } from '../../../util/util'
 class VoucherRepository {
     public obtenerVouchers = async(connection:any) => {
         try {
-            const query = `SELECT * FROM pagos ORDER BY ID DESC`
+            const query = `
+                SELECT 
+                    pagos.*,
+                    CONCAT(registros.AP_PATERNO, ' ', registros.AP_MATERNO, ' ', registros.NOMBRES) AS NOMBRE_COMPLETO
+                FROM pagos
+                LEFT JOIN registros ON pagos.dni = registros.dni
+                ORDER BY ID DESC
+            `
             const [rows]: any = await connection.promise().query(query)
             return rows
         }catch(error) {
@@ -38,9 +45,10 @@ class VoucherRepository {
         try {
             const query = await generarConsulta('pagos', params, null)
             const data = Object.values(params)
+            console.log(query, data)
             const resp = await connection.promise().execute(query, data)
             return resp
-        }catch(error) {
+        }catch(error: any) {
             logger.error('VoucherRepository.crearVoucher => ', error)
             throw error
         }

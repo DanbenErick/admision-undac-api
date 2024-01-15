@@ -10,7 +10,6 @@ import useAuthAdmin from '../hooks/useAuthAdmin';
 
 const BtnActionComponent = () => {
   const authCont = useContext(AuthContext);
-  console.log(authCont);
   const { logout } = useAuthAdmin();
   const cerrarSesion = () => {
     logout();

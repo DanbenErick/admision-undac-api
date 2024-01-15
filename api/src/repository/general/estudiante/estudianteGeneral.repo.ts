@@ -55,17 +55,23 @@ export class EstudianteGeneralRepository {
         throw error
       }
     }
-    /**
-     * 
-     
-     *  dat_complementarios
-        => 
-        DNI, SEXO, FECHA_NACIMIENTO, LUGAR_NACIMIENTO, DIRECCION, DISCAPACIDAD, TIPO_DISCAPACIDAD, ETNICA, CELULAR, TELEFONO, RUTA_FOTO, NOMBRE_COLEGIO, TIPO_COLEGIO
-
-        inscritos
-        =>
-        DNI COD_CARRERA, AREA_CARRERA, PROCESO, MODALIDAD, SEDE_EXAM, PREPARATORIA, YEAR_CONCLU, FECHA_REGISTRO
-     */
+    public obtenerMisPagos = async(connection: any, params: any) => {
+      try {
+        const query  = `
+        SELECT 
+          pagos.*,
+          procesos.NOMBRE AS NOMBRE_PROCESO	
+        FROM pagos 
+        LEFT JOIN procesos ON procesos.ID = pagos.ID_PROCESO
+        WHERE DNI = ${params.DNI};
+        `
+        const [rows]: any = await connection.promise().query(query)
+        return rows
+      }catch(error) {
+        logger.error('EstudianteGeneralRepository.obtenerMisPagos => ', error)
+        throw error
+      }
+    }
     public registrarDatosComplementariosEstudiante = async(connection: any, params: any) => {
       try {
         const query = await generarConsulta('dat_complementarios', params, null)
@@ -74,6 +80,7 @@ export class EstudianteGeneralRepository {
         return resp
       }catch(error) {
         logger.error('EstudianteGeneralRepository.registrarDatosComplementariosEstudiante => ', error)
+        throw error
       }
     }
     public registrarInscripcionEstudiante = async(connection: any, params: any) => {

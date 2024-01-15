@@ -20,6 +20,24 @@ const crearAulaService = async(params) => {
     console.error('Ocurrio un error', error)
   }
 }
+const cerrarAulaService = async(params) => {
+  try {
+    const ruta = getRuta('cerrar-aula')
+    const resp = await axios.put(ruta, params)
+    return resp
+  }catch(error) {
+    console.error('Ocurrio un error', error)
+  }
+}
+const abrirAulaService = async(params) => {
+  try {
+    const ruta = getRuta('abrir-aula')
+    const resp = await axios.put(ruta, params)
+    return resp
+  }catch(error) {
+    console.error('Ocurrio un error', error)
+  }
+}
 const generarPDFEstudiantesAulaService = async(params) => {
   try {
     const ruta = getRuta('generar-pdf')
@@ -67,5 +85,7 @@ export {
   crearAulaService,
   modificarAulaService,
   buscarAulaService,
+  abrirAulaService,
+  cerrarAulaService,
   generarPDFEstudiantesAulaService
 }

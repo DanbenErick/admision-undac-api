@@ -28,7 +28,12 @@ export const construirPdfAula = async ( dataCallback: any, endCallback: any, dat
   const tableArray = {
     title: `AULA: ${cabecera.AULA}`,
     subtitle: `TURNO: ${cabecera.TURNO}`,
-    headers: ["DNI", "NOMBRE COMPLETO", "CELULAR", "CELULAR APODERADO"],
+    headers: [
+        {label: 'DNI', width: 60, headerAlign:"center", align: 'center', headerColor:"#A8A8A8", headerOpacity:0.5},
+        {label: 'NOMBRE COMPLETO', width: 250, headerAlign:"center", align: 'center', headerColor:"#A8A8A8", headerOpacity:0.5},
+        {label: 'CELULAR', width: 86, headerAlign:"center", align: 'center', headerColor:"#A8A8A8", headerOpacity:0.5},
+        {label: 'CELULAR APODERADO', width: 138, headerAlign:"center", align: 'center', headerColor:"#A8A8A8", headerOpacity:0.5}
+    ],
     rows: arrayData,
   };
   doc.table(tableArray, { width: 535 });

@@ -10,7 +10,6 @@ const LoginPage = () => {
   const initialValues = {};
   const loginUsuario = async (params) => {
     const resp = await login(params);
-    console.log(resp);
   };
   return (
     <div className="pageLogin">

@@ -39,7 +39,11 @@ class AdministradorRouting {
         throw new Error('Authentication failed!');
       }
       // const verified = jwt.verify(token, process.env.JWT_TOKEN_SECRET);
-      const verified: any = jwt.verify(token, 'UNDAC_ADMISION');
+      if(!process.env.JWT_TOKEN_SECRET) {
+        throw new Error('JWT_TOKEN_SECRET must be defined');
+      }
+      const verified: any = jwt.verify(token, process.env.JWT_TOKEN_SECRET);
+      req.locals = verified
       if(verified.rol === 'ADMINISTRADOR'){ next() }
       else {res.status(403).json({message: 'No tienes los permisos nesesarios'})}
     } catch (err) {

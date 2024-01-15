@@ -2,6 +2,7 @@ import connectMysql from "../../../config/connection.mysqldb";
 import { EstudianteInterface } from "../../../interfaces/administrador/estudiantes.interface";
 import bcrypt from "bcrypt";
 import { EstudianteGeneralRepository } from "../../../repository/general/estudiante/estudianteGeneral.repo";
+import jwt from 'jsonwebtoken'
 
 export class EstudiantesGeneralService {
   public estudianteRepo: EstudianteGeneralRepository;
@@ -26,6 +27,18 @@ export class EstudiantesGeneralService {
       const result: [] = await this.estudianteRepo.verificarDatosCompletamerioEstudiante(dbConex, params)
       if(result.length > 0) return { ok: true, message: 'Se encontro los datos complementarios' }
       return { ok: false, message: 'No se encontro los datos complementarios' }
+      
+    }catch(error) {
+      await dbConex.rollback()
+    }finally {
+      await dbConex.close()
+    }
+  }
+  public obtenerMisPagos = async(params: any) => {
+    const dbConex: any = await connectMysql.connectMysql()
+    try {
+      const result: [] = await this.estudianteRepo.obtenerMisPagos(dbConex, params)
+      return result
       
     }catch(error) {
       await dbConex.rollback()
@@ -64,15 +77,32 @@ export class EstudiantesGeneralService {
   public registrarEstudiante = async (params: EstudianteInterface) => {
     const dbConex: any = await connectMysql.connectMysql();
     try {
-      params.FECHA_REGISTRO = new Date();
       const password: any = params.PASSWORD;
       const salt = await bcrypt.genSalt(10);
       const password_encript = await bcrypt.hash(password, salt);
       params.PASSWORD = password_encript;
       const [result] = await this.estudianteRepo.registrarEstudiante(dbConex,params);
-      if (result.affectedRows > 0)
-        return { ok: true, message: "Se modifico correctamente" };
-      return { ok: false, message: "Ocurrio un error al registrar" };
+      console.log(result);
+      if (result.affectedRows > 0) {
+        if(!process.env.JWT_TOKEN_SECRET) {
+          throw new Error('JWT_TOKEN_SECRET must be defined');
+        }
+        const token = jwt.sign({ id: result.insertId, usuario: params.DNI, rol: 'ESTUDIANTE', dni: params.DNI, }, process.env.JWT_TOKEN_SECRET, {
+          expiresIn: 1800
+        });
+            // send response with token 
+            return { 
+                ok: true, 
+                message: 'Se autentico correctamente',
+                user: params.DNI,
+                name: params.NOMBRES || 'USUARIO',
+                rol: 'ESTUDIANTE',
+                token
+            }
+        
+      }else {
+        return { ok: false, message: "Ocurrio un error al registrar" };
+      }
     } catch (error) {
       await dbConex.rollback();
     } finally {

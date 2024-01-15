@@ -8,7 +8,7 @@ import { CloseCircleOutlined, EditFilled, FilePdfOutlined, FolderOpenOutlined, S
 import { Popconfirm } from 'antd';
 import { Input } from 'antd';
 import { obtenerProcesosForm } from '../../api/apiInpputs';
-import { buscarAulaService, crearAulaService, generarPDFEstudiantesAulaService, modificarAulaService, obtenerAulasService } from '../../api/aulasService';
+import { abrirAulaService, buscarAulaService, cerrarAulaService, crearAulaService, generarPDFEstudiantesAulaService, modificarAulaService, obtenerAulasService } from '../../api/aulasService';
 
 const AulasPage = () => {
   const [loading, setLoading] = useState();
@@ -42,7 +42,33 @@ const AulasPage = () => {
       // }
       // message.error(resp.data.message);
     }catch(error) {
-      console.log(error)
+      console.error(error)
+    }
+  }
+  const abrirAula = async (params) => {
+    try {
+      const resp = await abrirAulaService(params);
+      if (resp.data.ok) {
+        message.success(resp.data.message)
+        await refreshTable()
+        return;
+      }
+      message.error(resp.data.message);
+    }catch(error){
+      console.error(error)
+    }
+  }
+  const cerrarAula = async(params) => {
+    try {
+      const resp = await cerrarAulaService(params);
+      if(resp.data.ok) { 
+        message.success(resp.data.message)
+        await refreshTable()
+        return
+      }
+      message.error(resp.data.message)
+    }catch(error) {
+      console.error(error)
     }
   }
   const columnsTable = [
@@ -77,7 +103,6 @@ const AulasPage = () => {
       dataIndex: 'OCUPADO',
       key: 'OCUPADO',
       render: (data) => {
-        console.log(data);
         return data === '1' ? 'Si' : 'No'
       }
     },
@@ -91,7 +116,7 @@ const AulasPage = () => {
           <>
           <Popconfirm
             title="Carerra"
-            description="Quieres editar este carrera?"
+            description="Quieres editar este aula?"
             onConfirm={() => {
               showPanelEditAula({ ID: column.ID });
             }}
@@ -105,25 +130,25 @@ const AulasPage = () => {
             title="Aula"
             description="Quieres cerrar esta aula?"
             onConfirm={() => {
-              showPanelEditAula({ ID: column.ID });
+              cerrarAula({ ID: column.ID });
             }}
             onCancel={() => ''}
             okText="Si"
             cancelText="No"
           >
-            <Button type="link" info icon={<CloseCircleOutlined />}></Button>
+            <Button type="link" info style={{ color: 'red' }} icon={<CloseCircleOutlined />}></Button>
           </Popconfirm>
           <Popconfirm
             title="Aula"
             description="Quieres abrir este  aula?"
             onConfirm={() => {
-              showPanelEditAula();
+              abrirAula({ID: column.ID});
             }}
             onCancel={() => ''}
             okText="Si"
             cancelText="No"
           >
-            <Button type="link" info icon={<FolderOpenOutlined /> }></Button>
+            <Button type="link" info style={{ color: 'green' }} icon={<FolderOpenOutlined /> }></Button>
           </Popconfirm>
           <Popconfirm
             title="Aula"
@@ -135,7 +160,7 @@ const AulasPage = () => {
             okText="Si"
             cancelText="No"
           >
-            <Button type="link" info icon={<FilePdfOutlined /> }></Button>
+            <Button type="link" info style={{ color: 'red' }} icon={<FilePdfOutlined /> }></Button>
           </Popconfirm>
           </>
         );

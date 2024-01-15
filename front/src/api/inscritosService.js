@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from './axiosConfig';
 const API_HOST = process.env.REACT_APP_API_URL;
 const API_ADMINISTRADOR = process.env.REACT_APP_API_ADMINISTRADOR;
 const obtenerInscritosService = async () => {

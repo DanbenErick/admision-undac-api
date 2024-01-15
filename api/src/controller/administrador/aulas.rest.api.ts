@@ -58,7 +58,7 @@ class AulasController {
             "Content-Type": "application/pdf",
             "content-Disposition": "attachment; filename=invoice.pdf"
         })
-        construirPdfAula(
+        await construirPdfAula(
             (data: any) => stream.write(data), 
             () =>  stream.end(),
             resp,
@@ -72,7 +72,27 @@ class AulasController {
         //     "Content-Type": "application/pdf"
         // }).end(pdfBuffer)
     }
+    public cerrarAula = async(req: Request, res: Response) => {
+        try {
+            const params: AulasInterface = req.body
+            const result = await this.aulasService.cerrarAula(params)
+            res.status(200).json(result)
+        }catch(error) {
+            res.status(500).json(error)
+        }
+    }
+    public abrirAula = async(req: Request, res: Response) => {
+        try {
+            const params: AulasInterface = req.body
+            const result = await this.aulasService.abrirAula(params)
+            res.status(200).json(result)
+        }catch(error) {
+            res.status(500).json(error)
+        }
+    }
     public routes() {
+        this.router.put('/cerrar-aula', asyncHandler(this.cerrarAula))
+        this.router.put('/abrir-aula', asyncHandler(this.abrirAula))
         this.router.get('/obtener-aulas', asyncHandler(this.obtenerAulas))
         this.router.post('/generar-pdf', asyncHandler(this.generarPdf))
         this.router.post('/buscar-aula', asyncHandler(this.buscarAula))

@@ -12,15 +12,18 @@ import { DatePicker } from 'antd';
 import {
   buscarEstudianteVoucherService,
   buscarVoucherService,
+  comprobarComprobantePagoService,
   crearVoucherService,
   obtenerVouchersService,
 } from '../../api/voucherService';
 import moment from 'moment';
+import { formatDateUtil } from '../../util/Util';
 
 const VoucherPage = () => {
   const [formVoucher] = Form.useForm();
   const [loading, setLoading] = useState();
   const [inputProcesos, setInputProcesos] = useState();
+  const [stateDisabledGuardar, setStateDisabledGuardar] = useState(true);
   const [dataTable, setDataTable] = useState();
   const columnsTable = [
     {
@@ -47,6 +50,7 @@ const VoucherPage = () => {
       title: 'Fecha',
       dataIndex: 'FECHA_PAGO',
       key: 'FECHA_PAGO',
+      render: (data) => formatDateUtil(data) 
     },
     {
       title: 'Monto',
@@ -64,7 +68,8 @@ const VoucherPage = () => {
   };
   const guardarCarrera = async (params) => {
     params.ESTADO = 1;
-    params.USUARIO_REGISTRO = 1;
+    delete params.age
+    delete params.caj
     params.FECHA_PAGO = moment(params.FECHA_PAGO).format('YYYY/MM/DD');
     const resp = await crearVoucherService(params);
     if (!resp.data) {
@@ -83,10 +88,8 @@ const VoucherPage = () => {
     const params = formVoucher.getFieldValue();
     const resp = await buscarVoucherService(params);
     setDataTable(resp.data);
-    // console.log(resp)
   };
   const buscarEstudiante = async () => {
-    // console.log(params)
     const params = formVoucher.getFieldValue('DNI');
     if (params.length === 8) {
       const { DNI } = formVoucher.getFieldValue();
@@ -104,7 +107,23 @@ const VoucherPage = () => {
     }
   };
   const comprobarVoucher = async() => {
-    alert("Comprobando voucher")
+    const params = formVoucher.getFieldsValue()
+    const data = {
+      age: params.age,
+      caj: params.caj,
+      secuencia: params.CODIGO,
+      payment_date: formatDateUtil(params.FECHA_PAGO)
+    }
+    const resp = await comprobarComprobantePagoService(data)
+    if(resp.data.state) {
+      message.success(resp.data.msg)
+      if(resp.data.data.n_docum.substring(resp.data.data.n_docum.length - 8) === params.DNI) {
+        message.success('DNI concuerdan')
+        formVoucher.setFieldValue('MONTO', resp.data.data.monto_pagado)
+        setStateDisabledGuardar(false)
+      }else { message.error('Los dni no concuerdan') }
+    }
+    
   }
   useEffect(() => {
     setLoading(true)
@@ -168,7 +187,7 @@ const VoucherPage = () => {
               <Form.Item
                 label="Nombre completo"
                 name="NOMBRE_COMPLETO"
-                rules={[{ required: true }]}
+                rules={[{ required: false }]}
               >
                 <Input disabled={true} />
               </Form.Item>
@@ -196,7 +215,7 @@ const VoucherPage = () => {
                 okText="Si"
                 cancelText="No"
               >
-                <Button type="primary" icon={<SaveFilled />}>
+                <Button type="primary" disabled={stateDisabledGuardar} icon={<SaveFilled />}>
                   Guardar Cambios
                 </Button>
               </Popconfirm>

@@ -26,11 +26,29 @@ export class AulasRepository {
     }
     public buscarAulas = async(connection: any, params: AulasInterface) => {
       try {
-        const query = `SELECT *, aulas.ID, procesos.NOMBRE AS NOMBRE_PROCESO
-        FROM aulas
-        LEFT JOIN procesos ON aulas.ID_PROCESO = procesos.ID
-        WHERE ID_PROCESO LIKE '%${params.ID_PROCESO}%' AND NOMBRE_AULA LIKE '%${params.NOMBRE_AULA}%' AND CAPACIDAD LIKE '%${params.CAPACIDAD}%'
-        ORDER BY aulas.ID DESC`;
+        const query = `
+        SELECT 
+            aulas.*, 
+            aulas.ID AS AULA_ID, 
+            procesos.NOMBRE AS NOMBRE_PROCESO, 
+            CONCAT(COUNT(inscritos.ID_AULA), ' / ', aulas.CAPACIDAD) AS INSCRITOS_CAPACIDAD
+        FROM 
+            aulas
+        LEFT JOIN 
+            procesos ON aulas.ID_PROCESO = procesos.ID
+        LEFT JOIN 
+            inscritos ON aulas.ID = inscritos.ID_AULA
+        WHERE 
+            aulas.ID_PROCESO LIKE '%${params.ID_PROCESO}%'
+            AND aulas.NOMBRE_AULA LIKE '%${params.NOMBRE_AULA}%' 
+            AND aulas.CAPACIDAD LIKE '%${params.CAPACIDAD}%'
+            AND aulas.TURNO LIKE '%${params.TURNO}%'
+        GROUP BY 
+            aulas.ID
+        ORDER BY 
+            aulas.ID DESC;
+    
+        `;
         const [rows]: any = await connection.promise().query(query)
         return rows
       }catch(error) {
@@ -46,6 +64,26 @@ export class AulasRepository {
         return resp
       }catch(error) {
         logger.error('AulasRepository.registrarNuevaAula =>', error)
+        throw error
+      }
+    }
+    public cerrarAula = async(connection: any, params:AulasInterface) => {
+      try {
+        const query = `UPDATE aulas SET OCUPADO = 1 WHERE ID = ${params.ID}`
+        const resp = await connection.promise().query(query)
+        return resp
+      }catch(error) {
+        logger.error('AulasRepository.cerrarAula =>', error)
+        throw error
+      }
+    }
+    public abrirAula = async(connection: any, params:AulasInterface) => {
+      try {
+        const query = `UPDATE aulas SET OCUPADO = 0 WHERE ID = ${params.ID}`
+        const resp = await connection.promise().query(query)
+        return resp
+      }catch(error) {
+        logger.error('AulasRepository.abrirAula =>', error)
         throw error
       }
     }
@@ -84,7 +122,7 @@ export class AulasRepository {
         const query = `
                 SELECT
                   reg.DNI,
-                  CONCAT(reg.AP_PATERNO, reg.AP_MATERNO, reg.NOMBRES) AS NOMBRE_COMPLETO,
+                  CONCAT(reg.AP_PATERNO ,' ' , reg.AP_MATERNO, ' ', reg.NOMBRES) AS NOMBRE_COMPLETO,
                   reg.CELULAR,
                   dat_c.CELULAR_APO AS CELULAR_APODERADO
                 FROM inscritos ins

@@ -29,7 +29,6 @@ export default function AsideComponent() {
       };
     });
     setRoutes(itemsRoutes);
-    console.log('ruta', itemsRoutes);
   }, []);
   const toggleCollapsed = () => {
     setCollapsed(!collapsed);

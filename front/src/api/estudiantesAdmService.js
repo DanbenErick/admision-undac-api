@@ -26,7 +26,6 @@ const buscarEstudianteService = async (params) => {
 const modificarEstudianteService = async (params) => {
   try {
     const resp = await axios.put(getRuta('modificar-estudiante'), params);
-    console.log(resp);
     return resp;
   } catch (error) {
     console.error('Ocurrio un error', error);

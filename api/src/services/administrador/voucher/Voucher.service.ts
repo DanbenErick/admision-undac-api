@@ -44,13 +44,17 @@ export class VoucherService {
   public crearVoucher = async (params: VoucherInterface) => {
     const dbConex: any = await connectMysql.connectMysql();
     try {
-
       const resp = await this.voucherRepo.crearVoucher(dbConex, params);
       if (resp[0].affectedRows > 0) {
         return { ok: true, message: "Guardado correctamente" };
       }
       return { ok: false, message: "Ocurrio un error al guardar" };
-    } catch (error) {
+    } catch (error: any) {
+      if (error.code && error.code === 'ER_DUP_ENTRY') {
+        return { ok: false, message: "El estudiante ya registro este pago" };
+      }else {
+        await dbConex.rollback();
+      }
       await dbConex.rollback();
     } finally {
       dbConex.close();

@@ -56,7 +56,6 @@ const InscritoPage = () => {
       dataIndex: 'PREPARATORIA',
       key: 'PREPARATORIA',
       render: (data, column) => {
-        console.log(data);
         return data === 1 ? 'Si' : 'No';
       },
     },
@@ -95,8 +94,6 @@ const InscritoPage = () => {
   const hiddenPanelEditInscritos = () => setPanelEditarInscritos(false);
   const showPanelEditInscritos = (params) => {
     const data = dataTable.find((inscrito) => inscrito.ID === params.ID);
-    console.log(params);
-    console.log(data);
     formModificarInscritos.setFieldsValue(data);
     setPanelEditarInscritos(true);
   };
@@ -114,7 +111,6 @@ const InscritoPage = () => {
   };
   const modificarInscrito = async (params) => {
     const resp = await modificarInscritoService(params);
-    console.log(params, resp);
     if (resp.data.ok) {
       message.success(resp.data.message);
       refreshTable();
@@ -135,7 +131,6 @@ const InscritoPage = () => {
       return;
     }
     message.error('Ocurrio un error');
-    console.log(resp);
   };
   useEffect(() => {
     setLoading(true)

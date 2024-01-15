@@ -21,7 +21,6 @@ const AsideDashboardEstudiantes = () => {
   const getData = async() => {
     const response = await obtenerProcesosAbiertosAside()
     const {data} = response;
-    console.log(response)
     
     data.forEach(element => {
       if(element.TIPO_PROCESO === 'C') setStatusCepre(true) 

@@ -57,7 +57,10 @@ class InputsControlsController {
     try {
       const token = req.token;
       // Decodificar el token
-      const decodedToken = jwt.verify(token, "UNDAC_ADMISION"); // Reemplaza 'tu_clave_secreta' con tu clave secreta real
+      if(!process.env.JWT_TOKEN_SECRET) {
+        throw new Error('JWT_TOKEN_SECRET must be defined');
+      }
+      const decodedToken = jwt.verify(token, process.env.JWT_TOKEN_SECRET);
 
       // El objeto 'decodedToken' contiene la información decodificada
       console.log("Decoded Token:", decodedToken);
@@ -138,7 +141,10 @@ class InputsControlsController {
         throw new Error('Authentication failed!');
       }
       // const verified = jwt.verify(token, process.env.JWT_TOKEN_SECRET);
-      const verified: any = jwt.verify(token, 'UNDAC_ADMISION');
+      if(!process.env.JWT_TOKEN_SECRET) {
+        throw new Error('JWT_TOKEN_SECRET must be defined');
+      }
+      const verified: any = jwt.verify(token, process.env.JWT_TOKEN_SECRET);
       if(verified != null){ next() }
       else {res.status(403).json({message: 'No tienes los permisos nesesarios'})}
     } catch (err) {

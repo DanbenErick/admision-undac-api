@@ -50,7 +50,6 @@ const obtenerFacultadesForm = async () => {
 };
 const obtenerProcesoActivoForm = async (params) => {
   try {
-    console.log(params)
     const ruta = getRuta('obtener-proceso-activo')
     const resp = await axios.post(ruta, params);
     return resp;
@@ -70,7 +69,7 @@ const obtenerDiscapacidadesForm = async () => {
 const obtenerRazasEtnicasForm = async () => {
   try {
     const ruta = getRuta('obtener-razas-etnicas')
-    const resp = await axios.get(ruta,{headers: { Authorization: `Bearer ${localStorage.getItem('token-estudiante')}` },});
+    const resp = await axios.get(ruta);
     return resp;
   } catch (error) {
     console.error('Ocurrio un error', error);

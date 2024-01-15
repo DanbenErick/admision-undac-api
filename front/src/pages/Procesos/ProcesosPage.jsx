@@ -25,7 +25,6 @@ export default function ProcesosPage() {
   const refreshTableProcesos = async () => {
     setLoading(true);
     const respProcesosTablet = await getProcesosService();
-    console.log(respProcesosTablet);
     setDataTable(respProcesosTablet.data);
     setLoading(false);
   };
@@ -104,7 +103,6 @@ export default function ProcesosPage() {
     setLoading(true);
     values.FECHA_REGISTRO = moment(values.FECHA_REGISTRO).format('YYYY/MM/DD');
     values.USUARIO_REGISTRO = 1;
-    console.log('Datos del formulario:', values);
     const resp = await crearProceso(values);
     if (resp.data.procesoAbiertoExistente) warnignMessage(resp.data.message);
     else if (resp.data.ok) sucessMessage(resp.data.message);

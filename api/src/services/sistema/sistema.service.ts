@@ -43,7 +43,12 @@ class SistemaService {
             if(result.length == 0) return { ok: false, message: 'No se encontro usuario' }
             const validarPassword = await bcrypt.compare(params.PASSWORD, result[0].PASSWORD)
             if(!validarPassword) return { ok: false, message: 'Usuario o contraseña incorrecta' }
-            const token = jwt.sign({ id: result[0].ID, usuario: result[0].USUARIO, rol: 'ADMINISTRADOR', dni: result[0].DNI, }, 'UNDAC_ADMISION');
+            if(!process.env.JWT_TOKEN_SECRET) {
+                throw new Error('JWT_TOKEN_SECRET must be defined');
+              }
+            const token = jwt.sign({ id: result[0].ID, usuario: result[0].USUARIO, rol: 'ADMINISTRADOR', dni: result[0].DNI, }, process.env.JWT_TOKEN_SECRET, {
+                expiresIn: 3600 * 3
+            });
             // send response with token 
             return { 
                 ok: true, 
@@ -82,7 +87,12 @@ class SistemaService {
             console.log(params.PASSWORD, result[0].PASSWORD)
             const validarPassword = await bcrypt.compare(params.PASSWORD, result[0].PASSWORD)
             if(!validarPassword) return { ok: false, message: 'Usuario o contraseña incorrecta' }
-            const token = jwt.sign({ id: result[0].ID, rol: 'ESTUDIANTE', dni: result[0].DNI, usuario: result[0].USUARIO }, 'UNDAC_ADMISION');
+            if(!process.env.JWT_TOKEN_SECRET) {
+                throw new Error('JWT_TOKEN_SECRET must be defined');
+              }
+            const token = jwt.sign({ id: result[0].ID, rol: 'ESTUDIANTE', dni: result[0].DNI, usuario: result[0].USUARIO }, process.env.JWT_TOKEN_SECRET, {
+                expiresIn: 3600 * 3
+            });
             return { 
                 ok: true, 
                 message: 'Se autentico correctamente',
