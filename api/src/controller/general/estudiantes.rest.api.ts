@@ -55,11 +55,6 @@ class EstudianteController {
     public inscribirEstudiante = async(req: Request, res: Response) => {
         try {
             const params: EstudianteInterface = req.body
-            const token: any = req.token
-            const decodedToken: any = jwt.verify(token, 'UNDAC_ADMISION');
-            params.DNI = decodedToken.dni
-            // console.log("decodedToken",decodedToken)
-            // console.log("params", params)
             const resp_1: any = await this.estudianteService.registrarDatosComplementarios(params)
             const resp_2: any = await this.estudianteService.registrarInscripcionEstudiante(params)
             if(!resp_1.ok && !resp_2.ok) {
@@ -133,16 +128,32 @@ class EstudianteController {
             res.status(500).json(error)
         }
     }
+    public authenticateToken = (req: any, res: any, next: any) => {
+        try {
+          // const token = req.headers.authorization.split(' ')[1]; // Authorization: 'Bearer TOKEN'
+          const token = req.token
+          console.log(token)
+          if (!token) {
+            throw new Error('Authentication failed!');
+          }
+          // const verified = jwt.verify(token, process.env.JWT_TOKEN_SECRET);
+          const verified: any = jwt.verify(token, 'UNDAC_ADMISION');
+          if(verified.rol === 'ESTUDIANTE'){ next() }
+          else {res.status(401).json({message: 'No tienes los permisos nesesarios'})}
+        } catch (err) {
+          res.status(400).send('Invalid token !');
+        }
+      }
     public routes() {
-        this.router.post('/consultar-dni', asyncHandler(this.consultarEstudianteExiste))
+        this.router.post('/consultar-dni', this.authenticateToken , asyncHandler(this.consultarEstudianteExiste))
         this.router.post('/registrar-estudiante', asyncHandler(this.registrarEstudiante))
-        this.router.post('/inscribir-estudiante', asyncHandler(this.inscribirEstudiante))
-        this.router.post('/subir-foto-estudiante', upload.single('foto'), asyncHandler(this.subirFotoEstudiante))
-        this.router.post('/subir-documentos-estudiante', upload.single('documento'), asyncHandler(this.subirDocumentacionEstudiante))
-        this.router.post('/registrar-test-psicologico', asyncHandler(this.registrarTestPsicologico))
-        this.router.post('/verificar-test-psicologico-inscrito', asyncHandler(this.verificarTestpsicologicoInscrito))
-        this.router.post('/verificar-inscripcion-estudiante', asyncHandler(this.verificarInscripcionEstudiante))
-        this.router.post('/verificar-registro-complementario-estudiante', asyncHandler(this.verificarDatosCompletamerioEstudiante))
+        this.router.post('/inscribir-estudiante', this.authenticateToken, asyncHandler(this.inscribirEstudiante))
+        this.router.post('/subir-foto-estudiante', this.authenticateToken, upload.single('foto'), asyncHandler(this.subirFotoEstudiante))
+        this.router.post('/subir-documentos-estudiante', this.authenticateToken, upload.single('documento'), asyncHandler(this.subirDocumentacionEstudiante))
+        this.router.post('/registrar-test-psicologico', this.authenticateToken, asyncHandler(this.registrarTestPsicologico))
+        this.router.post('/verificar-test-psicologico-inscrito', this.authenticateToken,  asyncHandler(this.verificarTestpsicologicoInscrito))
+        this.router.post('/verificar-inscripcion-estudiante', this.authenticateToken, asyncHandler(this.verificarInscripcionEstudiante))
+        this.router.post('/verificar-registro-complementario-estudiante', this.authenticateToken, asyncHandler(this.verificarDatosCompletamerioEstudiante))
         
     }
 }

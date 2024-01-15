@@ -6,7 +6,7 @@ import VoucherController from './voucher.rest.api';
 import EstudianteController from './estudiantes.rest.api';
 import InscritosController from './inscritos.routing';
 import AulasController from './aulas.rest.api';
-
+import jwt from 'jsonwebtoken'
 class AdministradorRouting {
 
   public router: Router;
@@ -30,8 +30,24 @@ class AdministradorRouting {
     this.router = Router();
     this.routes();
   }
-
+  public authenticateToken = (req: any, res: any, next: any) => {
+    try {
+      // const token = req.headers.authorization.split(' ')[1]; // Authorization: 'Bearer TOKEN'
+      const token = req.token
+      console.log(token)
+      if (!token) {
+        throw new Error('Authentication failed!');
+      }
+      // const verified = jwt.verify(token, process.env.JWT_TOKEN_SECRET);
+      const verified: any = jwt.verify(token, 'UNDAC_ADMISION');
+      if(verified.rol === 'ADMINISTRADOR'){ next() }
+      else {res.status(403).json({message: 'No tienes los permisos nesesarios'})}
+    } catch (err) {
+      res.status(400).send('Invalid token !');
+    }
+  }
   public routes() {
+    this.router.use(this.authenticateToken)
     this.router.use('/procesos', this.procesos.router)
     this.router.use('/vacantes', this.vacantes.router)
     this.router.use('/carreras', this.carreras.router)

@@ -129,8 +129,25 @@ class InputsControlsController {
       res.status(500).json(error)
     }
   }
+  public authenticateToken = (req: any, res: any, next: any) => {
+    try {
+      // const token = req.headers.authorization.split(' ')[1]; // Authorization: 'Bearer TOKEN'
+      const token = req.token
+      console.log(token)
+      if (!token) {
+        throw new Error('Authentication failed!');
+      }
+      // const verified = jwt.verify(token, process.env.JWT_TOKEN_SECRET);
+      const verified: any = jwt.verify(token, 'UNDAC_ADMISION');
+      if(verified != null){ next() }
+      else {res.status(403).json({message: 'No tienes los permisos nesesarios'})}
+    } catch (err) {
+      res.status(400).send('Invalid token !');
+    }
+  }
   public routes() {
-    this.router.get("/obtener-procesos-abiertos", asyncHandler(this.obtenerProcesosAbiertos));
+    //TODO: Revisar cuales son los endpoints que nesesitan permisos
+    this.router.get("/obtener-procesos-abiertos", this.authenticateToken, asyncHandler(this.obtenerProcesosAbiertos));
     this.router.get("/obtener-procesos", asyncHandler(this.obtenerProcesos));
     this.router.get("/obtener-carreras", asyncHandler(this.obtenerCarreras));
     this.router.post('/buscar-aula-por-turno', asyncHandler(this.buscarAulaPorTurno))
