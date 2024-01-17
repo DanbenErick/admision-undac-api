@@ -5,7 +5,9 @@ interface UsuarioInteface {
     DNI?: string,
     PASSWORD?: any,
     ROL?: number,
-    FECHA_REGISTRO?: Date
+    FECHA_REGISTRO?: Date,
+    CODIGO?: string,
+    CODIGO_ACCESO?: string
 }
 
 export { UsuarioInteface }

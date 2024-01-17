@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Breadcrumb, Button, Table } from 'antd';
+import { Breadcrumb, Button, Select, Table } from 'antd';
 import { Tag, Popconfirm, Card, Form, Input, Radio, DatePicker } from 'antd';
 import SpinnerCompoent from '../../components/Spinner';
 import {
@@ -102,7 +102,6 @@ export default function ProcesosPage() {
   const handleSubmit = async (values) => {
     setLoading(true);
     values.FECHA_REGISTRO = moment(values.FECHA_REGISTRO).format('YYYY/MM/DD');
-    values.USUARIO_REGISTRO = 1;
     const resp = await crearProceso(values);
     if (resp.data.procesoAbiertoExistente) warnignMessage(resp.data.message);
     else if (resp.data.ok) sucessMessage(resp.data.message);
@@ -167,6 +166,22 @@ export default function ProcesosPage() {
                   className="fullSizeInput"
                   format="YYYY/MM/DD"
                 />
+              </Form.Item>
+
+              <Form.Item
+                label="Tipo de Proceso"
+                name="TIPO_PROCESO"
+                rules={[{ required: true, message: 'El estado es requerido' }]}
+              >
+                <Select
+                  options={[
+                    {label: 'CEPRE', value: 'C'},
+                    {label: 'ORDINARIO', value: 'O'},
+                    {label: 'MODALIDADES', value: 'M'},
+                    {label: 'PRIMARA SELECCION', value: 'P'},
+                  ]}
+                />
+                  
               </Form.Item>
 
               <Form.Item

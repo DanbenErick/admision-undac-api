@@ -65,6 +65,8 @@ const InscripcionOdinarioPage = () => {
     return false
   };
 
+  const filterOption = (input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
+
   const subirFoto = async (params) => {
     const formData = new FormData();
     const selectedFile = fileInputImgRef.current.files[0];
@@ -268,6 +270,7 @@ const InscripcionOdinarioPage = () => {
                     showSearch
                     placeholder="Selecciona un proceso"
                     options={selectProcesos}
+                    filterOption={filterOption}
                   />
                 </Form.Item>
                 <Form.Item
@@ -280,6 +283,7 @@ const InscripcionOdinarioPage = () => {
                     showSearch
                     placeholder="Selecciona un proceso"
                     options={selectCarreras}
+                    filterOption={filterOption}
                   />
                 </Form.Item>
                 <Form.Item
@@ -330,6 +334,7 @@ const InscripcionOdinarioPage = () => {
                         label: 'Oxampampa',
                       },
                     ]}
+                    filterOption={filterOption}
                   />
                 </Form.Item>
                 <Form.Item
@@ -349,6 +354,7 @@ const InscripcionOdinarioPage = () => {
                         label: 'Tarde',
                       },
                     ]}
+                    filterOption={filterOption}
                     onChange={buscarAulaPorTurno}
                   />
                 </Form.Item>
@@ -360,6 +366,7 @@ const InscripcionOdinarioPage = () => {
                 >
                   <Select
                     options={selectAulas}
+                    filterOption={filterOption}
                   />
                 </Form.Item>
                 <Form.Item className="FormItem" label="Foto" name="RUTA_FOTO">
@@ -413,6 +420,7 @@ const InscripcionOdinarioPage = () => {
                               label: 'Femenino',
                             },
                           ]}
+                          filterOption={filterOption}
                         />
                       </Form.Item>
                       <Form.Item
@@ -432,6 +440,7 @@ const InscripcionOdinarioPage = () => {
                         <Select
                           options={optionsDepartamento}
                           onChange={buscarProvincia}
+                          filterOption={filterOption}
                         />
                       </Form.Item>
                       <Form.Item
@@ -443,6 +452,7 @@ const InscripcionOdinarioPage = () => {
                         <Select
                           onChange={buscarDistrito}
                           options={optionsProvincia}
+                          filterOption={filterOption}
                         />
                       </Form.Item>
                       <Form.Item
@@ -451,7 +461,7 @@ const InscripcionOdinarioPage = () => {
                         name="DISTRITO"
                         rules={[{ required: false }]}
                       >
-                        <Select options={optionsDistrito} />
+                        <Select options={optionsDistrito} filterOption={filterOption} />
                       </Form.Item>
                       <Form.Item
                         className="FormItem"
@@ -480,6 +490,7 @@ const InscripcionOdinarioPage = () => {
                               value: 0,
                             },
                           ]}
+                          filterOption={filterOption}
                         />
                       </Form.Item>
                       <Form.Item
@@ -492,6 +503,7 @@ const InscripcionOdinarioPage = () => {
                           showSearch
                           placeholder="Selecciona un proceso"
                           options={selectDiscapacidades}
+                          filterOption={filterOption}
                         />
                       </Form.Item>
                       <Form.Item
@@ -504,6 +516,7 @@ const InscripcionOdinarioPage = () => {
                           showSearch
                           placeholder="Selecciona un proceso"
                           options={selectRazasEtnicas}
+                          filterOption={filterOption}
                         />
                       </Form.Item>
                       <Form.Item

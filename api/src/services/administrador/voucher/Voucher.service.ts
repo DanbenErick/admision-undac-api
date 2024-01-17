@@ -9,7 +9,6 @@ export class VoucherService {
   }
   public obtenerVouchers = async () => {
     const dbConex: any = await connectMysql.connectMysql();
-
     try {
       const result = await this.voucherRepo.obtenerVouchers(dbConex);
       return result;
@@ -52,8 +51,6 @@ export class VoucherService {
     } catch (error: any) {
       if (error.code && error.code === 'ER_DUP_ENTRY') {
         return { ok: false, message: "El estudiante ya registro este pago" };
-      }else {
-        await dbConex.rollback();
       }
       await dbConex.rollback();
     } finally {

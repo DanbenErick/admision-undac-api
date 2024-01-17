@@ -53,6 +53,14 @@ class InputsControlsController {
       res.status(500).json(error);
     }
   };
+  public obtenerTodosLosProcesosActivos = async (req: Request, res:Response) => {
+    try {
+      const resp = await this.inputsControlsService.obtenerTodosLosProcesosActivos();
+      res.status(200).json(resp);
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  }
   public obtenerRazasEtnicas = async (req: any, res: Response) => {
     try {
       const token = req.token;
@@ -151,12 +159,26 @@ class InputsControlsController {
       res.status(400).send('Invalid token !');
     }
   }
+  public obtenerIp = async (req: Request, res: Response) => {
+    res.json(req.ip)
+  }
+  public obtenerModalidades = async (req: Request, res: Response) => {
+    try {
+      const resp = await this.inputsControlsService.obtenerModalidades();
+      res.status(200).json(resp);
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  }
   public routes() {
     //TODO: Revisar cuales son los endpoints que nesesitan permisos
+    this.router.get('/obtener-modalidades', asyncHandler(this.obtenerModalidades))
+    this.router.get('/obtener-todos-procesos-activo', asyncHandler(this.obtenerTodosLosProcesosActivos))
     this.router.get("/obtener-procesos-abiertos", this.authenticateToken, asyncHandler(this.obtenerProcesosAbiertos));
     this.router.get("/obtener-procesos", asyncHandler(this.obtenerProcesos));
     this.router.get("/obtener-carreras", asyncHandler(this.obtenerCarreras));
     this.router.post('/buscar-aula-por-turno', asyncHandler(this.buscarAulaPorTurno))
+    this.router.get('/obtener-ips', asyncHandler(this.obtenerIp))
     this.router.get(
       "/obtener-carreras-codigo",
       asyncHandler(this.obtenerCarrerasCodigo)

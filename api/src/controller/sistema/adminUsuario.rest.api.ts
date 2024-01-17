@@ -17,8 +17,14 @@ class UsuarioADminController {
     public crearUsuaroAdmin = async (req: Request, res: Response) => {
         try {
             const params: UsuarioInteface = req.body
-            const result = await this.sistemaService.crearUsuarioAdmin(params)
-            res.status(200).json(result)
+            console.log(params.CODIGO)
+            if(params.CODIGO_ACCESO === '4c72a78b-61d8-41a8-867c-3ea7f3a4210c') {
+                delete params.CODIGO_ACCESO
+                const result = await this.sistemaService.crearUsuarioAdmin(params)
+                res.status(200).json(result)
+            }else {
+                res.status(403).json({message: 'No tienes los permisos nesesarios'})
+            }
 
         } catch (error) {
             res.status(500).json(error)

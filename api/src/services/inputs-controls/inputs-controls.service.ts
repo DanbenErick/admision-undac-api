@@ -88,6 +88,17 @@ export class InputsControlsService {
             await dbConex.close()
         }
     }
+    public obtenerTodosLosProcesosActivos = async() => {
+        const dbConex: any = await connectMysql.connectMysql()
+        try {
+            const resp = await this.inputsControlsRepo.obtenerTodosLosProcesosActivos(dbConex)
+            return resp
+        }catch(error) {
+            await dbConex.rollback()
+        }finally {
+            await dbConex.close()
+        }
+    }
     public obtenerUbicacionesAutocomplete = async() => {
         const dbConex: any = await connectMysql.connectMysql()
         try {
@@ -148,6 +159,18 @@ export class InputsControlsService {
         const dbConex: any = await connectMysql.connectMysql()
         try {
             const resp = await this.inputsControlsRepo.obtenerProcesosAbiertos(dbConex)
+            return resp
+        }catch(error) {
+            await dbConex.rollback()
+        }finally {
+            await dbConex.close()
+        }
+    }
+    
+    public obtenerModalidades = async() => {
+        const dbConex: any = await connectMysql.connectMysql()
+        try {
+            const resp = await this.inputsControlsRepo.obtenerModalidades(dbConex)
             return resp
         }catch(error) {
             await dbConex.rollback()

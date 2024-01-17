@@ -68,11 +68,20 @@ export class InputsControlsRepository {
     public obtenerProcesoActivo = async(connection: any, params: any) => {
         try {
             const query  = `SELECT ID as value, NOMBRE as label FROM procesos WHERE ESTADO = 1 AND TIPO_PROCESO = '${params.TIPO_PROCESO}'`
-            console.log(query)
             const [rows] = await connection.promise().query(query)
             return rows
         }catch(error) {
             logger.error('InputsControlsRepository.obtenerDiscapacidades => ', error)
+            throw error
+        }
+    }
+    public obtenerTodosLosProcesosActivos = async(connection: any) => {
+        try {
+            const query = `SELECT ID as value, NOMBRE as label, TIPO_PROCESO FROM procesos WHERE ESTADO = 1`
+            const [rows] = await connection.promise().query(query)
+            return rows
+        }catch(error) {
+            logger.error('InputsControlsRepository.obtenerTodosLosProcesoActivos => ', error)
             throw error
         }
     }
@@ -84,6 +93,7 @@ export class InputsControlsRepository {
             return rows
         }catch(error) {
             logger.error('InputControlRepository.obtenerUbicacionAutocomplete => ', error)
+            throw error
         }
     }
     public obtenerDepartamentos = async(connection: any) => {
@@ -93,6 +103,7 @@ export class InputsControlsRepository {
             return rows
         }catch(error) {
             logger.error('InputControlRepository.obtenerUbicacionAutocomplete => ', error)
+            throw error
         }
     }
     public obtenerProvincias = async(connection: any, params: any) => {
@@ -102,6 +113,7 @@ export class InputsControlsRepository {
             return rows
         }catch(error) {
             logger.error('InputControlRepository.obtenerUbicacionAutocomplete => ', error)
+            throw error
         }
     }
     public obtenerDistritos = async(connection: any, params: any) => {
@@ -111,6 +123,7 @@ export class InputsControlsRepository {
             return rows
         }catch(error) {
             logger.error('InputControlRepository.obtenerUbicacionAutocomplete => ', error)
+            throw error
         }
     }
     public buscarAulaPorTurno = async(connection: any, params: any) => {
@@ -121,6 +134,7 @@ export class InputsControlsRepository {
             return rows
         }catch(error) {
             logger.error('InputControlRepository.buscarAulaPorTurno => ', error)
+            throw error
         }
     }
     public obtenerProcesosAbiertos = async(connection: any) => {
@@ -130,6 +144,18 @@ export class InputsControlsRepository {
             return rows
         }catch(error) {
             logger.error('InputControlRepository.obtenerProcesosAbiertos => ', error)
+            throw error
+        }
+    }
+
+    public obtenerModalidades = async(connection: any) => {
+        try {
+            const query = `SELECT ID AS value, NOMBRE as label from opc_modalidades`
+            const [rows] = await connection.promise().query(query)
+            return rows
+        }catch(error) {
+            logger.error('InputControlRepository.obtenerModalidades => ', error)
+            throw error
         }
     }
 

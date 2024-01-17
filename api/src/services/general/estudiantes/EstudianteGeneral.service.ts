@@ -90,15 +90,16 @@ export class EstudiantesGeneralService {
         const token = jwt.sign({ id: result.insertId, usuario: params.DNI, rol: 'ESTUDIANTE', dni: params.DNI, }, process.env.JWT_TOKEN_SECRET, {
           expiresIn: 1800
         });
-            // send response with token 
-            return { 
-                ok: true, 
-                message: 'Se autentico correctamente',
-                user: params.DNI,
-                name: params.NOMBRES || 'USUARIO',
-                rol: 'ESTUDIANTE',
-                token
-            }
+        const decoded: any = jwt.decode(token);
+        return { 
+            ok: true, 
+            message: 'Se autentico correctamente',
+            user: params.DNI,
+            name: params.NOMBRES || 'USUARIO',
+            rol: 'ESTUDIANTE',
+            token,
+            expiresAt: decoded.exp * 1000
+        }
         
       }else {
         return { ok: false, message: "Ocurrio un error al registrar" };

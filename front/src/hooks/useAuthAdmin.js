@@ -24,6 +24,7 @@ const useAuthAdmin = () => {
     localStorage.setItem('token', response.data.token);
     localStorage.setItem('nombre', response.data.name);
     localStorage.setItem('rol', 'ADMIN_DARAS');
+    localStorage.setItem('expiresAt', response.data.expiresAt);
     localStorage.setItem('dni', response.data.dni || '');
     message.success('Autenticado correctamente');
     context.setUser(response.data);

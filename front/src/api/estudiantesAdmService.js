@@ -23,6 +23,15 @@ const buscarEstudianteService = async (params) => {
   }
 };
 
+const registrarEInscribirEstudianteService = async(parmams) => {
+  try {
+    const resp = await axios.post(getRuta('registrar-inscribir-estudiante'), parmams);
+    return resp;
+  } catch (error) {
+    console.error('Ocurrio un error', error);
+  }
+}
+
 const modificarEstudianteService = async (params) => {
   try {
     const resp = await axios.put(getRuta('modificar-estudiante'), params);
@@ -36,4 +45,5 @@ export {
   obtenerEstudiantesService,
   buscarEstudianteService,
   modificarEstudianteService,
+  registrarEInscribirEstudianteService
 };

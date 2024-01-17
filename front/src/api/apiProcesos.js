@@ -1,10 +1,10 @@
 import axios from './axiosConfig';
-
+const API_HOST = process.env.REACT_APP_API_URL;
+const getRuta = (params) => `${API_HOST}/administrador/procesos/${params}`;
 const obtenerProcesosFull = async () => {
   try {
-    const resp = axios.get(
-      `http://localhost:3500/administrador/procesos/obtener-procesos`,
-    );
+    const ruta = getRuta('obtener-procesos')
+    const resp = axios.get(ruta);
     return resp;
   } catch (error) {
     console.error('ERROR: ', error);
@@ -12,10 +12,8 @@ const obtenerProcesosFull = async () => {
 };
 const crearProceso = async (params) => {
   try {
-    const resp = axios.post(
-      `http://localhost:3500/administrador/procesos/crear-proceso`,
-      params,
-    );
+    const ruta = getRuta('crear-proceso')
+    const resp = axios.post(ruta,params);
     return resp;
   } catch (error) {
     console.error('ERROR: ', error);
@@ -23,10 +21,8 @@ const crearProceso = async (params) => {
 };
 const cerrarProceso = async (params) => {
   try {
-    const resp = axios.post(
-      `http://localhost:3500/administrador/procesos/cerrar-proceso`,
-      params,
-    );
+    const ruta = getRuta('cerrar-proceso')
+    const resp = axios.post(ruta, params);
     return resp;
   } catch (error) {
     console.error('ERROR: ', error);

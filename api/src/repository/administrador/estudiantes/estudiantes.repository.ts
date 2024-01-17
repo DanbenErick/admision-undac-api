@@ -1,4 +1,5 @@
 
+import { EstudianteCompleto } from '../../../interfaces/administrador/EstudianteCompleto.interface';
 import { EstudianteInterface } from '../../../interfaces/administrador/estudiantes.interface';
 import { logger } from '../../../resources/manager-log.resource';
 import { generarConsulta } from '../../../util/util'
@@ -35,6 +36,16 @@ export class EstudianteRepository {
       }catch(error) {
       logger.error('EstudianteRepository.modificarEstudiante =>', (error))
       throw error
+    }
+  }
+  public registrarEInscribirEstudiante = async(connection: any, params: EstudianteCompleto) => {
+    try {
+      const query = `CALL RegistrarEstudianteComoAdministrador (? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,?)`
+      console.log('Query ejecutado:', connection.format(query, params));
+      const resp = await connection.promise().execute(query, params);
+      return resp
+    }catch(error) {
+      logger.error('EstudianteRepository.registrarEInscribirEstudiante', error)
     }
   }
 }

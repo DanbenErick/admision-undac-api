@@ -27,10 +27,11 @@ export class ProcesosService {
     public crearProceso = async(params: ProcesosInterface) => {
         const dbConnect: any = await connectMysql.connectMysql()
         try {
-            const consultaProcesoAbierto: any[] = await this.procesosRepo.verificarSiHayProcesoAbierto(dbConnect, "")
-            if(consultaProcesoAbierto.length > 0) {
-                return {ok: true, procesoAbiertoExistente: true, message: 'Ya hay un proceso abierto ahora'}
-            }
+            //TODO: Se desabilito la verificacion si hay un proceso abierto
+            // const consultaProcesoAbierto: any[] = await this.procesosRepo.verificarSiHayProcesoAbierto(dbConnect, "")
+            // if(consultaProcesoAbierto.length > 0) {
+            //     return {ok: true, procesoAbiertoExistente: true, message: 'Ya hay un proceso abierto ahora'}
+            // }
             const result = await this.procesosRepo.crearProceso(dbConnect ,params)
             if(result[0].affectedRows > 0) {
                 return { ok: true, procesoAbiertoExistente: false, message: 'Proceso llevado exitosamente' }

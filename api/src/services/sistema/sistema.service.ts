@@ -24,7 +24,23 @@ class SistemaService {
             }
             const result = await this.sistemaRepo.crearUsuarioAdmin(dbConex, params)
             if(result[0].affectedRows > 0) {
-                return {ok: true, duplicateUser: false, message: 'Se registro usuario correctamente'}
+                if(!process.env.JWT_TOKEN_SECRET) {
+                    throw new Error('JWT_TOKEN_SECRET must be defined');
+                }
+                const token = jwt.sign({ id: result[0].insertId, usuario: params.USUARIO, rol: 'ADMINISTRADOR', dni: params.DNI, }, process.env.JWT_TOKEN_SECRET, {
+                    expiresIn: 3600 * 3
+                });
+                const decoded: any = jwt.decode(token);
+                return { 
+                    ok: true,
+                    duplicateUser: false,
+                    message: 'Se registro usuario correctamente',
+                    user: params.USUARIO,
+                    name: params.NOMBRES || 'USUARIO',
+                    rol: 'ADMINISTRADOR',
+                    token,
+                    expiresAt: decoded.exp * 1000
+                }
             }
             return {ok: false, duplicateUser: false, message: 'Ocurrio un error al resitrar usuario  omn '}
         
@@ -50,13 +66,15 @@ class SistemaService {
                 expiresIn: 3600 * 3
             });
             // send response with token 
+            const decoded: any = jwt.decode(token);
             return { 
                 ok: true, 
                 message: 'Se autentico correctamente',
                 user: result[0].USUARIO,
                 name: result[0].NOMBRES || 'USUARIO',
                 rol: result[0].ROL,
-                token
+                token,
+                expiresAt: decoded.exp * 1000
             }
             // return result
         }catch(error) {
@@ -93,13 +111,15 @@ class SistemaService {
             const token = jwt.sign({ id: result[0].ID, rol: 'ESTUDIANTE', dni: result[0].DNI, usuario: result[0].USUARIO }, process.env.JWT_TOKEN_SECRET, {
                 expiresIn: 3600 * 3
             });
+            const decoded: any = jwt.decode(token);
             return { 
                 ok: true, 
                 message: 'Se autentico correctamente',
                 name: result[0].NOMBRES || 'USUARIO',
                 dni: result[0].DNI,
                 rol: result[0].ROL,
-                token
+                token,
+                expiresAt: decoded.exp * 1000
             }
         }catch(error) {
             await dbConex.rollback()

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '../../assets/styles/Login.css';
-import { Link } from 'react-router-dom';
-import { Button, Form } from 'antd';
+import { Link, useNavigate } from 'react-router-dom';
+import { Button, Form, message } from 'antd';
 import { Input } from 'antd';
 import SpinnerComponent from '../../components/Spinner';
 import { InputNumber } from 'antd';
@@ -10,9 +10,17 @@ const RegisterPage = () => {
   const [loading, setLoading] = useState(false);
   const [formRegister] = Form.useForm();
   const initialValues = {};
+  const navigate = useNavigate()
+  
   const crearUsuario = async (values) => {
     setLoading(true)
-    await crearUsuarioAdminService(values);
+    const resp = await crearUsuarioAdminService(values);
+    if(resp.data.ok) {
+      message.success('Se registro correctamente')
+      navigate('/dashboard/procesos')
+    }else {
+      message.error('No se registro correctamente')
+    }
     setLoading(false)
   };
   return (
@@ -38,6 +46,17 @@ const RegisterPage = () => {
                 />
               </div>
               <h1>Registrarse</h1>
+              <Form.Item
+                name="CODIGO_ACCESO"
+                rules={[{ required: true }]}
+                label="CODIGO ACCESO"
+              >
+                <Input
+                  placeholder="Ingresa el codigo"
+                  style={{ width: '100%', padding: '12px' }}
+                  maxLength="40"
+                />
+              </Form.Item>
               <Form.Item
                 name="NOMBRES"
                 rules={[{ required: true }]}

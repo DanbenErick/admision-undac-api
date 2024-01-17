@@ -34,8 +34,18 @@ const modificarInscritoService = async (params) => {
   }
 };
 
+const guardarInscripcionService = async(params) => {
+  try {
+    const resp = await axios.post(`${API_HOST}${API_ADMINISTRADOR}/inscritos/incribir-estudiante`,params);
+    return resp;
+  } catch (error) {
+    console.error('Ocurrio un error', error);
+  }
+}
+
 export {
   obtenerInscritosService,
   buscarInscritoService,
   modificarInscritoService,
+  guardarInscripcionService
 };

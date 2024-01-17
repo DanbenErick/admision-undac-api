@@ -37,7 +37,7 @@ const PagosEstudiantePage = () => {
       <div className="cardDashEstudiante">
         <div className="cardDashEstudianteHeader">
           <p>
-            <i className="ri-group-2-fill"></i> Pagos Estudiante
+            <i class="ri-file-history-fill"></i> Pagos Estudiante
           </p>
         </div>
         <div className="cardDashEstudianteBody">

@@ -42,4 +42,15 @@ export class InscritosRepository {
       throw error;
     }
   };
+  public inscribirEstudiante = async (connection: any,params: InscritosInterface) => {
+    try {
+      const query = await generarConsulta("inscritos",params, null);
+      const data = Object.values(params);
+      const resp = await connection.promise().execute(query, data);
+      return resp;
+    } catch (error) {
+      logger.error("InscritosRepository.inscribirEstudiante =>", error);
+      throw error;
+    }
+  }
 }

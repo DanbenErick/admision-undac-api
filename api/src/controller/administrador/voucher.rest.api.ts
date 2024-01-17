@@ -15,7 +15,6 @@ class VoucherController {
     }
     public obtenerVouchers = async(req: Request, res: Response) => {
         try {
-            const params = {}
             const result = await this.voucherService.obtenerVouchers()
             res.status(200).json(result)
         }catch(error){

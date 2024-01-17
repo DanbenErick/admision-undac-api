@@ -10,5 +10,6 @@ export interface InscritosInterface {
   PAGO_2?: string,
   PREPARATORIA?: number,
   YEAR_CONCLU?: string,
-  FECHA_REGISTRO?: Date
+  FECHA_REGISTRO?: Date,
+  TURNO?: string
 }

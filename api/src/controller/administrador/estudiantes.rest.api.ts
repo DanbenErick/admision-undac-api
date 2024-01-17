@@ -40,11 +40,22 @@ class EstudianteController {
         res.status(500).json(error)
       }
     }
+    public registrarEInscribirEstudiante = async(req: Request, res: Response) => {
+      try {
+        const params = req.body
+        console.log("PARAMETROS", params)
+        const resp = await this.estudianteService.registrarEInscribirEstudiante(params)
+        res.status(200).json(resp)
+      }catch(error) {
+        res.status(500).json(error)
+      }
+    }
     
     public routes() {
         this.router.get('/obtener-estudiantes', asyncHandler(this.obtenerEstudiantes))
         this.router.post('/buscar-estudiante', asyncHandler(this.buscarEstudiante))
         this.router.put('/modificar-estudiante', asyncHandler(this.modificarEstudiante))
+        this.router.post('/registrar-inscribir-estudiante', asyncHandler(this.registrarEInscribirEstudiante))
     }
 }
 export default EstudianteController

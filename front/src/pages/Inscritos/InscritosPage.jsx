@@ -1,19 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import SpinnerComponent from '../../components/Spinner';
-import { Breadcrumb, Button, Table } from 'antd';
+import { Breadcrumb, Button, DatePicker, Space, Table } from 'antd';
 import { Card } from 'antd';
 import { Form } from 'antd';
 import { Input } from 'antd';
 import { SaveFilled, SearchOutlined } from '@ant-design/icons';
 import {
   buscarInscritoService,
+  guardarInscripcionService,
   modificarInscritoService,
   obtenerInscritosService,
 } from '../../api/inscritosService';
 import {
+  buscarAulaPorTurnoForm,
   obtenerCarrerasCodigoForm,
   obtenerCarrerasForm,
+  obtenerModalidadesForm, 
   obtenerProcesosForm,
+  obtenerTodosLosProcesosActivosForm,
 } from '../../api/apiInpputs';
 import { Select } from 'antd';
 import { message } from 'antd';
@@ -28,8 +32,19 @@ const InscritoPage = () => {
   const [selectCarreras, setSelectCarreras] = useState();
   const [selectCarrerasCodigo, setSelectCarrerasCodigo] = useState();
   const [selectProcesos, setSelectProcesos] = useState();
+  const [selectProcesosActivos, setSelectProcesosActivos] = useState([]); //
   const [panelEditarInscritos, setPanelEditarInscritos] = useState(false);
+  const [panelInscribir, setPanelInscribir] = useState(false)
+
+  const [statusOrdinario, setStatusOrdinario] = useState(false)
+  const [statusModalidades, setStatusModalidades] = useState(false)
+  const [statusCepre, setStatusCepre] = useState(false)
+  const [statusPrimeraSeleccion, setStatusPrimeraSeleccion] = useState(false)
+  
+  const [selectModalidades, setSelectModalidades] = useState([])
+  const [selectAulas, setSelectAulas] = useState([])
   const [formModificarInscritos] = Form.useForm();
+  const [formInscribirEstudiante] = Form.useForm();
   const columnsTable = [
     {
       title: 'Proceso',
@@ -101,9 +116,11 @@ const InscritoPage = () => {
     const resp_carreras = await obtenerCarrerasForm();
     const resp_procesos = await obtenerProcesosForm();
     const resp_carreras_codigo = await obtenerCarrerasCodigoForm();
+    const resp_modalidades = await obtenerModalidadesForm()
     setSelectCarreras(resp_carreras.data);
     setSelectCarrerasCodigo(resp_carreras_codigo.data);
     setSelectProcesos(resp_procesos.data);
+    setSelectModalidades(resp_modalidades.data);
   };
   const refreshTable = async () => {
     const resp = await obtenerInscritosService();
@@ -132,6 +149,63 @@ const InscritoPage = () => {
     }
     message.error('Ocurrio un error');
   };
+  const inscribirEstudiante = async() => {
+    
+  }
+  const onClosePanelInscrito = async() => {
+    setPanelInscribir(false);
+  }
+  const onShowPanelInscritos = async() => {
+    setLoading(true)
+    const respProcesosActivos = await obtenerTodosLosProcesosActivosForm()
+    console.log(respProcesosActivos)
+    setSelectProcesosActivos(respProcesosActivos.data)
+    setPanelInscribir(true);
+    setLoading(false)
+  }
+  const guardarInscripcion = async(params) => {
+    setLoading(true)
+    const resp = await guardarInscripcionService(params)
+    if(resp.status === 200 && resp.data && resp.data.ok)  {
+      message.success(resp.data.message)
+      refreshTable()
+      setPanelInscribir(false)
+      setLoading(false)
+      return
+    }else message.error(resp.data.message)
+    console.log(resp)
+    setLoading(false)
+  }
+  const changeProcesos = async(value) => {
+    selectProcesosActivos.forEach(proceso => {
+      
+      if (proceso.value === value) {
+        setStatusCepre(false)
+        setStatusPrimeraSeleccion(false)
+        setStatusOrdinario(false)
+        setStatusModalidades(false)
+        if(proceso.TIPO_PROCESO === 'C') {
+          setStatusCepre(true)
+          
+        }
+        if(proceso.TIPO_PROCESO === 'O'){
+          setStatusOrdinario(true)
+        } 
+        if(proceso.TIPO_PROCESO === 'P'){
+          setStatusPrimeraSeleccion(true)
+        } 
+        if(proceso.TIPO_PROCESO === 'M'){
+          setStatusModalidades(true)
+          
+
+        } 
+      }
+    })
+  }
+  const changeTurno = async(value) => {
+    const resp = await buscarAulaPorTurnoForm({TURNO: value})
+    setSelectAulas(resp.data)
+  }
   useEffect(() => {
     setLoading(true)
     refreshTable();
@@ -175,9 +249,8 @@ const InscritoPage = () => {
               <Button type="primary" icon={<SaveFilled />}>
                 Guardar Cambios
               </Button>
-              <Button icon={<SearchOutlined />} onClick={buscarInscrito}>
-                Buscar
-              </Button>
+              <Button icon={<SearchOutlined />} onClick={buscarInscrito}>Buscar</Button>
+              <Button icon={<SaveFilled />} onClick={onShowPanelInscritos}>Inscribir</Button>
             </Form.Item>
           </Form>
         </Card>
@@ -220,6 +293,96 @@ const InscritoPage = () => {
             </Form.Item>
           </Form>
         </Drawer>
+
+        <Drawer
+        title='Inscribir estudiante'
+        placement="right"
+        size={'large'}
+        onClose={onClosePanelInscrito}
+        open={panelInscribir}
+        extra={
+          <Space>
+            <Button incon type="primary" onClick={formInscribirEstudiante.submit}>
+              Inscribir
+            </Button>
+          </Space>
+        }
+      >
+        <Form layout='vertical' form={formInscribirEstudiante} className="formProcesosDashAdmin" onFinish={guardarInscripcion}>
+          <Form.Item label="Proceso" rules={[{ required: true }]} name="PROCESO">
+            <Select
+              showSearch
+              placeholder="Selecciona una proceso"
+              options={selectProcesosActivos}
+              onChange={changeProcesos}
+            />
+          </Form.Item>
+          <Form.Item label="DNI" name="DNI" rules={[{ required: true }]}>
+            <Input maxLength={8} />
+          </Form.Item>
+          <Form.Item label="Carrera" name="COD_CARRERA">
+            <Select
+              showSearch
+              placeholder="Selecciona una carrera"
+              options={selectCarrerasCodigo}
+            />
+          </Form.Item>
+          <Form.Item label="Sede Examen" rules={[{ required: true }]} name="SEDE_EXAM">
+            <Select
+              options={[
+                {label: 'Pasco', value: 'Pasco'},
+                {label: 'Tarma', value: 'Tarma'},
+                {label: 'Huayllay', value: 'Huayllay'},
+                {label: 'Oxapampa', value: 'Oxapampa'},
+              ]}
+            />
+          </Form.Item>
+          <Form.Item label="Preparatoria" rules={[{ required: true }]} name="PREPARATORIA">
+            <Select
+              options={[
+                {label: 'Si', value: 1},
+                {label: 'No', value: 0},
+              ]}
+            />
+          </Form.Item>
+          {
+            statusCepre
+            ?
+            <>
+              <Form.Item label="Turno" rules={[{ required: true }]} name="TURNO">
+                <Select
+                  options={[
+                    {label: 'Mañana', value: 'M'},
+                    {label: 'Tarde', value: 'T'},
+                  ]}
+                  onChange={changeTurno}
+                />
+              </Form.Item>
+              <Form.Item label="Aula" rules={[{ required: true }]} name="ID_AULA">
+                <Select
+                  options={selectAulas}
+                />
+              </Form.Item>
+              </>
+            :
+            ''
+          }
+          <Form.Item label="Año que termino secundaria?" rules={[{ required: true }]}>
+            <DatePicker picker='year' style={{ width: '100%' }} />
+          </Form.Item>
+          {
+            statusModalidades
+            ?
+              <Form.Item label="Modalidad" name="ID_TIPO_MODALIDAD">
+                <Select
+                  options={selectModalidades}
+                />
+              </Form.Item>
+            :
+            ''
+          }
+        </Form>
+      </Drawer>
       </div>
     </div>
   );

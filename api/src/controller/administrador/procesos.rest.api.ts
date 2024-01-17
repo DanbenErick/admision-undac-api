@@ -39,7 +39,9 @@ class ProcesosController {
 
     public crearProceso = async (req: Request, res: Response) => {
       try {
+        const datosMiddleware = (req as any).locals;
         const params = req.body
+        params.USUARIO_REGISTRO = datosMiddleware.id
         const result:any = await this.procesosService.crearProceso(params)
         if(result.ok) {
           res.status(200).json(result)
