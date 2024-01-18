@@ -18,7 +18,7 @@ export class InscritosRepository {
     params: InscritosInterface
   ) => {
     try {
-      const query = `SELECT * FROM vista_obtener_inscritos_admin WHERE PROCESO LIKE '%${params.PROCESO}%' AND DNI LIKE '%${params.DNI}%' AND COD_CARRERA LIKE '%${params.COD_CARRERA}%' AND SEDE_EXAM LIKE '%${params.SEDE_EXAM}%'`;
+      const query = `SELECT * FROM vista_obtener_inscritos_admin WHERE PROCESO LIKE '%${params.PROCESO}%' AND DNI LIKE '%${params.DNI}%' AND COD_CARRERA LIKE '%${params.COD_CARRERA}%' AND SEDE_EXAM LIKE '%${params.SEDE_EXAM}%' ORDER BY ID DESC`;
       const [rows]: any = await connection.promise().query(query);
       return rows;
     } catch (error) {

@@ -4,7 +4,8 @@ import { Breadcrumb, Button, DatePicker, Space, Table } from 'antd';
 import { Card } from 'antd';
 import { Form } from 'antd';
 import { Input } from 'antd';
-import { SaveFilled, SearchOutlined } from '@ant-design/icons';
+import {formatOnlyYear} from '../../util/Util'
+import { EditFilled, SaveFilled, SearchOutlined } from '@ant-design/icons';
 import {
   buscarInscritoService,
   guardarInscripcionService,
@@ -26,6 +27,7 @@ import { Popconfirm } from 'antd';
 import { Drawer } from 'antd';
 
 const InscritoPage = () => {
+  
   const [loading, setLoading] = useState();
   const [dataTable, setDataTable] = useState();
   const [formInscritos] = Form.useForm();
@@ -45,31 +47,32 @@ const InscritoPage = () => {
   const [selectAulas, setSelectAulas] = useState([])
   const [formModificarInscritos] = Form.useForm();
   const [formInscribirEstudiante] = Form.useForm();
+
   const columnsTable = [
     {
       title: 'Proceso',
       dataIndex: 'NOMBRE_PROCESO',
-      key: 'NOMBRE_PROCESO',
+      key: '1',
     },
     {
       title: 'DNI',
       dataIndex: 'DNI',
-      key: 'DNI',
+      key: '2',
     },
     {
       title: 'Carrera',
-      dataIndex: 'NOMBRE_CARRERA',
-      key: 'NOMBRE_CARRERA',
+      dataIndex: 'ESCUELA_COMPLETA',
+      key: '3',
     },
     {
       title: 'Sede',
       dataIndex: 'SEDE_EXAM',
-      key: 'SEDE_EXAM',
+      key: '4',
     },
     {
       title: 'Prepa',
       dataIndex: 'PREPARATORIA',
-      key: 'PREPARATORIA',
+      key: '5',
       render: (data, column) => {
         return data === 1 ? 'Si' : 'No';
       },
@@ -77,17 +80,17 @@ const InscritoPage = () => {
     {
       title: 'Año term',
       dataIndex: 'YEAR_CONCLU',
-      key: 'YEAR_CONCLU',
+      key: '6',
     },
     {
       title: 'Fecha Reg',
       dataIndex: 'FECHA_REGISTRO',
-      key: 'FECHA_REGISTRO',
+      key: '7',
       render: (data) => moment(data).format('YYYY/MM/DD'),
     },
     {
       title: 'Action',
-      key: 'action',
+      key: '8',
       render: (_, column) => {
         return (
           <Popconfirm
@@ -98,9 +101,7 @@ const InscritoPage = () => {
             okText="Si"
             cancelText="No"
           >
-            <Button type="link" info>
-              Editar
-            </Button>
+            <Button type="link" info icon={<EditFilled />}></Button>
           </Popconfirm>
         );
       },
@@ -165,6 +166,7 @@ const InscritoPage = () => {
   }
   const guardarInscripcion = async(params) => {
     setLoading(true)
+    params.YEAR_CONCLU = formatOnlyYear(params.YEAR_CONCLU)
     const resp = await guardarInscripcionService(params)
     if(resp.status === 200 && resp.data && resp.data.ok)  {
       message.success(resp.data.message)
@@ -176,6 +178,10 @@ const InscritoPage = () => {
     console.log(resp)
     setLoading(false)
   }
+  
+  
+
+  
   const changeProcesos = async(value) => {
     selectProcesosActivos.forEach(proceso => {
       
@@ -235,7 +241,7 @@ const InscritoPage = () => {
                 <Select
                   showSearch
                   placeholder="Selecciona una carrera"
-                  options={selectCarreras}
+                  options={selectCarrerasCodigo}
                 />
               </Form.Item>
               <Form.Item label="DNI" name="DNI">
@@ -367,7 +373,7 @@ const InscritoPage = () => {
             :
             ''
           }
-          <Form.Item label="Año que termino secundaria?" rules={[{ required: true }]}>
+          <Form.Item label="Año que termino secundaria?" rules={[{ required: true }]} name="YEAR_CONCLU">
             <DatePicker picker='year' style={{ width: '100%' }} />
           </Form.Item>
           {

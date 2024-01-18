@@ -69,6 +69,7 @@ const InscripcionDashboardEstudiante = () => {
   const subirFoto = async (params) => {
     const formData = new FormData();
     const selectedFile = fileInputImgRef.current.files[0];
+    console.log(selectedFile)
     const typeFile = selectedFile.type;
     const fileExtension = typeFile.split('/')[1];
     const newFileName = `${params}.${fileExtension}`;

@@ -3,7 +3,7 @@ export interface InscritosInterface {
   DNI?: string,
   COD_CARRERA?: string,
   AREA_CARRERA?: number,
-  PROCESO?: number,
+  PROCESO?: any,
   MODALIDAD?: string,
   SEDE_EXAM?: string,
   PAGO_1?: string,

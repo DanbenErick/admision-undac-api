@@ -41,9 +41,31 @@ const modificarEstudianteService = async (params) => {
   }
 };
 
+const editarFotoEstudianteService = async(params) => {
+  try {
+    const ruta = getRuta('editar-foto-estudiante');
+    const resp = await axios.post(ruta, params)
+    return resp
+  }catch(error) {
+    console.error('Ocurrio un error', error);
+  }
+}
+
+const editarArchivoEstudianteService = async(params) => {
+  try {
+    const ruta = getRuta('editar-documento-estudiante')
+    const resp = await axios.post(ruta, params)
+    return resp
+  }catch(error) {
+    console.error('Ocurrio un error', error)
+  }
+}
+
 export {
   obtenerEstudiantesService,
   buscarEstudianteService,
   modificarEstudianteService,
-  registrarEInscribirEstudianteService
+  registrarEInscribirEstudianteService,
+  editarFotoEstudianteService,
+  editarArchivoEstudianteService
 };

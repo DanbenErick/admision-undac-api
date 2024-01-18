@@ -27,6 +27,12 @@ export class InscritosService {
     public buscarInscrito = async(params: InscritosInterface) => {
         const dbConex: any = await connectMysql.connectMysql()
         try {
+            params = {
+                PROCESO: params.PROCESO || '',
+                COD_CARRERA: params.COD_CARRERA || '',
+                DNI: params.DNI || '',
+                SEDE_EXAM: params.SEDE_EXAM || ''
+            }
             const result = await this.inscritosRepo.buscarInscritos(dbConex, params)
             return result
         }catch(error) {

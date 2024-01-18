@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import SpinnerComponent from '../../components/Spinner';
-import { Breadcrumb, Button, DatePicker, Modal, Select, Space, Table } from 'antd';
+import { Breadcrumb, Button, DatePicker, Image, Modal, Select, Space, Table } from 'antd';
 import { Card } from 'antd';
 import { Form } from 'antd';
 import { Input } from 'antd';
-import { SaveFilled, SearchOutlined } from '@ant-design/icons';
+import { EditFilled, SaveFilled, SearchOutlined, UploadOutlined } from '@ant-design/icons';
 import {
   buscarEstudianteService,
+  editarArchivoEstudianteService,
+  editarFotoEstudianteService,
   modificarEstudianteService,
   obtenerEstudiantesService,
   registrarEInscribirEstudianteService,
@@ -18,14 +20,17 @@ import moment from 'moment';
 import { buscarAulaPorTurnoForm, obtenerCarrerasCodigoForm, obtenerCarrerasForm, obtenerDepartamentosForm, obtenerDiscapacidadesForm, obtenerDistritosForm, obtenerProcesoActivoForm, obtenerProcesosForm, obtenerProvinciasForm, obtenerRazasEtnicasForm, obtenerTodosLosProcesosActivosForm } from '../../api/apiInpputs';
 import { formatDateUtil, formatOnlyYear } from '../../util/Util';
 
+
+
 const EstudiantesPage = () => {
+  const [keyFoto, setKeyFoto] = useState(0)
   const [loading, setLoading] = useState();
+  const [stateDNI, setStateDNI] = useState()
   const [formEstudiantes] = Form.useForm();
   const [dataTable, setDataTable] = useState();
   const [formModificarEstudiante] = Form.useForm();
   const [panelEditarEstudiante, setPanelEditarEstudiante] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
+  
   // Selects
   const [selectCarreras, setSelectCarreras] = useState([]);
   const [selectAulas, setSelectAulas] = useState([]);
@@ -35,12 +40,31 @@ const EstudiantesPage = () => {
   const [selectDepartamento, setSelectDepartamento] = useState([])
   const [selectProvincia, setSelectProvincia] = useState([])
   const [selectDistrito, setSelectDistrito] = useState([])
+  
+  const [modalFotosyArchivo, setModalFotosyArchivo] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [stateDiscapacidad, setStateDiscapacidad] = useState(false);
   const [stateAulas, setStateAulas] = useState(false)
 
   const [formRegistrarEInscribir] = Form.useForm()
-  
+
+  const fileFoto = useRef(null)
+  const fileArchivo = useRef(null)
+
+  // const handleFileFoto = (event) => {
+  //   setFileFoto(event.target.files[0]);
+  // }
+  // const handleFileArchivo = (event) => {
+  //   setFileArchivo(event.target.files[0]);
+  // }
+
+  const handleCancelFoto = () => setModalFotosyArchivo(false)
+  const handleShowFoto = ({ID, DNI}) => {
+    setStateDNI(DNI)
+    setModalFotosyArchivo(true)
+  }
+
   const columnsTable = [
     {
       title: 'DNI',
@@ -74,20 +98,32 @@ const EstudiantesPage = () => {
       render: (_, column) => {
         // if (column.ESTADO === 1) {
         return (
-          <Popconfirm
-            title="Carerra"
-            description="Quieres editar este carrera?"
-            onConfirm={() => {
-              showPanelEditEstudiante({ ID: column.ID });
-            }}
-            onCancel={() => ''}
-            okText="Si"
-            cancelText="No"
-          >
-            <Button type="link" info>
-              Editar
-            </Button>
-          </Popconfirm>
+          <>
+            <Popconfirm
+              title="Estudiante"
+              description="Quieres editar este carrera?"
+              onConfirm={() => {
+                showPanelEditEstudiante({ ID: column.ID });
+              }}
+              onCancel={() => ''}
+              okText="Si"
+              cancelText="No"
+            >
+              <Button type="link" info icon={<EditFilled />}></Button>
+            </Popconfirm>
+            <Popconfirm
+              title="Estudiante"
+              description="Quieres editar foto y archivo del estudiante?"
+              onConfirm={() => {
+                handleShowFoto({ ID: column.ID, DNI: column.DNI });
+              }}
+              onCancel={() => ''}
+              okText="Si"
+              cancelText="No"
+            >
+              <Button type="link" info icon={<UploadOutlined />}></Button>
+            </Popconfirm>
+          </>
         );
       },
     },
@@ -146,7 +182,7 @@ const EstudiantesPage = () => {
     message.error(resp.data.message);
   };
   const handleCancel = () => { setIsModalOpen(false)}
-  const handleOk = () => {}
+  
   const handleProcesos = (value) => {
     selectProcesos.forEach(proceso => {
       if(proceso.value === value) {
@@ -182,6 +218,30 @@ const EstudiantesPage = () => {
     const resp = await buscarEstudianteService(params);
     setDataTable(resp.data);
   };
+  const cambiarFoto = async() => {
+    const formData = new FormData();
+    const selectedFile = fileFoto.current.files[0];
+    const typeFile = selectedFile.type;
+    const fileExtension = typeFile.split('/')[1];
+    const newFileName = `${stateDNI}.${fileExtension}`;
+    
+    formData.append('fotoEstudiante', selectedFile, newFileName);
+    const resp = await editarFotoEstudianteService(formData);
+    if(resp.status === 200 && resp.data.ok) {
+      message.success(resp.data.message);
+      setKeyFoto(prevKey => prevKey + 1)
+      // handleCancelFoto()
+      // await refreshTable();
+      return;
+    }
+    console.log(resp)
+  }
+  const cambiarDocumento = async () => {
+    const formdata = new FormData()
+    formdata.append('archivo', fileArchivo.current.files[0])
+    const resp = await editarArchivoEstudianteService(formdata)
+    console.log(resp)
+  }
   const registrarEInscribirEstudiante = async (params) => {
     params.FECHA_NACIMIENTO = formatDateUtil(params.FECHA_NACIMIENTO)
     params.YEAR_CONCLU = formatOnlyYear(params.YEAR_CONCLU)
@@ -450,6 +510,46 @@ const EstudiantesPage = () => {
         </Form>
       </Drawer>
     
+
+      <Drawer
+        title='Estudiantes'
+        placement="right"
+        size={'small'}
+        onClose={handleCancelFoto}
+        open={modalFotosyArchivo}
+      >
+        <h1>Fotos {stateDNI} </h1>
+        <div style={{ width: '100%', objectFit: 'cover', marginBottom: '10px' }}>
+          <Image
+            key={keyFoto}
+            src={`http://localhost:3500/${stateDNI}/${stateDNI}.jpeg`}
+          />
+        </div>
+        <Form layout='vertical'>
+        
+          <Form.Item className="FormItem" label="Foto" name="RUTA_FOTO">
+            <input
+              type="file"
+              accept=".png, .jpg, .jpeg"
+              ref={fileFoto}
+            />
+          </Form.Item>
+        
+          <Button type="primary" onClick={cambiarFoto} style={{ marginBottom: '20px' }}>Subir imagen</Button>
+        <Form.Item
+          className="FormItem"
+          label="Archivos DNI y Cert. estudios"
+        >
+          <input
+            type="file"
+            accept=".pdf"
+            ref={fileArchivo}
+            
+          />
+        </Form.Item>
+          <Button type="primary" onClick={cambiarDocumento}>Subir documento</Button>
+        </Form>
+      </Drawer>
 </>
   );
 };

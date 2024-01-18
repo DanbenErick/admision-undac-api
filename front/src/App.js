@@ -30,6 +30,9 @@ import PagosEstudiantePage from './pages/DashboardEstudiantes/PagesDashboardEstu
 import InscripcionEstraordinarioPage from './pages/DashboardEstudiantes/PagesDashboardEstudiantes/InscripcionExtraordinarioPage';
 import InscripcionModalidadesPage from './pages/DashboardEstudiantes/PagesDashboardEstudiantes/InscripcionModalidadesPage';
 import InscripcionOdinarioPage from './pages/DashboardEstudiantes/PagesDashboardEstudiantes/InscripcionOrdinarioPage';
+import ResultadoPage from './pages/Resultados/ResultadosPage';
+import CarreraResultadoPage from './pages/Resultados/CarrerasResultadoPage';
+import TablaResultadosPage from './pages/Resultados/TablaResultadosPage';
 
 const App = () => {
   return (
@@ -104,6 +107,9 @@ const App = () => {
                 <Route path="resultados" element={<ResultadosAdmPage />} />
                 <Route path="aulas" element={<AulasPage />} />
               </Route>
+              <Route path="/resultados" element={<ResultadoPage />} />
+              <Route path='/resultados-lis-carreras/:nombre/:id' element={<CarreraResultadoPage />} />
+              <Route path='/tabla-resultado/:id/:nombre' element={<TablaResultadosPage />} />
               <Route path="*" element={NotFound} />
             </Routes>
           </Router>
