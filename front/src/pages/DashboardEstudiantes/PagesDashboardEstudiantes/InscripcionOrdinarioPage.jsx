@@ -227,7 +227,7 @@ const InscripcionOdinarioPage = () => {
                       className="FormItem"
                       label="Apellido y nombres"
                       name="NOMBRE_COMPLETO_APO"
-                      rules={[{ required: false }]}
+                      rules={[{ required: true }]}
                     >
                       <Input maxLength={30} />
                     </Form.Item>
@@ -235,7 +235,7 @@ const InscripcionOdinarioPage = () => {
                       className="FormItem"
                       label="Numero de celular "
                       name="CELULAR_APO"
-                      rules={[{ required: false }]}
+                      rules={[{ required: true }]}
                     >
                       <Input maxLength={9} />
                     </Form.Item>
@@ -243,7 +243,7 @@ const InscripcionOdinarioPage = () => {
                       className="FormItem"
                       label="Numero de DNI"
                       name="DNI_APO"
-                      rules={[{ required: false }]}
+                      rules={[{ required: true }]}
                     >
                       <Input maxLength={8} />
                     </Form.Item>
@@ -264,7 +264,7 @@ const InscripcionOdinarioPage = () => {
                   className="FormItem"
                   label="Modalidad"
                   name="PROCESO"
-                  rules={[{ required: false }]}
+                  rules={[{ required: true }]}
                 >
                   <Select
                     showSearch
@@ -277,7 +277,7 @@ const InscripcionOdinarioPage = () => {
                   className="FormItem"
                   label="Programa de Estudio"
                   name="COD_CARRERA"
-                  rules={[{ required: false }]}
+                  rules={[{ required: true }]}
                 >
                   <Select
                     showSearch
@@ -290,7 +290,7 @@ const InscripcionOdinarioPage = () => {
                   className="FormItem"
                   label="Año termino secundaria"
                   name="YEAR_CONCLU"
-                  rules={[{ required: false }]}
+                  rules={[{ required: true }]}
                 >
                   <DatePicker picker="year" style={{ width: '100%' }} />
                 </Form.Item>
@@ -298,7 +298,7 @@ const InscripcionOdinarioPage = () => {
                   className="FormItem"
                   label="Tipo de Colegio"
                   name="TIPO_COLEGIO"
-                  rules={[{ required: false }]}
+                  rules={[{ required: true }]}
                 >
                   <Radio.Group defaultValue="a" buttonStyle="solid">
                     <Radio.Button value="E">Estatal</Radio.Button>
@@ -309,7 +309,7 @@ const InscripcionOdinarioPage = () => {
                   className="FormItem"
                   label="Nombre de Colegio"
                   name="NOMBRE_COLEGIO"
-                  rules={[{ required: false }]}
+                  rules={[{ required: true }]}
                 >
                   <Input />
                 </Form.Item>
@@ -317,7 +317,7 @@ const InscripcionOdinarioPage = () => {
                   className="FormItem"
                   label="Sede de Examen"
                   name="SEDE_EXAM"
-                  rules={[{ required: false }]}
+                  rules={[{ required: true }]}
                 >
                   <Select
                     options={[
@@ -337,39 +337,9 @@ const InscripcionOdinarioPage = () => {
                     filterOption={filterOption}
                   />
                 </Form.Item>
-                <Form.Item
-                  className="FormItem"
-                  label="Turno"
-                  name="TURNO"
-                  rules={[{ required: false }]}
-                >
-                  <Select
-                    options={[
-                      {
-                        value: 'M',
-                        label: 'Mañana',
-                      },
-                      {
-                        value: 'T',
-                        label: 'Tarde',
-                      },
-                    ]}
-                    filterOption={filterOption}
-                    onChange={buscarAulaPorTurno}
-                  />
-                </Form.Item>
-                <Form.Item
-                  className="FormItem"
-                  label="Aula"
-                  name="ID_AULA"
-                  rules={[{ required: false }]}
-                >
-                  <Select
-                    options={selectAulas}
-                    filterOption={filterOption}
-                  />
-                </Form.Item>
-                <Form.Item className="FormItem" label="Foto" name="RUTA_FOTO">
+                
+                
+                <Form.Item className="FormItem" label="Foto" name="RUTA_FOTO" rules={[{ required: true }]}>
                   <input
                     type="file"
                     accept=".png, .jpg, .jpeg"
@@ -380,6 +350,8 @@ const InscripcionOdinarioPage = () => {
                 <Form.Item
                   className="FormItem"
                   label="Archivos DNI y Cert. estudios"
+                  name="RUTA_DOCUMENTO"
+                  rules={[{ required: true }]}
                 >
                   <input
                     type="file"
@@ -407,7 +379,7 @@ const InscripcionOdinarioPage = () => {
                         className="FormItem"
                         label="Genero"
                         name="SEXO"
-                        rules={[{ required: false }]}
+                        rules={[{ required: true }]}
                       >
                         <Select
                           options={[
@@ -427,7 +399,7 @@ const InscripcionOdinarioPage = () => {
                         className="FormItem"
                         label="Fecha de Nacimiento"
                         name="FECHA_NACIMIENTO"
-                        rules={[{ required: false }]}
+                        rules={[{ required: true }]}
                       >
                         <DatePicker style={{ width: '100%' }} />
                       </Form.Item>
@@ -435,7 +407,7 @@ const InscripcionOdinarioPage = () => {
                         className="FormItem"
                         label="Departamento"
                         name="DEPARTAMENTO"
-                        rules={[{ required: false }]}
+                        rules={[{ required: true }]}
                       >
                         <Select
                           options={optionsDepartamento}
@@ -447,7 +419,7 @@ const InscripcionOdinarioPage = () => {
                         className="FormItem"
                         label="PROVINCIA"
                         name="PROVINCIA"
-                        rules={[{ required: false }]}
+                        rules={[{ required: true }]}
                       >
                         <Select
                           onChange={buscarDistrito}
@@ -459,7 +431,7 @@ const InscripcionOdinarioPage = () => {
                         className="FormItem"
                         label="DISTRITO"
                         name="DISTRITO"
-                        rules={[{ required: false }]}
+                        rules={[{ required: true }]}
                       >
                         <Select options={optionsDistrito} filterOption={filterOption} />
                       </Form.Item>
@@ -467,7 +439,7 @@ const InscripcionOdinarioPage = () => {
                         className="FormItem"
                         label="Direccion Actual"
                         name="DIRECCION"
-                        rules={[{ required: false }]}
+                        rules={[{ required: true }]}
                       >
                         <Input />
                       </Form.Item>
@@ -475,7 +447,7 @@ const InscripcionOdinarioPage = () => {
                         className="FormItem"
                         label="¿Tiene discapacidad?"
                         name="TIPO_DISCAPACIDAD"
-                        rules={[{ required: false }]}
+                        rules={[{ required: true }]}
                       >
                         <Select
                           showSearch
@@ -497,7 +469,7 @@ const InscripcionOdinarioPage = () => {
                         className="FormItem"
                         label="Tipo de Discapacidad"
                         name="DISCAPACIDAD"
-                        rules={[{ required: false }]}
+                        rules={[{ required: true }]}
                       >
                         <Select
                           showSearch
@@ -510,7 +482,7 @@ const InscripcionOdinarioPage = () => {
                         className="FormItem"
                         label="Identidad Etnica"
                         name="ETNICA"
-                        rules={[{ required: false }]}
+                        rules={[{ required: true }]}
                       >
                         <Select
                           showSearch
@@ -523,25 +495,18 @@ const InscripcionOdinarioPage = () => {
                         className="FormItem"
                         label="Telefono Fijo"
                         name="TELEFONO"
-                        rules={[{ required: false }]}
+                        rules={[{ required: true }]}
                       >
                         <Input />
                       </Form.Item>
                     </div>
-                    <Button
-                      type="primary"
-                      block
-                      icon={<SaveFilled />}
-                      htmlType="submit"
-                    >
-                      Guardar
-                    </Button>
                   </div>
                 </div>
               )
           }
         </div>
       </Form>
+      <Button type="primary" block icon={<SaveFilled />} style={{ marginTop: '10px' }} onClick={formDatosComplementariosEstudiante.submit}>Guardar</Button>
     </>
   );
 };

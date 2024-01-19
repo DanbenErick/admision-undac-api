@@ -156,7 +156,7 @@ class InputsControlsController {
       if(verified != null){ next() }
       else {res.status(403).json({message: 'No tienes los permisos nesesarios'})}
     } catch (err) {
-      res.status(400).send('Invalid token !');
+      res.status(401).send('Invalid token !');
     }
   }
   public obtenerIp = async (req: Request, res: Response) => {

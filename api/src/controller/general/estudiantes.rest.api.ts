@@ -5,6 +5,7 @@ import { EstudianteInterface } from '../../interfaces/administrador/estudiantes.
 import multer from 'multer'
 import jwt from 'jsonwebtoken'
 import fs from 'fs'
+import { EstudianteCompleto } from '../../interfaces/administrador/EstudianteCompleto.interface'
 
 
 
@@ -56,15 +57,16 @@ class EstudianteController {
     }
     public inscribirEstudiante = async(req: Request, res: Response) => {
         try {
-            const params: EstudianteInterface = req.body
-            const resp_1: any = await this.estudianteService.registrarDatosComplementarios(params)
-            const resp_2: any = await this.estudianteService.registrarInscripcionEstudiante(params)
-            if(!resp_1.ok && !resp_2.ok) {
+            const params: EstudianteCompleto = req.body
+            
+            console.table(params)
+            const resp: any = await this.estudianteService.inscribirEstudianteProcedimientoAlmacenado(params)
+
+            // const resp_1: any = await this.estudianteService.registrarDatosComplementarios(params)
+            // const resp_2: any = await this.estudianteService.registrarInscripcionEstudiante(params)
+            
+            if(!resp.ok) {
                 res.status(200).json({ok: false, message: 'No se llego a registrar'})
-                return
-            }
-            if (!resp_1.ok || !resp_2.ok) {
-                res.status(200).json({ok: false, message: 'Se completo solo uno de los registros'})
                 return
             }
             res.status(200).json({ok: true, message: 'Se guardo los cambios correctamente' })
@@ -75,7 +77,7 @@ class EstudianteController {
     public subirFotoEstudiante = async(req: any, res: Response) => {
         try {
             if (!req.file) { 
-                res.status(400).json({ error: 'No se proporcionó ningún archivo.' });
+                res.status(200).json({ error: 'No se proporcionó ningún archivo.' });
             }
             res.status(200).json({ok: true, message: 'Foto subido correctamente'})
             
@@ -87,7 +89,7 @@ class EstudianteController {
     public subirDocumentacionEstudiante = async(req: any, res: Response) => {
         try {
             if(!req.file) {
-                res.status(400).json({ error: 'No se proporcionó ningún archivo.' });
+                res.status(200).json({ error: 'No se proporcionó ningún archivo.' });
             }
             res.status(200).json({ok: true, message: 'Documento subido correctamente'})
         }catch(error) {
@@ -146,7 +148,7 @@ class EstudianteController {
           if(verified.rol === 'ESTUDIANTE'){ next() }
           else {res.status(401).json({message: 'No tienes los permisos nesesarios'})}
         } catch (err) {
-          res.status(400).send('Invalid token !');
+          res.status(401).send({ok: false, message: 'Tu token ya se vencio'});
         }
       }
 

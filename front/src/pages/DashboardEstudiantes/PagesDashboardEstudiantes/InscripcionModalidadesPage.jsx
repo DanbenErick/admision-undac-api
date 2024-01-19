@@ -23,6 +23,7 @@ import {
   obtenerDepartamentosForm,
   obtenerDiscapacidadesForm,
   obtenerDistritosForm,
+  obtenerModalidadesForm,
   obtenerProcesoActivoForm,
   obtenerProvinciasForm,
   obtenerRazasEtnicasForm,
@@ -38,6 +39,7 @@ const InscripcionModalidadesPage = () => {
   const [selectAulas, setSelectAulas] = useState();
   const [selectDiscapacidades, setSelectDiscapacidades] = useState();
   const [selectRazasEtnicas, setSelectRazasEtnicas] = useState();
+  const [selectModalidades, setSelectModalidades] = useState();
   const [loading, setLoading] = useState(false);
   const [verificarRegistroEstudiante, setVerificarRegistroEstudiante] = useState(0);
   const [stateInscripcionEstudiante, setStateInscripcionEstudiante] = useState(false);
@@ -47,7 +49,6 @@ const InscripcionModalidadesPage = () => {
   const [optionsDepartamento, setOptionsDepartamento] = useState();
   const [optionsProvincia, setOptionsProvincia] = useState();
   const [optionsDistrito, setOptionsDistrito] = useState();
-  const [fileList, setFileList] = useState([]);
 
   const fileInputDocRef = useRef(null);
   const fileInputImgRef = useRef(null);
@@ -56,11 +57,8 @@ const InscripcionModalidadesPage = () => {
     const params = { DNI: localStorage.getItem('dni'), TIPO_PROCESO: 'M' };
     
     const resp_dat_compl = await verificarDatosComplementariosEstudiante(params);
-    
     setStateDatComplEstudiante(resp_dat_compl.data.ok)
-    
     const resp_insc = await verificarInscripcionEstudianteService(params);
-    
     setStateInscripcionEstudiante(resp_insc.data.ok)
     if (resp_dat_compl.data.ok && resp_insc.data.ok) {
       setVerificarRegistroEstudiante(true);
@@ -68,6 +66,8 @@ const InscripcionModalidadesPage = () => {
     }
     return false
   };
+
+  const filterOption = (input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
 
   const subirFoto = async (params) => {
     const formData = new FormData();
@@ -108,12 +108,12 @@ const InscripcionModalidadesPage = () => {
 
   const getInputs = async () => {
     setLoading(true);
-    const resp_proceso_activo = await obtenerProcesoActivoForm();
+    const resp_proceso_activo = await obtenerProcesoActivoForm({TIPO_PROCESO: 'M'});
     const resp_carreras = await obtenerCarrerasCodigoForm();
     const resp_discapacidades = await obtenerDiscapacidadesForm();
     const resp_razas_etnicas = await obtenerRazasEtnicasForm();
     const resp_departamentos = await obtenerDepartamentosForm();
-
+    const resp_modalidades = await obtenerModalidadesForm()
     // const resp_ubicaciones = await obtenerUbicacionesForm();
 
     // setOptionsUbicacion(resp_ubicaciones.data);
@@ -122,6 +122,7 @@ const InscripcionModalidadesPage = () => {
     setSelectCarreras(resp_carreras.data);
     setSelectDiscapacidades(resp_discapacidades.data);
     setSelectRazasEtnicas(resp_razas_etnicas.data);
+    setSelectModalidades(resp_modalidades.data);
     setLoading(false);
   };
   const guardarDatosComplementarios = async (params) => {
@@ -137,7 +138,6 @@ const InscripcionModalidadesPage = () => {
     const resp_inscripcion_estudiante = await inscribirEstudianteService(params);
     const resp_subir_foto = await subirFoto(params.DNI);
     const resp_subir_documento = await subirDocumentosEstudiante(params.DNI);
-    
     if (
       resp_inscripcion_estudiante.data.ok &&
       resp_subir_foto &&
@@ -230,7 +230,7 @@ const InscripcionModalidadesPage = () => {
                       className="FormItem"
                       label="Apellido y nombres"
                       name="NOMBRE_COMPLETO_APO"
-                      rules={[{ required: false }]}
+                      rules={[{ required: true }]}
                     >
                       <Input maxLength={30} />
                     </Form.Item>
@@ -238,7 +238,7 @@ const InscripcionModalidadesPage = () => {
                       className="FormItem"
                       label="Numero de celular "
                       name="CELULAR_APO"
-                      rules={[{ required: false }]}
+                      rules={[{ required: true }]}
                     >
                       <Input maxLength={9} />
                     </Form.Item>
@@ -246,7 +246,7 @@ const InscripcionModalidadesPage = () => {
                       className="FormItem"
                       label="Numero de DNI"
                       name="DNI_APO"
-                      rules={[{ required: false }]}
+                      rules={[{ required: true }]}
                     >
                       <Input maxLength={8} />
                     </Form.Item>
@@ -267,31 +267,46 @@ const InscripcionModalidadesPage = () => {
                   className="FormItem"
                   label="Modalidad"
                   name="PROCESO"
-                  rules={[{ required: false }]}
+                  rules={[{ required: true }]}
                 >
                   <Select
                     showSearch
                     placeholder="Selecciona un proceso"
                     options={selectProcesos}
+                    filterOption={filterOption}
+                  />
+                </Form.Item>
+                <Form.Item
+                  className="FormItem"
+                  label="Modalidad"
+                  name="ID_TIPO_MODALIDAD"
+                  rules={[{ required: true }]}
+                >
+                  <Select
+                    showSearch
+                    placeholder="Selecciona un proceso"
+                    options={selectModalidades}
+                    filterOption={filterOption}
                   />
                 </Form.Item>
                 <Form.Item
                   className="FormItem"
                   label="Programa de Estudio"
                   name="COD_CARRERA"
-                  rules={[{ required: false }]}
+                  rules={[{ required: true }]}
                 >
                   <Select
                     showSearch
                     placeholder="Selecciona un proceso"
                     options={selectCarreras}
+                    filterOption={filterOption}
                   />
                 </Form.Item>
                 <Form.Item
                   className="FormItem"
                   label="Año termino secundaria"
                   name="YEAR_CONCLU"
-                  rules={[{ required: false }]}
+                  rules={[{ required: true }]}
                 >
                   <DatePicker picker="year" style={{ width: '100%' }} />
                 </Form.Item>
@@ -299,7 +314,7 @@ const InscripcionModalidadesPage = () => {
                   className="FormItem"
                   label="Tipo de Colegio"
                   name="TIPO_COLEGIO"
-                  rules={[{ required: false }]}
+                  rules={[{ required: true }]}
                 >
                   <Radio.Group defaultValue="a" buttonStyle="solid">
                     <Radio.Button value="E">Estatal</Radio.Button>
@@ -310,7 +325,7 @@ const InscripcionModalidadesPage = () => {
                   className="FormItem"
                   label="Nombre de Colegio"
                   name="NOMBRE_COLEGIO"
-                  rules={[{ required: false }]}
+                  rules={[{ required: true }]}
                 >
                   <Input />
                 </Form.Item>
@@ -318,7 +333,7 @@ const InscripcionModalidadesPage = () => {
                   className="FormItem"
                   label="Sede de Examen"
                   name="SEDE_EXAM"
-                  rules={[{ required: false }]}
+                  rules={[{ required: true }]}
                 >
                   <Select
                     options={[
@@ -335,39 +350,10 @@ const InscripcionModalidadesPage = () => {
                         label: 'Oxampampa',
                       },
                     ]}
+                    filterOption={filterOption}
                   />
                 </Form.Item>
-                <Form.Item
-                  className="FormItem"
-                  label="Turno"
-                  name="TURNO"
-                  rules={[{ required: false }]}
-                >
-                  <Select
-                    options={[
-                      {
-                        value: 'M',
-                        label: 'Mañana',
-                      },
-                      {
-                        value: 'T',
-                        label: 'Tarde',
-                      },
-                    ]}
-                    onChange={buscarAulaPorTurno}
-                  />
-                </Form.Item>
-                <Form.Item
-                  className="FormItem"
-                  label="Aula"
-                  name="ID_AULA"
-                  rules={[{ required: false }]}
-                >
-                  <Select
-                    options={selectAulas}
-                  />
-                </Form.Item>
-                <Form.Item className="FormItem" label="Foto" name="RUTA_FOTO">
+                <Form.Item className="FormItem" label="Foto" name="RUTA_FOTO" rules={[{ required: true }]}>
                   <input
                     type="file"
                     accept=".png, .jpg, .jpeg"
@@ -378,6 +364,8 @@ const InscripcionModalidadesPage = () => {
                 <Form.Item
                   className="FormItem"
                   label="Archivos DNI y Cert. estudios"
+                  rules={[{ required: true }]}
+                  
                 >
                   <input
                     type="file"
@@ -405,7 +393,7 @@ const InscripcionModalidadesPage = () => {
                         className="FormItem"
                         label="Genero"
                         name="SEXO"
-                        rules={[{ required: false }]}
+                        rules={[{ required: true }]}
                       >
                         <Select
                           options={[
@@ -418,13 +406,14 @@ const InscripcionModalidadesPage = () => {
                               label: 'Femenino',
                             },
                           ]}
+                          filterOption={filterOption}
                         />
                       </Form.Item>
                       <Form.Item
                         className="FormItem"
                         label="Fecha de Nacimiento"
                         name="FECHA_NACIMIENTO"
-                        rules={[{ required: false }]}
+                        rules={[{ required: true }]}
                       >
                         <DatePicker style={{ width: '100%' }} />
                       </Form.Item>
@@ -432,37 +421,39 @@ const InscripcionModalidadesPage = () => {
                         className="FormItem"
                         label="Departamento"
                         name="DEPARTAMENTO"
-                        rules={[{ required: false }]}
+                        rules={[{ required: true }]}
                       >
                         <Select
                           options={optionsDepartamento}
                           onChange={buscarProvincia}
+                          filterOption={filterOption}
                         />
                       </Form.Item>
                       <Form.Item
                         className="FormItem"
                         label="PROVINCIA"
                         name="PROVINCIA"
-                        rules={[{ required: false }]}
+                        rules={[{ required: true }]}
                       >
                         <Select
                           onChange={buscarDistrito}
                           options={optionsProvincia}
+                          filterOption={filterOption}
                         />
                       </Form.Item>
                       <Form.Item
                         className="FormItem"
                         label="DISTRITO"
                         name="DISTRITO"
-                        rules={[{ required: false }]}
+                        rules={[{ required: true }]}
                       >
-                        <Select options={optionsDistrito} />
+                        <Select options={optionsDistrito} filterOption={filterOption} />
                       </Form.Item>
                       <Form.Item
                         className="FormItem"
                         label="Direccion Actual"
                         name="DIRECCION"
-                        rules={[{ required: false }]}
+                        rules={[{ required: true }]}
                       >
                         <Input />
                       </Form.Item>
@@ -470,7 +461,7 @@ const InscripcionModalidadesPage = () => {
                         className="FormItem"
                         label="¿Tiene discapacidad?"
                         name="TIPO_DISCAPACIDAD"
-                        rules={[{ required: false }]}
+                        rules={[{ required: true }]}
                       >
                         <Select
                           showSearch
@@ -485,55 +476,51 @@ const InscripcionModalidadesPage = () => {
                               value: 0,
                             },
                           ]}
+                          filterOption={filterOption}
                         />
                       </Form.Item>
                       <Form.Item
                         className="FormItem"
                         label="Tipo de Discapacidad"
                         name="DISCAPACIDAD"
-                        rules={[{ required: false }]}
+                        rules={[{ required: true }]}
                       >
                         <Select
                           showSearch
                           placeholder="Selecciona un proceso"
                           options={selectDiscapacidades}
+                          filterOption={filterOption}
                         />
                       </Form.Item>
                       <Form.Item
                         className="FormItem"
                         label="Identidad Etnica"
                         name="ETNICA"
-                        rules={[{ required: false }]}
+                        rules={[{ required: true }]}
                       >
                         <Select
                           showSearch
                           placeholder="Selecciona un proceso"
                           options={selectRazasEtnicas}
+                          filterOption={filterOption}
                         />
                       </Form.Item>
                       <Form.Item
                         className="FormItem"
                         label="Telefono Fijo"
                         name="TELEFONO"
-                        rules={[{ required: false }]}
+                        rules={[{ required: true }]}
                       >
                         <Input />
                       </Form.Item>
                     </div>
-                    <Button
-                      type="primary"
-                      block
-                      icon={<SaveFilled />}
-                      htmlType="submit"
-                    >
-                      Guardar
-                    </Button>
                   </div>
                 </div>
               )
           }
         </div>
       </Form>
+      <Button type="primary" block icon={<SaveFilled />} style={{ marginTop: '10px' }} onClick={formDatosComplementariosEstudiante.submit}>Guardar</Button>
     </>
   );
 };

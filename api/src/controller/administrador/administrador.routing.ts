@@ -47,7 +47,7 @@ class AdministradorRouting {
       if(verified.rol === 'ADMINISTRADOR'){ next() }
       else {res.status(403).json({message: 'No tienes los permisos nesesarios'})}
     } catch (err) {
-      res.status(400).send('Invalid token !');
+      res.status(401).send({ok: 'error', message: 'Se vencio tu token'});
     }
   }
   public routes() {

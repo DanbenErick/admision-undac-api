@@ -130,6 +130,8 @@ export class AulasRepository {
                 LEFT JOIN dat_complementarios dat_c ON dat_c.DNI = ins.DNI
                 LEFT JOIN aulas au ON au.ID = ins.ID_AULA
                 WHERE au.ID = ${params.ID_AULA}`
+                console.log('Query ejecutado:', connection.format(query, params));
+                console.log('Query ejecutado 2:', query);
         const [rows] = await connection.promise().query(query)
         return rows
       }catch(error) {

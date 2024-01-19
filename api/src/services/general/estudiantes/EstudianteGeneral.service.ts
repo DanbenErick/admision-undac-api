@@ -74,6 +74,50 @@ export class EstudiantesGeneralService {
     }
   };
 
+  public inscribirEstudianteProcedimientoAlmacenado = async(params: any) => {
+    const dbConex: any = await connectMysql.connectMysql();
+    const data = [
+      params.DNI || '',
+      params.COD_CARRERA || '',
+      params.PROCESO || '',
+      params.SEDE_EXAM || '',
+      params.PAGO_1 || '',
+      params.PAGO_2 || '',
+      params.PREPARATORIA || '',
+      params.ID_AULA || '',
+      params.ID_TIPO_MODALIDAD || null,
+      params.YEAR_CONCLU || '',
+      params.SEXO || '',
+      params.FECHA_NACIMIENTO || '',
+      params.LUGAR_RESIDENCIA || '',
+      params.DIRECCION || '',
+      params.DISCAPACIDAD || '',
+      params.TIPO_DISCAPACIDAD || '',
+      params.ETNICA || '',
+      params.CELULAR || '',
+      params.TELEFONO || '',
+      params.RUTA_FOTO || '',
+      params.NOMBRE_COLEGIO || '',
+      params.TIPO_COLEGIO || '',
+      params.NOMBRE_COMPLETO_APO || '',
+      params.CELULAR_APO || '',
+      params.DNI_APO || '',
+      params.DEPARTAMENTO || '',
+      params.PROVINCIA || '',
+      params.DISTRITO || '',
+  ]
+    try {
+      const [result] = await this.estudianteRepo.inscribirEstudianteConProcedimientoAlmacenado(dbConex, data)
+      console.log(result)
+      if(result.affectedRows > 0) return { ok: true, message: 'Se registró correctamente' }
+      return { ok: false, message: 'No se pudo registrar' }
+    }catch(error) {
+      await dbConex.rollback()
+    }finally {
+      await dbConex.close()
+    }
+  }
+
   public registrarEstudiante = async (params: EstudianteInterface) => {
     const dbConex: any = await connectMysql.connectMysql();
     try {

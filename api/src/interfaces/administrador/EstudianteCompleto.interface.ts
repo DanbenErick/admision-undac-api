@@ -4,6 +4,8 @@ export interface EstudianteCompleto  {
     AP_MATERNO?: string,
     NOMBRES?: string,
     CELULAR_EST?: string,
+    CELULAR?: string,
+    ID_TIPO_MODALIDAD?: string,
     CORREO?: string,
     PASSWORD?: string,
     SEXO?: string,

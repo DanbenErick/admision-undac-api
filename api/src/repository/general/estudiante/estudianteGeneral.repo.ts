@@ -44,6 +44,17 @@ export class EstudianteGeneralRepository {
         throw error
       }
     }
+    public inscribirEstudianteConProcedimientoAlmacenado = async(connection: any, params: any) => {
+      try {
+        const query = `CALL InscribirEstudianteRolEstudiante (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`
+        console.log('Query ejecutado:', connection.format(query, params));
+        const resp = await connection.promise().execute(query, params);
+        return resp
+      }catch (error) {
+        logger.error('EstudianteGeneralRepository.inscribirEstudianteConProcedimeintoAlmacenado', error);
+        throw error
+      }
+    }
     public registrarEstudiante = async(connection: any, params: EstudianteInterface) => {
       try {
         const query = await generarConsulta('registros', params, null)
