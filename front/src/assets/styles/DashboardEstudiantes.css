@@ -326,4 +326,7 @@
     grid-column-start: 1;
     grid-column-end: 2;
   }
+  .gridFormDatosComplementarios {
+    grid-template-columns: 1fr !important;
+  }
 }
