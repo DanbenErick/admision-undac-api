@@ -8,6 +8,10 @@ import { message } from 'antd';
 import { SmileOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 
+const isNumeric = (value) => {
+  return !/[^0-9]/.test(value);
+}
+
 const DatosPersonalIncripcion = (props) => {
   const [formDatosPersonales] = Form.useForm();
   const [api, contextHolder] = notification.useNotification();
@@ -25,6 +29,10 @@ const DatosPersonalIncripcion = (props) => {
   };
   const { setEstudiante } = useContext(EstudianteContext);
   const guardarDatosPersonales = async (params) => {
+    if(!isNumeric(params.DNI)) {
+      message.info('Ingresa un DNI valido')
+      return 
+    }
     const resp = await consultarEstudianteExisteService({ DNI: params.DNI });
     if (resp.data.length > 0) {
       openNotification()
@@ -46,7 +54,7 @@ const DatosPersonalIncripcion = (props) => {
           <Select options={[{ value: 'DNI', label: 'DNI' }]} />
         </Form.Item>
         <Form.Item label="DNI" name="DNI" rules={[{ required: true }]}>
-          <InputNumber
+          <Input
             maxLength="8"
             placeholder="Ingresa tu numero de DNI"
             style={{ width: '100%' }}

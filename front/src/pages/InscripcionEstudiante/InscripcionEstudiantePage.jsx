@@ -16,25 +16,25 @@ const InscripcionEstudiantePage = () => {
   };
   const steps = [
     {
-      title: <b></b>,
+      title: <b>Informacion</b>,
       content: (
         <DatosPersonalIncripcion current={current} setCurrent={setCurrent} />
       ),
     },
     {
-      title: <b></b>,
+      title: <b>Celular</b>,
       content: <DatosContactoIns current={current} setCurrent={setCurrent} />,
     },
     {
-      title: <b></b>,
+      title: <b>Confirmacion</b>,
       content: <ResumenIns current={current} setCurrent={setCurrent} />,
     },
     {
-      title: <b></b>,
+      title: <b>Correo</b>,
       content: <ValidacionIns current={current} setCurrent={setCurrent} />,
     },
     {
-      title: <b></b>,
+      title: <b>Clave</b>,
       content: <ConfirmacionIns current={current} setCurrent={setCurrent} />,
     },
   ];

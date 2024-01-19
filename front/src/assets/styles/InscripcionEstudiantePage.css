@@ -33,3 +33,13 @@
   grid-template-columns: 1fr 1fr 1fr;
   gap: 10px;
 }
+
+
+@media (max-width: 768px) {
+  .InscripcionEstudiantePage .containerInscripcionEstudiantePage {
+    width: 100%;
+  }
+  .InscripcionEstudiantePage .ResumenStepIns .FormResumenStepIns {
+    grid-template-columns: 1fr;
+  }
+}

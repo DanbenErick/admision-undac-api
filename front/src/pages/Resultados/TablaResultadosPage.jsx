@@ -48,7 +48,7 @@ const TablaResultadosPage = () => {
       <div className="containerResultadosTabla">
         <h1>TABLA DE RESULTADOS: <b>{nombre}</b></h1>
         <div className="containerTable"></div>
-        <Table columns={columns} dataSource={data} pagination={{ pageSize: 30 }} scroll={{ x: 800,  }} />
+        <Table columns={columns} dataSource={data} pagination={{ pageSize: 30 }} scroll={{ x: 800  }} />
       </div>
     </div>
     </>

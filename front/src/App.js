@@ -110,7 +110,7 @@ const App = () => {
               <Route path="/resultados" element={<ResultadoPage />} />
               <Route path='/resultados-lis-carreras/:nombre/:id' element={<CarreraResultadoPage />} />
               <Route path='/tabla-resultado/:id/:nombre' element={<TablaResultadosPage />} />
-              <Route path="*" element={NotFound} />
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </Router>
         </div>

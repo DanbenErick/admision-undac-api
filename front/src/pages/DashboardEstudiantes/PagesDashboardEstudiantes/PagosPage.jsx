@@ -74,7 +74,7 @@ const PagosEstudiantePage = () => {
     </div>
     <div className="cardDashEstudianteBody">
       <div className="">
-          <Table columns={columnsTable} dataSource={dataTable} />
+          <Table columns={columnsTable} dataSource={dataTable} scroll={{ x: 800  }} />
       </div>
     </div>
     

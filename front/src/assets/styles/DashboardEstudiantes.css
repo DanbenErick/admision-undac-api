@@ -107,7 +107,7 @@
   background: white;
   padding: 0;
   margin: 0;
-  width: 100%;
+  /* width: 100%; */
   border-radius: 10px;
   border: solid #d1d6db 2px;
 }
@@ -257,4 +257,73 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
+}
+
+
+
+
+/* Media query para el aside */
+
+
+/* Estilos para pantallas más pequeñas */
+.iconMenuAsideDashEstudiante {
+  position: fixed;
+  top: 1;
+  right: 0;
+  margin: 20px;
+  z-index: 9999;
+  display: none;
+}
+
+@media only screen and (max-width: 600px) {
+  .iconMenuAsideDashEstudiante {
+    display: block;
+    
+  }
+  .containerGridDashboardEstudiantesPage {
+    grid-template-columns: 1fr;
+  }
+  .containerGridDashboardEstudiantesPage .asideEstudiantesDash {
+    width: 100%;
+    background: #101828;
+    min-height: 100vh;
+    position: fixed;
+    top: 0;
+    left: -100%;
+    transition: left 0.3s ease-in-out;
+    z-index:9998;
+  }
+  
+  .containerGridDashboardEstudiantesPage .asideEstudiantesDash.show {
+    left: 0;
+  }
+  .gridHomePageDashboardEstudiante {
+    grid-template-columns: 1fr;
+  }
+
+
+  /* PAGOS */
+
+  .cardDashEstudiante {
+    width: 95vw !important;
+  }
+  .mainContainerEstudiantes {
+    padding: 40px 5px !important;
+  }
+
+  .gridFormFormularioPagosEstudiante {
+    grid-template-columns: 1fr;
+  }
+
+  /* INSCRIPCION */
+
+  .gridFormFormularioInscripcion {
+    grid-template-columns: 1fr !important;
+  }
+
+  .gridFormFormularioInscripcion .FormItem:nth-child(2),
+  .gridFormFormularioInscripcion .FormItem:nth-child(1) {
+    grid-column-start: 1;
+    grid-column-end: 2;
+  }
 }
