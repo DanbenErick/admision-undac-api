@@ -20,6 +20,7 @@ import {
 import {
   buscarAulaPorTurnoForm,
   obtenerCarrerasCodigoForm,
+  obtenerCarrerasPorModalidadesForm,
   obtenerDepartamentosForm,
   obtenerDiscapacidadesForm,
   obtenerDistritosForm,
@@ -34,17 +35,15 @@ import SpinnerComponent from '../../../components/Spinner';
 
 const InscripcionModalidadesPage = () => {
   const [formDatosComplementariosEstudiante] = Form.useForm();
-  const [selectProcesos, setSelectProcesos] = useState();
-  const [selectCarreras, setSelectCarreras] = useState();
-  const [selectAulas, setSelectAulas] = useState();
-  const [selectDiscapacidades, setSelectDiscapacidades] = useState();
-  const [selectRazasEtnicas, setSelectRazasEtnicas] = useState();
-  const [selectModalidades, setSelectModalidades] = useState();
+  const [selectProcesos, setSelectProcesos] = useState([]);
+  const [selectCarreras, setSelectCarreras] = useState([]);
+  const [selectDiscapacidades, setSelectDiscapacidades] = useState([]);
+  const [selectRazasEtnicas, setSelectRazasEtnicas] = useState([]);
+  const [selectModalidades, setSelectModalidades] = useState([]);
   const [loading, setLoading] = useState(false);
   const [verificarRegistroEstudiante, setVerificarRegistroEstudiante] = useState(0);
   const [stateInscripcionEstudiante, setStateInscripcionEstudiante] = useState(false);
   const [stateDatComplEstudiante, setStateDatComplEstudiante] = useState(false);
-  const [estudianteInscrito, setEstudianteInscrito] = useState(false);
 
   const [optionsDepartamento, setOptionsDepartamento] = useState();
   const [optionsProvincia, setOptionsProvincia] = useState();
@@ -109,7 +108,7 @@ const InscripcionModalidadesPage = () => {
   const getInputs = async () => {
     setLoading(true);
     const resp_proceso_activo = await obtenerProcesoActivoForm({TIPO_PROCESO: 'M'});
-    const resp_carreras = await obtenerCarrerasCodigoForm();
+    // const resp_carreras = await obtenerCarrerasCodigoForm();
     const resp_discapacidades = await obtenerDiscapacidadesForm();
     const resp_razas_etnicas = await obtenerRazasEtnicasForm();
     const resp_departamentos = await obtenerDepartamentosForm();
@@ -119,7 +118,7 @@ const InscripcionModalidadesPage = () => {
     // setOptionsUbicacion(resp_ubicaciones.data);
     setOptionsDepartamento(resp_departamentos.data);
     setSelectProcesos(resp_proceso_activo.data);
-    setSelectCarreras(resp_carreras.data);
+    // setSelectCarreras(resp_carreras.data);
     setSelectDiscapacidades(resp_discapacidades.data);
     setSelectRazasEtnicas(resp_razas_etnicas.data);
     setSelectModalidades(resp_modalidades.data);
@@ -191,9 +190,12 @@ const InscripcionModalidadesPage = () => {
       fileInputImgRef.current.value = '';
     }
   };
-  const buscarAulaPorTurno = async(e) => {
-    const resp = await buscarAulaPorTurnoForm({TURNO: e})
-    setSelectAulas(resp.data)
+  const changeModalidad = async () => {
+    const params = formDatosComplementariosEstudiante.getFieldsValue()
+    params.ID_PROCESO = params.PROCESO
+    const resp = await obtenerCarrerasPorModalidadesForm(params);
+    
+    setSelectCarreras(resp.data);
   }
   return verificarRegistroEstudiante ? (
     <Alert
@@ -265,9 +267,10 @@ const InscripcionModalidadesPage = () => {
               <div className="gridFormFormularioInscripcion">
                 <Form.Item
                   className="FormItem"
-                  label="Modalidad"
+                  label="Proceso"
                   name="PROCESO"
                   rules={[{ required: true }]}
+                  
                 >
                   <Select
                     showSearch
@@ -287,6 +290,7 @@ const InscripcionModalidadesPage = () => {
                     placeholder="Selecciona un proceso"
                     options={selectModalidades}
                     filterOption={filterOption}
+                    onChange={changeModalidad}
                   />
                 </Form.Item>
                 <Form.Item
@@ -294,12 +298,14 @@ const InscripcionModalidadesPage = () => {
                   label="Programa de Estudio"
                   name="COD_CARRERA"
                   rules={[{ required: true }]}
+                  
                 >
                   <Select
                     showSearch
                     placeholder="Selecciona un proceso"
                     options={selectCarreras}
                     filterOption={filterOption}
+                    disabled={selectCarreras.length === 0}
                   />
                 </Form.Item>
                 <Form.Item

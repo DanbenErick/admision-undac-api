@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Breadcrumb, Button, Select, Table } from 'antd';
+import { Breadcrumb, Button, Modal, Select, Table, Tooltip } from 'antd';
 import { Tag, Popconfirm, Card, Form, Input, Radio, DatePicker } from 'antd';
 import SpinnerCompoent from '../../components/Spinner';
 import {
@@ -8,13 +8,16 @@ import {
 } from '../../api/apiProcesos';
 import '../../assets/styles/DashboardAdmin.css';
 import moment from 'moment';
-import { getProcesosService } from '../../services/ProcesosService';
+import { getInscritosPorProcesoService, getProcesosService } from '../../services/ProcesosService';
 import { message } from 'antd/es';
+import { CloseCircleOutlined, EyeOutlined } from '@ant-design/icons';
 
 export default function ProcesosPage() {
   const [messageApi, contextHolder] = message.useMessage();
   const [loading, setLoading] = useState(true);
   const [dataTable, setDataTable] = useState([]);
+  const [statusModal, setStatusModal] = useState(false);
+  const [dataInscritos, setDataInscritos] = useState([]);
   const initialValues = {
     NOMBRE: '',
     FECHA_REGISTRO: '',
@@ -35,6 +38,24 @@ export default function ProcesosPage() {
     start();
   }, []);
 
+  const obtenerInscritosPorProceso = async (params) => {
+    setStatusModal(true)
+    const resp = await getInscritosPorProcesoService(params)
+    console.log(resp)
+    setDataInscritos(resp.data)
+  }
+  const columnsInscritos = [
+    {
+      title: 'Sede',
+      dataIndex: 'SEDE',
+      key: 'SEDE',
+    },
+    {
+      title: 'Total de inscritos',
+      dataIndex: 'CANTIDAD',
+      key: 'CANTIDAD',
+    },
+  ]
   const columns = [
     {
       title: 'Titulo',
@@ -55,6 +76,11 @@ export default function ProcesosPage() {
           .replace(/\//g, '/'),
     },
     {
+      title: 'Inscritos',
+      dataIndex: 'TOTAL_INSCRITOS',
+      key: 'TOTAL_INSCRITOS'
+    },
+    {
       title: 'Estado',
       dataIndex: 'ESTADO',
       key: 'ESTADO',
@@ -73,6 +99,7 @@ export default function ProcesosPage() {
       render: (_, column) => {
         if (column.ESTADO === 1) {
           return (
+            <>
             <Popconfirm
               title="Proceso"
               description="Quieres borrar este proceso?"
@@ -81,10 +108,12 @@ export default function ProcesosPage() {
               okText="Si"
               cancelText="No"
             >
-              <Button type="link" danger>
-                Cerrar
-              </Button>
+              <Button type="link" danger icon={<CloseCircleOutlined />}></Button>
             </Popconfirm>
+            <Tooltip title="Ver inscritos por sede">
+              <Button onClick={() => obtenerInscritosPorProceso({ID_PROCESO: column.ID})} type="link" sucess icon={<EyeOutlined />}></Button>
+            </Tooltip>
+            </>
           );
         }
         return '';
@@ -215,6 +244,9 @@ export default function ProcesosPage() {
           <Table dataSource={dataTable} columns={columns} size="small" />
         </Card>
       </div>
+      <Modal title="Informacion adicional" open={statusModal} onOk={() => setStatusModal(false)} onCancel={() => setStatusModal(false)}>
+        <Table dataSource={dataInscritos} columns={columnsInscritos} size='large' />
+      </Modal>
     </div>
   );
 }

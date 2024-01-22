@@ -178,5 +178,16 @@ export class InputsControlsService {
             await dbConex.close()
         }
     }
+    public obtenerCarrerasPorModalidades = async(params: any) => {
+        const dbConex: any = await connectMysql.connectMysql()
+        try {
+            const resp = await this.inputsControlsRepo.obtenerCarrerasPorModalidades(dbConex, params)
+            return resp
+        }catch(error) {
+            await dbConex.rollback()
+        }finally {
+            await dbConex.close()
+        }
+    }
     
 }

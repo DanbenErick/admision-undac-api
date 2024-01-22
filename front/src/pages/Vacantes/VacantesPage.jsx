@@ -12,7 +12,7 @@ import {
   Table,
 } from 'antd';
 import { SaveFilled, SearchOutlined } from '@ant-design/icons';
-import { obtenerProcesosForm } from '../../api/apiInpputs';
+import { obtenerModalidadesForm, obtenerProcesosForm } from '../../api/apiInpputs';
 import '../../assets/styles/VacantesPage.css';
 import {
   crearVacante,
@@ -42,6 +42,7 @@ const VacantesPage = () => {
   const [inputCarrera, setInputCarrera] = useState([]);
   const [botonDisabled, setBotonDisabled] = useState(true);
   const [dataTable, setDataTable] = useState([]);
+  const [selectModalidades, setSelectModalidades] = useState([]);
   const initialValues = {
     ID_PROCESO: '',
     ID_CARRERA: '',
@@ -76,10 +77,19 @@ const VacantesPage = () => {
       console.error('Error', error);
     }
   };
+  const getModalidades = async()  => {
+    try {
+      const resp = await obtenerModalidadesForm()
+      setSelectModalidades(resp.data);
+    }catch(error) {
+      console.error('Error', error);
+    }
+  }
   useEffect(() => {
     getProcesosInputs();
     refreshCarrerasInput();
     refreshDataVacatesProcesoActivo();
+    getModalidades();
     // setTimeout(() => {
     //     setLoading(false)
     // }, 1000)
@@ -97,9 +107,9 @@ const VacantesPage = () => {
       key: 'NOMBRE_ESCUELA',
     },
     {
-      title: 'Area',
-      dataIndex: 'AREA',
-      key: 'AREA',
+      title: 'Modalidad',
+      dataIndex: 'NOMBRE_MODALIDAD',
+      key: 'NOMBRE_MODALIDAD',
     },
     {
       title: 'Cantidad',
@@ -119,14 +129,14 @@ const VacantesPage = () => {
   };
   const guardarDatos = async (values) => {
     setLoading(true);
-    values.USUARIO_REGISTRO = 1;
-    values.AREA = 1;
+    
+    
 
     const resp = await crearVacante(values);
 
     await refreshDataVacatesProcesoActivo();
     await refreshCarrerasInput();
-    formVacante.resetFields();
+    // formVacante.resetFields();
     if (resp.data.ok) messageModal('success', resp.data.message);
     else messageModal('error', resp.data.message);
     setLoading(false);
@@ -168,6 +178,16 @@ const VacantesPage = () => {
                   onChange={verificarEstadoProceso}
                   onSearch={onSearch}
                   filterOption={filterOption}
+                />
+              </Form.Item>
+              <Form.Item label="Modalidad" name="ID_MODALIDAD">
+                <Select
+                  showSearch
+                  placeholder="Selecciona una carrera"
+                  optionFilterProp="children"
+                  onSearch={onSearch}
+                  filterOption={filterOption}
+                  options={selectModalidades}
                 />
               </Form.Item>
               <Form.Item label="Carrera" name="ID_CARRERA">

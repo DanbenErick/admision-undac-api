@@ -138,8 +138,18 @@ const obtenerModalidadesForm = async (params) => {
     console.error('Ocurrio un error', error);
   }
 }
+const obtenerCarrerasPorModalidadesForm = async(params) => {
+  try {
+    const ruta = getRuta('obtener-carreras-por-modalidades')
+    const resp = await axios.post(ruta, params);
+    return resp
+  }catch(error) {
+    console.error('Ocurrio un error', error);
+  }
+}
 
 export {
+  obtenerCarrerasPorModalidadesForm,
   obtenerModalidadesForm,
   obtenerCarrerasForm,
   obtenerProcesosForm,

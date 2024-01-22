@@ -41,7 +41,9 @@ class VacantesController {
     }
     public crearVacante = async(req: Request, res: Response) => {
         try {
+            const datosMiddleware = (req as any).locals;
             const params: VacantesInterface = req.body
+            params.USUARIO_REGISTRO = datosMiddleware.id
             const result = await this.vacantesService.crearVacante(params)
             res.status(200).json(result)
         }catch(error) {

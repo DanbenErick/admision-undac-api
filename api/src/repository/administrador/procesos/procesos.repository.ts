@@ -5,8 +5,18 @@ import { generarConsulta } from '../../../util/util'
 export class ProcesosRepository {
     public obtenerProcesos = async(connection: any, params: ProcesosInterface) => {
         try {
-            const query = `SELECT * FROM procesos ORDER BY ID DESC`;
-            const [rows, fields]: any = await connection.promise().query(query)
+            const query = `SELECT
+                                procesos.*,
+                                COUNT(inscritos.PROCESO) AS TOTAL_INSCRITOS
+                            FROM
+                                procesos
+                            LEFT JOIN
+                                inscritos ON inscritos.PROCESO = procesos.ID
+                            GROUP BY
+                                procesos.ID
+                            ORDER BY
+                                procesos.ID DESC`;
+            const [rows]: any = await connection.promise().query(query)
             return rows
         }catch(error) {
             logger.error("ProcesosRepo.obtenerProcesos =>", (error))
@@ -41,6 +51,24 @@ export class ProcesosRepository {
             return result
         }catch(error) {
             logger.error(`ProcesosRepo.cerrarProceso =>`, error)
+            throw error
+        }
+    }
+
+    public obtenerInscritosPorSede = async(connection: any, params: ProcesosInterface) => {
+        try {
+            const query = `SELECT
+                                SEDE_EXAM AS SEDE,
+                                COUNT(*) AS CANTIDAD
+                            FROM
+                                inscritos
+                            WHERE PROCESO = ${params.ID_PROCESO}
+                            GROUP BY
+                                SEDE_EXAM`
+            const [rows] = await connection.promise().query(query)
+            return rows            
+        }catch(error) {
+            logger.error(`ProcesosRepo.obtenerInscritosPorSede =>`, error)
             throw error
         }
     }

@@ -25,10 +25,11 @@ const AsideDashboardEstudiantes = () => {
     const {data} = response;
     
     data.forEach(element => {
+      // debugger
       if(element.TIPO_PROCESO === 'C') setStatusCepre(true) 
       if(element.TIPO_PROCESO === 'O') setStatusOrdinario(true) 
       if(element.TIPO_PROCESO === 'M') setStatusModalidades(true) 
-      if(element.TIPO_PROCESO === 'O') setStatusOrdinario(true) 
+      if(element.TIPO_PROCESO === 'P') setStatusExtraOrdinario(true) 
     })
     setSelectProcesos(data)
   }

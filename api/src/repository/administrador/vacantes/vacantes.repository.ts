@@ -5,7 +5,7 @@ import { generarConsulta } from '../../../util/util'
 class VacantesRepository {
     public obtenerVacantes = async(connection:any) => {
         try {
-            const query = `select * from vista_obtener_vacantes_proceso_ult_activo where ESTADO = 1`
+            const query = `select * from vista_obtener_vacantes_proceso_ult_activo where ESTADO = 1 `
             const [rows, fields]: any = await connection.promise().query(query)
             return rows
         }catch(error) {
@@ -15,9 +15,10 @@ class VacantesRepository {
     }
     public obtenerCarrerasPorProcesoInput = async(connection: any) => {
         try {
-            const query = `SELECT ID as value, ESCUELA_COMPLETA as label
-            FROM carreras
-            WHERE id NOT IN (SELECT ID_CARRERA FROM vacantes WHERE ID_PROCESO = (SELECT ID FROM procesos WHERE estado = 1))`
+            const query = `SELECT ID as value, ESCUELA_COMPLETA as label FROM carreras`
+            // const query = `SELECT ID as value, ESCUELA_COMPLETA as label
+            // FROM carreras
+            // WHERE id NOT IN (SELECT ID_CARRERA FROM vacantes WHERE ID_PROCESO = (SELECT ID FROM procesos WHERE estado = 1))`
             const [rows, fields]: any = await connection.promise().query(query)
             return rows
         }catch(error) {

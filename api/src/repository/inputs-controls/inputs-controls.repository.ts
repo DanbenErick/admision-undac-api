@@ -159,4 +159,20 @@ export class InputsControlsRepository {
         }
     }
 
+    public obtenerCarrerasPorModalidades = async(connection: any, params: any) => {
+        try {
+            const query = `SELECT
+                carreras.ESCUELA_COMPLETA AS label,
+                carreras.CODIGO_ESCUELA AS value	
+            FROM vacantes
+            LEFT JOIN carreras ON carreras.ID = vacantes.ID_CARRERA
+            WHERE ID_PROCESO = ${params.ID_PROCESO} AND ID_MODALIDAD = ${params.ID_TIPO_MODALIDAD}`
+            const [rows] = await connection.promise().query(query)
+            return rows
+        }catch(error) {
+            logger.error('InputControlRepostiry.obtenerCarrerasPorModalidades => ', error)
+            throw error
+        }
+    }
+
 }

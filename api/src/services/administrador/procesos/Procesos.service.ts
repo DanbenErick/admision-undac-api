@@ -60,4 +60,15 @@ export class ProcesosService {
             await dbConnect.close()
         }
     }
+    public obtenerInscritosPorSede = async(params: ProcesosInterface) => {
+        const dbConnect: any = await connectMysql.connectMysql()
+        try {
+            const result = await this.procesosRepo.obtenerInscritosPorSede(dbConnect, params)
+            return result
+        }catch(error) {
+            await dbConnect.rollback()
+        }finally {
+            await dbConnect.close()
+        }
+    }
 }
